@@ -1,0 +1,19 @@
+{
+  "name": "hackathon",
+  "version": "1.0.0",
+  "description": "Create Chrome Extension before tomorrow. Free for all. It can do anything.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "devDependencies": {
+    "eslint": "^7.2.0",
+    "eslint-config": "^0.3.0",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-prettier": "^6.14.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "prettier": "^2.1.2"
+  },
+  "license": "ISC"
+}
