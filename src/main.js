@@ -1,11 +1,45 @@
-runExtension();
 
-document.addEventListener('click', () => {
-  setTimeout(runExtension, 600)
-})
+
+// document.addEventListener('click', () => {
+//   setTimeout(runExtension, 600)
+// })
+
+// rerun extension when github adds new file browser rows to DOM
+const targetNode = document;
+
+// Options for the observer (which mutations to observe)
+const observerOptions = { childList: true, subtree: true };
+
+// Callback function to execute when mutations are observed
+const callback = function (mutationsList, observer) {
+  // Use traditional 'for loops' for IE 11
+  for (const mutation of mutationsList) {
+    const addedNodes = [...mutation.addedNodes];
+    const mustHaveClasses = 'container-xl.clearfix.new-discussion-timeline.px-3.px-md-4.px-lg-5'.replace(/\./g,' ');
+
+    if (addedNodes.length > 0) {
+      if (addedNodes[0].className === mustHaveClasses) {
+        if (addedNodes[0].querySelector('.Box-row')) {
+          observer.disconnect() // stop listening for changes while we run our substitutions
+          runExtension()
+        }
+      }
+    }
+  }
+};
+
+// Create an observer instance linked to the callback function
+const observer = new MutationObserver(callback);
+
+// Start observing the target node for configured mutations
+observer.observe(targetNode, observerOptions);
+
+// run on load
+runExtension();
+//////
 
 function runExtension() {
-  // console.log(`loaded ${window.location.href}`);
+  console.log(`loaded ${window.location.href}`);
   const jsonUrl = chrome.runtime.getURL('iconMap.json');
 
   fetch(jsonUrl)
@@ -16,7 +50,10 @@ function runExtension() {
       const fileList = document.querySelector('[aria-labelledby=files]'); // get file box
       if (!fileList) return;
       const fileRows = fileList.querySelectorAll('.Box-row');
-      fileRows.forEach((row) => replaceIcon(row, iconMap));
+      fileRows.forEach((row,i, arr) => {
+        const isLast = i === arr.length -1;
+        replaceIcon(row, iconMap,isLast);
+      });
     });
 }
 
@@ -48,10 +85,14 @@ function getIcon(iconName) {
 
 function lookForMatch(fileName, iconMap) {
   // returns icon name string if matches otherwise undefined
-  fileName = fileName.toLowerCase();
+  const lowerFileName = fileName.toLowerCase();
   // first look in fileNames and folderNames
   if (iconMap.fileNames[fileName]) return iconMap.fileNames[fileName];
   if (iconMap.folderNames[fileName]) return iconMap.folderNames[fileName];
+
+  // then check all lowercase
+  if (iconMap.fileNames[lowerFileName]) return iconMap.fileNames[lowerFileName];
+  if (iconMap.folderNames[lowerFileName]) return iconMap.folderNames[lowerFileName];
 
   // look for extension in fileExtensions and languageIds
   // const extRgx = /(?<=\.).+$/
@@ -60,9 +101,12 @@ function lookForMatch(fileName, iconMap) {
 
   if (iconMap.fileExtensions[extension]) return iconMap.fileExtensions[extension];
   if (iconMap.languageIds[extension]) return iconMap.languageIds[extension];
+
+  // TODO: fallback into default file or folder if no matches
 }
 
-function replaceIcon(fileRow, iconMap) {
+function replaceIcon(fileRow, iconMap, isLastIcon) {
+  if (isLastIcon) observer.observe(targetNode, observerOptions); // TODO: should run after last insertion, not before
   // get file/folder name
   const fileName = fileRow.querySelector('[role=rowheader]')?.firstElementChild?.firstElementChild
     ?.innerText;
@@ -86,17 +130,3 @@ function replaceIcon(fileRow, iconMap) {
   });
 }
 
-/////// Detect location change on github since it's SPA
-// https://stackoverflow.com/questions/6390341/how-to-detect-if-url-has-changed-after-hash-in-javascript/52809105#52809105
-
-// const targetNode = document;
-// const observerOptions = {
-//   childList: true,
-//   attributes: true,
-
-//   // Omit (or set to false) to observe only changes to the parent node
-//   subtree: true
-// }
-
-// const observer = new MutationObserver(runExtension);
-// observer.observe(targetNode, observerOptions);

@@ -1,13 +1,12 @@
 {
   "manifest_version": 2,
-  "name": "Hackathon_Name",
+  "name": "Material Icons for Github",
   "version": "1.0",
-  "description": "",
+  "description": "Replace the file/folder icons on github file browsers with icons representing what the file's type and which tool it is used by.",
   "content_scripts": [
     {
       "matches": ["*://*.github.com/*"],
       "js": ["./main.js"]
-      // "run_at": "document_end"
     }
   ],
   "web_accessible_resources": [
