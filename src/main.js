@@ -1,23 +1,17 @@
-// const matches = {
-//   '.eslintrc.js': 'eslint',
-//   '.eslintrc.cjs': 'eslint',
-//   '.eslintrc.yaml': 'eslint',
-//   '.eslintrc.yml': 'eslint',
-//   '.eslintrc.json': 'eslint',
-//   '.eslintrc': 'eslint',
-//   '.eslintignore': 'eslint',
-//   '.eslintcache': 'eslint',
-// };
+window.addEventListener('load', () => {
+  const jsonUrl = chrome.runtime.getURL('iconMap.json');
 
-const jsonUrl = chrome.runtime.getURL('iconMap.json');
-
-fetch(jsonUrl)
-  .then((response) => response.json())
-  .then((iconMap) => {
-    const fileList = document.querySelector('[aria-labelledby=files]'); // get file box
-    const fileRows = fileList.querySelectorAll('.Box-row');
-    fileRows.forEach(row => replaceIcon(row, iconMap));
-  });
+  fetch(jsonUrl)
+    .then((response) => response.json())
+    .then((iconMap) => {
+      // debug(iconMap)
+  
+      const fileList = document.querySelector('[aria-labelledby=files]'); // get file box
+      if (!fileList) return;
+      const fileRows = fileList.querySelectorAll('.Box-row');
+      fileRows.forEach((row) => replaceIcon(row, iconMap));
+    });
+})
 
 function getIcon(iconName) {
   const filePath = 'icons/' + iconName + '.svg';
@@ -45,6 +39,22 @@ function getIcon(iconName) {
   });
 }
 
+function lookForMatch(fileName, iconMap) {
+  // returns icon name string if matches otherwise undefined
+
+  // first look in fileNames and folderNames
+  if (iconMap.fileNames[fileName]) return iconMap.fileNames[fileName];
+  if (iconMap.folderNames[fileName]) return iconMap.folderNames[fileName];
+
+  // look for extension in fileExtensions and languageIds
+  // const extRgx = /(?<=\.).+$/
+  const captureExtension = /.+(?<=\.)(.+)$/;
+  const extension = fileName.replace(captureExtension, '$1');
+
+  if (iconMap.fileExtensions[extension]) return iconMap.fileExtensions[extension];
+  if (iconMap.languageIds[extension]) return iconMap.languageIds[extension];
+}
+
 function replaceIcon(fileRow, iconMap) {
   // get file/folder name
   const fileName = fileRow.querySelector('[role=rowheader]')?.firstElementChild?.firstElementChild
@@ -56,12 +66,12 @@ function replaceIcon(fileRow, iconMap) {
   if (!svgEl) return; // couldn't find svg element
 
   // get icon filename
-  const iconName = iconMap.fileNames[fileName];
+  const iconName = lookForMatch(fileName, iconMap); // returns iconname if found or undefined
   if (!iconName) return;
 
-// if (fileName !== '.eslintrc') return
+  // TODO: 'changes' and 'security' exist both on iconMap.fileNames and iconMap.folderNames
 
-  getIcon(iconMap.fileNames[fileName]).then(({ innerSVG, viewBox }) => {
+  getIcon(iconName).then(({ innerSVG, viewBox }) => {
     // must first reset innerHTML on svgEl to innerHTML of our svg
     svgEl.innerHTML = innerSVG;
     // then must set viewBox on svgEl to viewBox on our icon
