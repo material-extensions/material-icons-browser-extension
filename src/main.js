@@ -1,17 +1,24 @@
-window.addEventListener('load', () => {
+runExtension()
+
+document.addEventListener('click', () => {
+  setTimeout(runExtension, 600)
+})
+
+function runExtension() {
+  console.log(`loaded ${window.location.href}`);
   const jsonUrl = chrome.runtime.getURL('iconMap.json');
 
   fetch(jsonUrl)
     .then((response) => response.json())
     .then((iconMap) => {
       // debug(iconMap)
-  
+
       const fileList = document.querySelector('[aria-labelledby=files]'); // get file box
       if (!fileList) return;
       const fileRows = fileList.querySelectorAll('.Box-row');
       fileRows.forEach((row) => replaceIcon(row, iconMap));
     });
-})
+}
 
 function getIcon(iconName) {
   const filePath = 'icons/' + iconName + '.svg';
@@ -78,3 +85,18 @@ function replaceIcon(fileRow, iconMap) {
     svgEl.setAttribute('viewBox', viewBox);
   });
 }
+
+/////// Detect location change on github since it's SPA
+// https://stackoverflow.com/questions/6390341/how-to-detect-if-url-has-changed-after-hash-in-javascript/52809105#52809105
+
+// const targetNode = document;
+// const observerOptions = {
+//   childList: true,
+//   attributes: true,
+
+//   // Omit (or set to false) to observe only changes to the parent node
+//   subtree: true
+// }
+
+// const observer = new MutationObserver(runExtension);
+// observer.observe(targetNode, observerOptions);
