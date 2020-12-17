@@ -1,9 +1,3 @@
-
-
-// document.addEventListener('click', () => {
-//   setTimeout(runExtension, 600)
-// })
-
 // rerun extension when github adds new file browser rows to DOM
 const targetNode = document;
 
@@ -19,8 +13,8 @@ const callback = function (mutationsList, observer) {
 
     if (addedNodes.length > 0) {
       if (addedNodes[0].className === mustHaveClasses) {
-        if (addedNodes[0].querySelector('.Box-row')) {
-          observer.disconnect() // stop listening for changes while we run our substitutions
+        if (addedNodes[0].querySelector('.Box-row')) { 
+          // TODO: should delay disconnect and wairForIcons until last match
           runExtension()
         }
       }
@@ -36,10 +30,20 @@ observer.observe(targetNode, observerOptions);
 
 // run on load
 runExtension();
+// todo: check performance impact of checking every 500
+setInterval(checkIconPersists, 500)
 //////
 
+function checkIconPersists() {
+  setTimeout(() => {
+    const materialIcon = document.querySelector('div.Box-row > div.mr-3 > svg.material-icons-ext')
+    if (!materialIcon) runExtension();
+  }, 50)
+}
+
 function runExtension() {
-  console.log(`loaded ${window.location.href}`);
+  // console.log(`loaded ${window.location.href}`);
+  observer.disconnect() // stop listening for changes while we run our substitutions
   const jsonUrl = chrome.runtime.getURL('iconMap.json');
 
   fetch(jsonUrl)
@@ -106,7 +110,10 @@ function lookForMatch(fileName, iconMap) {
 }
 
 function replaceIcon(fileRow, iconMap, isLastIcon) {
-  if (isLastIcon) observer.observe(targetNode, observerOptions); // TODO: should run after last insertion, not before
+  if (isLastIcon) {
+    checkIconPersists()
+    observer.observe(targetNode, observerOptions); // TODO: should run after last insertion, not before
+  }
   // get file/folder name
   const fileName = fileRow.querySelector('[role=rowheader]')?.firstElementChild?.firstElementChild
     ?.innerText;
@@ -127,6 +134,7 @@ function replaceIcon(fileRow, iconMap, isLastIcon) {
     svgEl.innerHTML = innerSVG;
     // then must set viewBox on svgEl to viewBox on our icon
     svgEl.setAttribute('viewBox', viewBox);
+    svgEl.classList.add('material-icons-ext')
   });
 }
 
