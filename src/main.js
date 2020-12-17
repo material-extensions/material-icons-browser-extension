@@ -48,7 +48,7 @@ function getIcon(iconName) {
 
 function lookForMatch(fileName, iconMap) {
   // returns icon name string if matches otherwise undefined
-
+  fileName = fileName.toLowerCase();
   // first look in fileNames and folderNames
   if (iconMap.fileNames[fileName]) return iconMap.fileNames[fileName];
   if (iconMap.folderNames[fileName]) return iconMap.folderNames[fileName];
