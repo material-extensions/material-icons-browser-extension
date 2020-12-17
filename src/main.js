@@ -31,7 +31,7 @@ observer.observe(targetNode, observerOptions);
 // run on load
 runExtension();
 // todo: check performance impact of checking every 500
-setInterval(checkIconPersists, 500)
+setInterval(checkIconPersists, 200)
 //////
 
 function checkIconPersists() {
