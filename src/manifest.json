@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+  "name": "Hackathon_Name",
+  "version": "1.0",
+  "description": "",
+  "content_scripts": [
+    {
+      "matches": ["*://*.github.com/*"],
+      "js": ["./main.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    "iconMap.json",
+    "icons/*"
+  ]
+}
