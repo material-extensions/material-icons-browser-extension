@@ -87,26 +87,28 @@ function getIcon(iconName) {
   });
 }
 
-function lookForMatch(fileName, iconMap) {
+function lookForMatch(fileName, isDir, iconMap) {
   // returns icon name string if matches otherwise undefined
   const lowerFileName = fileName.toLowerCase();
   // first look in fileNames and folderNames
-  if (iconMap.fileNames[fileName]) return iconMap.fileNames[fileName];
-  if (iconMap.folderNames[fileName]) return iconMap.folderNames[fileName];
+  if (iconMap.fileNames[fileName] && !isDir) return iconMap.fileNames[fileName];
+  if (iconMap.folderNames[fileName] && isDir) return iconMap.folderNames[fileName];
 
   // then check all lowercase
-  if (iconMap.fileNames[lowerFileName]) return iconMap.fileNames[lowerFileName];
-  if (iconMap.folderNames[lowerFileName]) return iconMap.folderNames[lowerFileName];
+  if (iconMap.fileNames[lowerFileName] && !isDir) return iconMap.fileNames[lowerFileName];
+  if (iconMap.folderNames[lowerFileName] && isDir) return iconMap.folderNames[lowerFileName];
 
   // look for extension in fileExtensions and languageIds
   // const extRgx = /(?<=\.).+$/
   const captureExtension = /.+(?<=\.)(.+)$/;
   const extension = fileName.replace(captureExtension, '$1');
 
-  if (iconMap.fileExtensions[extension]) return iconMap.fileExtensions[extension];
-  if (iconMap.languageIds[extension]) return iconMap.languageIds[extension];
+  if (iconMap.fileExtensions[extension] && !isDir) return iconMap.fileExtensions[extension];
+  if (iconMap.languageIds[extension] && !isDir) return iconMap.languageIds[extension];
 
-  // TODO: fallback into default file or folder if no matches
+  // fallback into default file or folder if no matches
+  if (!isDir) return 'file'
+  if (isDir) return 'folder'
 }
 
 function replaceIcon(fileRow, iconMap, isLastIcon) {
@@ -123,8 +125,11 @@ function replaceIcon(fileRow, iconMap, isLastIcon) {
   const svgEl = fileRow.querySelector('.octicon');
   if (!svgEl) return; // couldn't find svg element
 
+  // get type. Directory or File
+  const isDir = svgEl.getAttribute('aria-label') === "Directory";
+
   // get icon filename
-  const iconName = lookForMatch(fileName, iconMap); // returns iconname if found or undefined
+  const iconName = lookForMatch(fileName, isDir, iconMap); // returns iconname if found or undefined
   if (!iconName) return;
 
   // TODO: 'changes' and 'security' exist both on iconMap.fileNames and iconMap.folderNames
