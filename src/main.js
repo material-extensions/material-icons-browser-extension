@@ -30,8 +30,8 @@ observer.observe(targetNode, observerOptions);
 
 // run on load
 runExtension();
-// todo: check performance impact of checking every 500
-setInterval(checkIconPersists, 200)
+// todo: check performance impact of checking every 500. Another idea would be to set a success threshold. i.e if successful 20 times in a row, stop checking
+setInterval(checkIconPersists, 100)
 //////
 
 function checkIconPersists() {
