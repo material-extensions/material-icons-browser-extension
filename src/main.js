@@ -99,9 +99,8 @@ function lookForMatch(fileName, isDir, iconMap) {
   if (iconMap.folderNames[lowerFileName] && isDir) return iconMap.folderNames[lowerFileName];
 
   // look for extension in fileExtensions and languageIds
-  // const extRgx = /(?<=\.).+$/
   const captureExtension = /.+(?<=\.)(.+)$/;
-  const extension = fileName.replace(captureExtension, '$1');
+  const extension = fileName.match(captureExtension)?.[1];
 
   if (iconMap.fileExtensions[extension] && !isDir) return iconMap.fileExtensions[extension];
   if (iconMap.languageIds[extension] && !isDir) return iconMap.languageIds[extension];
