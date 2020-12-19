@@ -4,7 +4,9 @@
   "description": "Create Chrome Extension before tomorrow. Free for all. It can do anything.",
   "main": "index.js",
   "scripts": {
-    "build": "node ./scripts/build.js"
+    "build": "npx rimraf ./dist && npx run-p build-dependencies build-src",
+    "build-dependencies": "node ./scripts/build-dependencies.js",
+    "build-src": "node ./scripts/build-src.js"
   },
   "author": "",
   "devDependencies": {
@@ -15,6 +17,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "fs-extra": "^9.0.1",
     "mkdirp": "^1.0.4",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.1.2",
     "rimraf": "^3.0.2",
     "simple-git": "^2.31.0",
