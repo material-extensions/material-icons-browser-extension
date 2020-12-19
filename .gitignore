@@ -1,6 +1,6 @@
 dist/
 temp/
-# src/icons
+.vscode/
 
 # Logs
 logs
