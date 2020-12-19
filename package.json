@@ -1,12 +1,13 @@
 {
-  "name": "hackathon",
+  "name": "material-icons-github-chrome-extension",
   "version": "1.0.0",
-  "description": "Create Chrome Extension before tomorrow. Free for all. It can do anything.",
+  "description": "Chrome Extension that enhances the GitHub file browser with material icons",
   "main": "index.js",
   "scripts": {
     "build": "npx rimraf ./dist && npx run-p build-dependencies build-src",
     "build-dependencies": "node ./scripts/build-dependencies.js",
-    "build-src": "node ./scripts/build-src.js"
+    "build-src": "node ./scripts/build-src.js",
+    "rebuild-logos": "node ./scripts/build-extensionIcons.js"
   },
   "author": "",
   "devDependencies": {

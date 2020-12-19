@@ -22,5 +22,6 @@ function src() {
     path.resolve(srcPath, 'manifest.json'),
     path.resolve(distPath, 'manifest.json')
   );
-  return Promise.all([copyCustomIcons, copyMainScript, copyManifest]);
+  const copyExtensionLogos = fs.copy(path.resolve(srcPath, 'extensionIcons'), distPath);
+  return Promise.all([copyCustomIcons, copyMainScript, copyManifest, copyExtensionLogos]);
 }
