@@ -1,4 +1,5 @@
-references/
+dist/
+temp/
 # src/icons
 
 # Logs

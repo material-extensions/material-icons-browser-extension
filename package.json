@@ -4,7 +4,7 @@
   "description": "Create Chrome Extension before tomorrow. Free for all. It can do anything.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "node ./scripts/build.js"
   },
   "author": "",
   "devDependencies": {
@@ -13,7 +13,12 @@
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-prettier": "^6.14.0",
     "eslint-plugin-prettier": "^3.1.4",
-    "prettier": "^2.1.2"
+    "fs-extra": "^9.0.1",
+    "mkdirp": "^1.0.4",
+    "prettier": "^2.1.2",
+    "rimraf": "^3.0.2",
+    "simple-git": "^2.31.0",
+    "svgo": "^1.3.2"
   },
   "license": "ISC"
 }
