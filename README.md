@@ -5,6 +5,8 @@
 
 ## Installation
 
+![Available in the Chrome Web Store](/assets/chrome-web-store.png)
+
 Install directly from the [Chrome Web Store]()
 
 ## About
@@ -29,13 +31,13 @@ Build unpackaged extension for testing in `dist` directory
 npm run build
 ```
 
-Build only files from `src` folder, without re-downloading dependencies from  [Material Icon Theme](https://github.com/PKief/vscode-material-icon-theme)
+Build only files from `src` folder, without re-downloading dependencies from [Material Icon Theme](https://github.com/PKief/vscode-material-icon-theme)
 
 ```shell
 npm run build-src
 ```
 
-Rebuild extension logos from `src/logo.svg`. *This script needs [Inkscape](https://inkscape.org/) to be available on PATH*
+Rebuild extension logos from `src/logo.svg`. _This script needs [Inkscape](https://inkscape.org/) to be available on PATH_
 
 ```shell
 npm run rebuild-logos
@@ -43,4 +45,4 @@ npm run rebuild-logos
 
 ---
 
-*Original extension developed with [Richard Lam](https://github.com/rlam108)*
+_Original extension developed with [Richard Lam](https://github.com/rlam108)_
