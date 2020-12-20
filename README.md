@@ -1,21 +1,24 @@
-# Material Icons for GitHub
+<center>
+  <h1>Material Icons for GitHub</h1>
 
 ![Dark GitHub example](/assets/example_dark.png)
 ![Light GitHub example](/assets/example_light.png)
 
-## Installation
+  <img src="https://github.com/Claudiohbsantos/github-material-icons-extension/raw/master/assets/chrome-web-store.png">
 
-![Available in the Chrome Web Store](/assets/chrome-web-store.png)
+**Install directly from the [Chrome Web Store]()**
 
-Install directly from the [Chrome Web Store]()
+</center>
 
-## About
+---
+
+### About
 
 Material Icons for GitHub is a Chrome Extension that enhances repositories file browsers. Replace default file/folder icons with material design icons tailored to each file type, tool and purpose in the project.
 
 Based and dependent on the popular [Material Icon Theme](https://github.com/PKief/vscode-material-icon-theme) extension for Visual Studio Code. All icons and file assignments on this project are pulled directly from that project, so any praise or design issues should be raised on the original repository.
 
-## Development
+### Development
 
 Clone this repository and install dependencies
 
@@ -45,4 +48,6 @@ npm run rebuild-logos
 
 ---
 
-_Original extension developed with [Richard Lam](https://github.com/rlam108)_
+<center>
+  <i>Original extension developed with [Richard Lam](https://github.com/rlam108)</i>
+</center>
