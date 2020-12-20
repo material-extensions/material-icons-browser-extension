@@ -1,5 +1,4 @@
-<center>
-  <h1>Material Icons for GitHub</h1>
+<h1 align="center">Material Icons for GitHub</h1>
 
 ![Dark GitHub example](/assets/example_dark.png)
 ![Light GitHub example](/assets/example_light.png)
@@ -8,7 +7,6 @@
 
 **Install directly from the [Chrome Web Store]()**
 
-</center>
 
 ---
 
@@ -48,6 +46,4 @@ npm run rebuild-logos
 
 ---
 
-<center>
-  <i>Original extension developed with [Richard Lam](https://github.com/rlam108)</i>
-</center>
+*Original extension developed with [Richard Lam](https://github.com/rlam108)*
