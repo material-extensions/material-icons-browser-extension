@@ -1,12 +1,13 @@
 <h1 align="center">Material Icons for GitHub</h1>
 
+<div align="center">
+
 ![Dark GitHub example](/assets/example_dark.png)
 ![Light GitHub example](/assets/example_light.png)
 
-  <img src="https://github.com/Claudiohbsantos/github-material-icons-extension/raw/master/assets/chrome-web-store.png">
+<img src="https://github.com/Claudiohbsantos/github-material-icons-extension/raw/master/assets/chrome-web-store.png">
 
-**Install directly from the [Chrome Web Store]()**
-
+<b>Install directly from the <a href="">Chrome Web Store</a></b></div>
 
 ---
 
@@ -46,4 +47,4 @@ npm run rebuild-logos
 
 ---
 
-*Original extension developed with [Richard Lam](https://github.com/rlam108)*
+_Original extension developed with [Richard Lam](https://github.com/rlam108)_
