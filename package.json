@@ -7,7 +7,8 @@
     "build": "npx rimraf ./dist && npx run-p build-dependencies build-src",
     "build-dependencies": "node ./scripts/build-dependencies.js",
     "build-src": "node ./scripts/build-src.js",
-    "rebuild-logos": "node ./scripts/build-extensionIcons.js"
+    "rebuild-logos": "node ./scripts/build-extensionIcons.js",
+    "bundle": "7z a material-icons-github-chrome-extension.zip dist"
   },
   "author": "",
   "devDependencies": {

@@ -1,6 +1,7 @@
 dist/
 temp/
 .vscode/
+material-icons-github-chrome-extension.zip
 
 # Logs
 logs
