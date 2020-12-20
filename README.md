@@ -1,23 +1,46 @@
-Create Chrome Extension before tomorrow. Free for all. It can do anything.
+# Material Icons for GitHub
 
-# Team: Claudio and Richard
+![Dark GitHub example](/assets/example_dark.png)
+![Light GitHub example](/assets/example_light.png)
 
-### References
+## Installation
 
-- <https://csx.codesmith.io/public/chrome-extension/chrome-extension-1n>
+Install directly from the [Chrome Web Store]()
 
-### Icon packs
+## About
 
-- <https://github.com/PKief/vscode-material-icon-theme> - 6M downloads
-- <https://github.com/vscode-icons/vscode-icons> - 6.6M downloads
+Material Icons for GitHub is a Chrome Extension that enhances repositories file browsers. Replace default file/folder icons with material design icons tailored to each file type, tool and purpose in the project.
 
-## TODO
+Based and dependent on the popular [Material Icon Theme](https://github.com/PKief/vscode-material-icon-theme) extension for Visual Studio Code. All icons and file assignments on this project are pulled directly from that project, so any praise or design issues should be raised on the original repository.
 
-- [ ] Name project
-- [ ] How to replace icons on github?
-- [ ] How to identify pages with file lists?
-- [ ] How to identify file/folder image?
-- [ ] How to relate file/folder icon to filename on github
-- [ ] How does the icons extension pack relate filename to icon
+## Development
 
-### svgo: `svgo --disable=removeViewBox [file]`
+Clone this repository and install dependencies
+
+```shell
+git clone https://github.com/Claudiohbsantos/github-material-icons-extension.git
+cd github-material-icons-extension
+npm install
+```
+
+Build unpackaged extension for testing in `dist` directory
+
+```shell
+npm run build
+```
+
+Build only files from `src` folder, without re-downloading dependencies from  [Material Icon Theme](https://github.com/PKief/vscode-material-icon-theme)
+
+```shell
+npm run build-src
+```
+
+Rebuild extension logos from `src/logo.svg`. *This script needs [Inkscape](https://inkscape.org/) to be available on PATH*
+
+```shell
+npm run rebuild-logos
+```
+
+---
+
+*Original extension developed with [Richard Lam](https://github.com/rlam108)*
