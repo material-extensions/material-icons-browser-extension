@@ -1,4 +1,4 @@
-const successThreshold = 20;
+const successThreshold = 60;
 
 // rerun extension when github adds new file browser rows to DOM
 const targetNode = document;
