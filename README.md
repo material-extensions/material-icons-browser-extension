@@ -5,9 +5,9 @@
 ![Dark GitHub example](/assets/example_dark.png)
 ![Light GitHub example](/assets/example_light.png)
 
-<a href=""><img src="https://github.com/Claudiohbsantos/github-material-icons-extension/raw/master/assets/chrome-web-store.png"></a>
+<a href="https://chrome.google.com/webstore/detail/material-icons-for-github/bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc"><img src="https://github.com/Claudiohbsantos/github-material-icons-extension/raw/master/assets/chrome-web-store.png"></a>
 
-<b>Install directly from the <a href="">Chrome Web Store</a></b></div>
+<b>Install directly from the <a href="https://chrome.google.com/webstore/detail/material-icons-for-github/bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc">Chrome Web Store</a></b></div>
 
 ---
 
