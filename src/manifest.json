@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Material Icons for Github",
-  "version": "1.0",
+  "version": "1.1",
   "description": "Replace the file/folder icons on github file browsers with icons representing the file's type and which tool it is used by.",
   "icons": {
     "16": "icon16.png",
