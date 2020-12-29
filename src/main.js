@@ -1,57 +1,31 @@
-const successThreshold = 60;
-
-// rerun extension when github adds new file browser rows to DOM
-const targetNode = document;
-
-// Options for the observer (which mutations to observe)
-const observerOptions = { childList: true, subtree: true };
-
-const mutationCB = function (mutationsList, observer) {
-  for (const mutation of mutationsList) {
-    const addedNodes = [...mutation.addedNodes];
-    const mustHaveClasses = 'container-xl.clearfix.new-discussion-timeline.px-3.px-md-4.px-lg-5'.replace(
-      /\./g,
-      ' '
-    );
-
-    if (addedNodes.length > 0) {
-      if (addedNodes[0].className === mustHaveClasses) {
-        if (addedNodes[0].querySelector('.Box-row')) {
-          runExtension();
-          break; // ensure only one execution of runExtension is triggered;
-        }
-      }
-    }
-  }
-};
-
-// Create an observer instance linked to the callback function
-const observer = new MutationObserver(mutationCB);
-observer.observe(targetNode, observerOptions);
+import { observe } from 'selector-observer';
 
 // run on load
-runExtension();
-//////
+const jsonUrl = chrome.runtime.getURL('iconMap.json');
+const iconSelector = '.js-navigation-container > .js-navigation-item';
 
-function runExtension() {
-  observer.disconnect(); // stop listening for changes while we run our substitutions
-  const jsonUrl = chrome.runtime.getURL('iconMap.json');
-
-  fetch(jsonUrl)
-    .then((response) => response.json())
-    .then((iconMap) => {
-      const fileList = document.querySelector('[aria-labelledby=files]'); // get file box
-      if (!fileList) return;
-
-      const fileRows = fileList.querySelectorAll('.Box-row');
-      fileRows.forEach((row, i, arr) => {
-        const isLast = i === arr.length - 1;
-        replaceIcon(row, iconMap, isLast);
-      });
+fetch(jsonUrl)
+  .then((response) => response.json())
+  .then((iconMap) => {
+    manualRun(iconMap);
+    observe(iconSelector, {
+      add(row) {
+        replaceIcon(row, iconMap);
+      },
     });
+  });
+
+//
+
+///
+function manualRun(iconMap) {
+  const fileRows = document.querySelectorAll(iconSelector);
+  fileRows.forEach((row) => {
+    replaceIcon(row, iconMap);
+  });
 }
 
-function replaceIcon(fileRow, iconMap, isLastIcon) {
+function replaceIcon(fileRow, iconMap) {
   // get file/folder name
   const fileName = fileRow.querySelector('[role=rowheader]')?.firstElementChild?.firstElementChild
     ?.innerText;
@@ -68,20 +42,12 @@ function replaceIcon(fileRow, iconMap, isLastIcon) {
   const iconName = lookForMatch(fileName, isDir, iconMap); // returns iconname if found or undefined
   if (!iconName) return;
 
-  getIcon(iconName)
-    .then(({ innerSVG, viewBox }) => {
-      // must first reset innerHTML on svgEl to innerHTML of our svg
-      svgEl.innerHTML = innerSVG;
-      // then must set viewBox on svgEl to viewBox on our icon
-      svgEl.setAttribute('viewBox', viewBox);
-      svgEl.classList.add('material-icons-ext');
-    })
-    .then(() => {
-      if (isLastIcon) {
-        checkIconPersists();
-        observer.observe(targetNode, observerOptions); 
-      }
-    });
+  getIcon(iconName).then(({ innerSVG, viewBox }) => {
+    // must first reset innerHTML on svgEl to innerHTML of our svg
+    svgEl.innerHTML = innerSVG;
+    // then must set viewBox on svgEl to viewBox on our icon
+    svgEl.setAttribute('viewBox', viewBox);
+  });
 }
 
 function lookForMatch(fileName, isDir, iconMap) {
@@ -131,18 +97,4 @@ function getIcon(iconName) {
       })
       .catch((error) => reject(error));
   });
-}
-
-function checkIconPersists() {
-  let consecutiveSucesses = 0;
-  const timer = setInterval(() => {
-    const materialIcon = document.querySelector('div.Box-row > div.mr-3 > svg.material-icons-ext');
-    if (!materialIcon) {
-      clearInterval(timer);
-      runExtension();
-    } else {
-      consecutiveSucesses++;
-      if (consecutiveSucesses >= successThreshold) clearInterval(timer);
-    }
-  }, 50);
 }

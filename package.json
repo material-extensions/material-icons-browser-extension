@@ -27,5 +27,8 @@
     "simple-git": "^2.31.0",
     "svgo": "^1.3.2"
   },
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "selector-observer": "^2.1.6"
+  }
 }
