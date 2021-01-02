@@ -1,21 +1,16 @@
 import { observe } from 'selector-observer';
+import iconsCache from './iconsCache';
+import iconMap from './iconMap';
 
 // run on load
-const jsonUrl = chrome.runtime.getURL('iconMap.json');
 const iconSelector = '.js-navigation-container > .js-navigation-item';
 
-fetch(jsonUrl)
-  .then((response) => response.json())
-  .then((iconMap) => {
-    manualRun(iconMap);
-    observe(iconSelector, {
-      add(row) {
-        replaceIcon(row, iconMap);
-      },
-    });
-  });
-
-//
+manualRun(iconMap);
+observe(iconSelector, {
+  add(row) {
+    replaceIcon(row, iconMap);
+  },
+});
 
 ///
 function manualRun(iconMap) {
@@ -42,12 +37,13 @@ function replaceIcon(fileRow, iconMap) {
   const iconName = lookForMatch(fileName, isDir, iconMap); // returns iconname if found or undefined
   if (!iconName) return;
 
-  getIcon(iconName).then(({ innerSVG, viewBox }) => {
-    // must first reset innerHTML on svgEl to innerHTML of our svg
-    svgEl.innerHTML = innerSVG;
-    // then must set viewBox on svgEl to viewBox on our icon
-    svgEl.setAttribute('viewBox', viewBox);
-  });
+  const { innerHtml, viewBox } = iconsCache[iconName + '.svg'];
+  if (!innerHtml || !viewBox) return;
+
+  // must first reset innerHTML on svgEl to innerHTML of our svg
+  svgEl.innerHTML = innerHtml;
+  // then must set viewBox on svgEl to viewBox on our icon
+  svgEl.setAttribute('viewBox', viewBox);
 }
 
 function lookForMatch(fileName, isDir, iconMap) {
@@ -71,30 +67,4 @@ function lookForMatch(fileName, isDir, iconMap) {
   // fallback into default file or folder if no matches
   if (!isDir) return 'file';
   if (isDir) return 'folder';
-}
-
-function getIcon(iconName) {
-  const filePath = 'icons/' + iconName + '.svg';
-  const url = chrome.runtime.getURL(filePath);
-
-  return new Promise((resolve, reject) => {
-    fetch(url)
-      .then((response) => response.text())
-      .then((svgStr) => {
-        const tempEl = document.createElement('div');
-        tempEl.innerHTML = svgStr;
-        const svg = tempEl.firstElementChild;
-
-        const viewBox = svg.getAttribute('viewBox');
-        const innerSVG = svg.innerHTML;
-
-        if (!viewBox || !innerSVG) reject('fail');
-
-        resolve({
-          innerSVG,
-          viewBox,
-        });
-      })
-      .catch((error) => reject(error));
-  });
 }

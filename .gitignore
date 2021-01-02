@@ -2,6 +2,9 @@ dist/
 temp/
 .vscode/
 material-icons-github-chrome-extension.zip
+src/iconsCache.js
+src/iconMap.json
+optimizedSVGs/
 
 # Logs
 logs
