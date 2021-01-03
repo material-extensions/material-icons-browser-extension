@@ -12,6 +12,7 @@ const srcPath = path.resolve(__dirname, '..', 'src');
 // Copy dependencies from vs code extension
 
 rimraf.sync(vsExtPath);
+rimraf.sync(destSVGPath);
 mkdirp(destSVGPath)
   .then(() => git.clone(`https://github.com/PKief/vscode-material-icon-theme.git`, 'temp'))
   .then(npmInstallExt)
