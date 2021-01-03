@@ -12,7 +12,8 @@
   "content_scripts": [
     {
       "matches": ["*://*.github.com/*"],
-      "js": ["./main.js"]
+      "js": ["./main.js"],
+      "run_at": "document_start"
     }
   ],
   "web_accessible_resources": [

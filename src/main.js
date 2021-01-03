@@ -5,20 +5,11 @@ import iconMap from './iconMap';
 // run on load
 const iconSelector = '.js-navigation-container > .js-navigation-item';
 
-manualRun(iconMap);
 observe(iconSelector, {
   add(row) {
     replaceIcon(row, iconMap);
   },
 });
-
-///
-function manualRun(iconMap) {
-  const fileRows = document.querySelectorAll(iconSelector);
-  fileRows.forEach((row) => {
-    replaceIcon(row, iconMap);
-  });
-}
 
 function replaceIcon(fileRow, iconMap) {
   // get file/folder name
