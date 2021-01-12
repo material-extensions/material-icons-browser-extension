@@ -4,7 +4,7 @@
   "description": "Chrome Extension that enhances the GitHub file browser with material icons",
   "main": "index.js",
   "scripts": {
-    "build": "npx rimraf ./dist && npx run-s build-dependencies build-src",
+    "build": "npx rimraf ./dist && npx run-s build-dependencies build-src bundle",
     "build-dependencies": "node ./scripts/build-dependencies.js",
     "build-src": "node ./scripts/build-src.js",
     "rebuild-logos": "node ./scripts/build-extensionIcons.js",
