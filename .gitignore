@@ -2,6 +2,7 @@ dist/
 temp/
 .vscode/
 material-icons-github-chrome-extension.zip
+material-icons-firefox-extension.zip
 src/iconsCache.js
 src/iconMap.json
 optimizedSVGs/

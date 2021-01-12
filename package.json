@@ -8,7 +8,9 @@
     "build-dependencies": "node ./scripts/build-dependencies.js",
     "build-src": "node ./scripts/build-src.js",
     "rebuild-logos": "node ./scripts/build-extensionIcons.js",
-    "bundle": "7z a material-icons-github-chrome-extension.zip dist",
+    "bundle": "run-p bundle-chrome bundle-firefox",
+    "bundle-chrome": "7z a material-icons-github-chrome-extension.zip dist",
+    "bundle-firefox": "web-ext -s ./dist/ -n material-icons-firefox-extension.zip -a . build",
     "parcel": "parcel build ./src/main.js"
   },
   "author": "",
@@ -26,7 +28,8 @@
     "prettier": "^2.1.2",
     "rimraf": "^3.0.2",
     "simple-git": "^2.31.0",
-    "svgo": "^1.3.2"
+    "svgo": "^1.3.2",
+    "web-ext": "^5.5.0"
   },
   "license": "ISC",
   "dependencies": {

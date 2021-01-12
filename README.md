@@ -45,7 +45,7 @@ Rebuild extension logos from `src/logo.svg`. _This script needs [Inkscape](https
 npm run rebuild-logos
 ```
 
-Zip `dist` folder for upload to Chrome Web Store. *This script needs 7z (7zip) to be available on PATH*
+Zip `dist` folder for upload to Chrome Web Store and Firefox. *This script needs 7z (7zip) to be available on PATH*
 
 ```shell
 npm run bundle
