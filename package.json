@@ -1,38 +1,52 @@
 {
-  "name": "material-icons-github-chrome-extension",
-  "version": "1.3.0",
-  "description": "Chrome Extension that enhances the GitHub file browser with material icons",
-  "main": "index.js",
-  "scripts": {
-    "build": "npx rimraf ./dist && npx run-s build-dependencies build-src bundle",
-    "build-dependencies": "node ./scripts/build-dependencies.js",
-    "build-src": "node ./scripts/build-src.js",
-    "rebuild-logos": "node ./scripts/build-extensionIcons.js",
-    "bundle": "run-p bundle-chrome bundle-firefox",
-    "bundle-chrome": "7z a material-icons-github-chrome-extension.zip dist",
-    "bundle-firefox": "web-ext -s ./dist/ -n material-icons-firefox-extension.zip -a . build",
-    "parcel": "parcel build ./src/main.js"
-  },
-  "author": "",
-  "devDependencies": {
-    "eslint": "^7.2.0",
-    "eslint-config": "^0.3.0",
-    "eslint-config-airbnb": "^18.2.0",
-    "eslint-config-prettier": "^6.14.0",
-    "eslint-plugin-prettier": "^3.1.4",
-    "fs-extra": "^9.0.1",
-    "mkdirp": "^1.0.4",
-    "node-html-parser": "^2.0.1",
-    "npm-run-all": "^4.1.5",
-    "parcel-bundler": "^1.12.4",
-    "prettier": "^2.1.2",
-    "rimraf": "^3.0.2",
-    "simple-git": "^2.31.0",
-    "svgo": "^1.3.2",
-    "web-ext": "^5.5.0"
-  },
-  "license": "ISC",
-  "dependencies": {
-    "selector-observer": "^2.1.6"
-  }
+	"name": "github-material-icons-extension",
+	"version": "1.3.0",
+	"description": "Browser Extension that enhances the GitHub file browser with material icons.",
+	"main": "src/main.js",
+	"author": "Claudio Santos",
+	"license": "MIT",
+	"homepage": "https://github.com/Claudiohbsantos/github-material-icons-extension#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Claudiohbsantos/github-material-icons-extension.git"
+	},
+	"bugs": {
+		"url": "https://github.com/Claudiohbsantos/github-material-icons-extension/issues"
+	},
+	"engines": {
+		"node": ">=10.0.0",
+		"npm": ">=6.9.0 <7"
+	},
+	"dependencies": {
+		"selector-observer": "2.1.6"
+	},
+	"devDependencies": {
+		"eslint": "7.29.0",
+		"eslint-config": "0.3.0",
+		"eslint-config-airbnb": "18.2.1",
+		"eslint-config-prettier": "8.3.0",
+		"eslint-plugin-prettier": "3.4.0",
+		"fs-extra": "10.0.0",
+		"mkdirp": "1.0.4",
+		"node-html-parser": "3.3.5",
+		"npm-run-all": "4.1.5",
+		"parcel-bundler": "1.12.5",
+		"prettier": "2.3.1",
+		"rimraf": "3.0.2",
+		"sharp": "0.28.3",
+		"simple-git": "2.40.0",
+		"svgo": "2.3.0",
+		"web-ext": "6.1.0"
+	},
+	"scripts": {
+		"build": "npx rimraf ./dist && npx run-s build-dependencies build-src bundle",
+		"build-dependencies": "node ./scripts/build-dependencies.js",
+		"build-src": "node ./scripts/build-src.js",
+		"rebuild-logos": "node ./scripts/build-extensionIcons.js",
+		"bundle": "run-p bundle-edge bundle-chrome bundle-firefox",
+		"bundle-edge": "zip -r material-icons-github-edge-extension.zip dist",
+		"bundle-chrome": "zip -r material-icons-github-chrome-extension.zip dist",
+		"bundle-firefox": "web-ext -s ./dist/ -n material-icons-github-firefox-extension.zip -a . build",
+		"parcel": "parcel build ./src/main.js"
+	}
 }

@@ -11,7 +11,6 @@
 
 <b>Install directly from the <a href="https://chrome.google.com/webstore/detail/material-icons-for-github/bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc">Chrome Web Store</a> or the <a href="https://addons.mozilla.org/en-US/firefox/addon/material-icons-for-github/">Addons for Firefox</a></b></div>
 
-
 ---
 
 ### About
@@ -42,13 +41,13 @@ Build only files from `src` folder, without re-downloading dependencies from [Ma
 npm run build-src
 ```
 
-Rebuild extension logos from `src/logo.svg`. _This script needs [Inkscape](https://inkscape.org/) to be available on PATH_
+Rebuild extension logos from `src/logo.svg`.
 
 ```shell
 npm run rebuild-logos
 ```
 
-Zip `dist` folder for upload to Chrome Web Store and Firefox. *This script needs 7z (7zip) to be available on PATH*
+Zip `dist` folder for upload to Chrome Web Store and Firefox. _This script needs Zip to be available on PATH_
 
 ```shell
 npm run bundle

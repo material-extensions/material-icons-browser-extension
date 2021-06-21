@@ -1,41 +1,62 @@
+/**
+ * External depedencies
+ */
 const path = require('path');
-const mkdirp = require('mkdirp');
 const fs = require('fs-extra');
+const mkdirp = require('mkdirp');
 const Parcel = require('parcel-bundler');
 const extractSVGs = require('./extract-svgHtml');
 
-const destSVGPath = path.resolve(__dirname, '..', 'optimizedSVGs');
-const distPath = path.resolve(__dirname, '..', 'dist');
+/**
+ * Internal depedencies
+ */
 const srcPath = path.resolve(__dirname, '..', 'src');
+const distPath = path.resolve(__dirname, '..', 'dist');
+const destSVGPath = path.resolve(__dirname, '..', 'optimizedSVGs');
 
-mkdirp(distPath).then(createIconsCache).then(src);
+// copy src files to dist.
+mkdirp(distPath).then(createIconsCache).then(copySrc);
 
-// copy src files
+/**
+ * Copy the src files.
+ *
+ * @since 1.4.0
+ *
+ * @returns a newly generated promise object.
+ */
+function copySrc() {
+	// Copy manifest file.
+	const copyManifest = fs.copy(
+		path.resolve(srcPath, 'manifest.json'),
+		path.resolve(distPath, 'manifest.json')
+	);
 
-function src() {
-  const entryFile = path.resolve(srcPath, 'main.js');
-  const parcelOptions = {
-    watch: false,
-    minify: true,
-  };
-  const bundler = new Parcel(entryFile, parcelOptions);
-  const bundleMainScript = bundler.bundle();
+	// Copy extension icon.
+	const copyExtensionLogos = fs.copy(
+		path.resolve(srcPath, "extensionIcons"),
+		path.resolve(distPath, "icons")
+	);
 
-  const copyManifest = fs.copy(
-    path.resolve(srcPath, 'manifest.json'),
-    path.resolve(distPath, 'manifest.json')
-  );
+	// Bundle the main script.
+	const entryFile = path.resolve(srcPath, 'main.js');
+	const bundleMainScript = new Parcel(entryFile, {
+		watch: false,
+		minify: true,
+	}).bundle();
 
-  const copyExtensionLogos = fs.copy(path.resolve(srcPath, 'extensionIcons'), distPath);
-
-  return Promise.all([copyManifest, copyExtensionLogos, bundleMainScript]);
+	return Promise.all([copyManifest, copyExtensionLogos, bundleMainScript]);
 }
 
+/**
+ * Create icons cache.
+ *
+ * @since 1.4.0
+ */
 function createIconsCache() {
-  return new Promise((resolve, reject) => {
-    fs.copy(path.resolve(srcPath, 'customIcons'), destSVGPath)
-      .then(() => extractSVGs())
-      .then(resolve)
-      .catch(reject);
-  });
+	return new Promise((resolve, reject) => {
+		fs.copy(path.resolve(srcPath, 'customIcons'), destSVGPath)
+			.then(() => extractSVGs())
+			.then(resolve)
+			.catch(reject);
+	});
 }
