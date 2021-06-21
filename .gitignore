@@ -5,9 +5,9 @@ node_modules
 optimizedSVGs
 src/iconMap.json
 src/iconsCache.js
-material-icons-github-edge-extension.zip
-material-icons-github-chrome-extension.zip
-material-icons-github-firefox-extension.zip
+github-material-icons-edge-extension.zip
+github-material-icons-chrome-extension.zip
+github-material-icons-firefox-extension.zip
 
 # Directories/files that may appear in your environment
 *.log
