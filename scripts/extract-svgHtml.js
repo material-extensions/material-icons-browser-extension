@@ -13,30 +13,30 @@ const { parse } = require('node-html-parser');
  * @returns a newly generated promise object.
  */
 module.exports = function extractSVGs() {
-	const iconsPath = path.resolve(__dirname, '..', 'optimizedSVGs');
-	const destCachePath = path.resolve(__dirname, '..', 'src', 'iconsCache.js');
+  const iconsPath = path.resolve(__dirname, '..', 'optimizedSVGs');
+  const destCachePath = path.resolve(__dirname, '..', 'src', 'iconsCache.js');
 
-	return new Promise((resolve, reject) => {
-		fs.readdir(iconsPath)
-			.then((iconsNames) =>
-				Promise.all(
-					iconsNames.map((name) => fs.readFile(path.resolve(iconsPath, name), { encoding: 'utf8' }))
-				).then((svgStrs) => svgStrs.map((svgStr, i) => [iconsNames[i], parse(svgStr)]))
-			)
-			.then((svgElsEntries) =>
-				svgElsEntries.map((entry) => [
-					entry[0],
-					{
-						innerHtml: entry[1].firstChild.innerHTML,
-						viewBox: entry[1].firstChild.getAttribute('viewBox'),
-					},
-				])
-			)
-			.then((cacheEntries) => Object.fromEntries(cacheEntries))
-			.then((svgsObj) => fs.writeFile(destCachePath, formatCache(svgsObj)))
-			.then(resolve)
-			.catch(reject);
-	});
+  return new Promise((resolve, reject) => {
+    fs.readdir(iconsPath)
+      .then((iconsNames) =>
+        Promise.all(
+          iconsNames.map((name) => fs.readFile(path.resolve(iconsPath, name), { encoding: 'utf8' }))
+        ).then((svgStrs) => svgStrs.map((svgStr, i) => [iconsNames[i], parse(svgStr)]))
+      )
+      .then((svgElsEntries) =>
+        svgElsEntries.map((entry) => [
+          entry[0],
+          {
+            innerHtml: entry[1].firstChild.innerHTML,
+            viewBox: entry[1].firstChild.getAttribute('viewBox'),
+          },
+        ])
+      )
+      .then((cacheEntries) => Object.fromEntries(cacheEntries))
+      .then((svgsObj) => fs.writeFile(destCachePath, formatCache(svgsObj)))
+      .then(resolve)
+      .catch(reject);
+  });
 };
 
 /**
@@ -48,11 +48,11 @@ module.exports = function extractSVGs() {
  * @returns Cache file contents.
  */
 function formatCache(obj) {
-	const declaration = `const cache = `;
-	const cacheObj = JSON.stringify(obj);
-	const bottomExport = `export default cache;`;
+  const declaration = `const cache = `;
+  const cacheObj = JSON.stringify(obj);
+  const bottomExport = `export default cache;`;
 
-	const fileContents = `${declaration}${cacheObj}\n\n${bottomExport}`;
+  const fileContents = `${declaration}${cacheObj}\n\n${bottomExport}`;
 
-	return fileContents;
+  return fileContents;
 }

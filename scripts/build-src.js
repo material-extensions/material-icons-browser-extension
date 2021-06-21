@@ -25,26 +25,26 @@ mkdirp(distPath).then(createIconsCache).then(copySrc);
  * @returns a newly generated promise object.
  */
 function copySrc() {
-	// Copy manifest file.
-	const copyManifest = fs.copy(
-		path.resolve(srcPath, 'manifest.json'),
-		path.resolve(distPath, 'manifest.json')
-	);
+  // Copy manifest file.
+  const copyManifest = fs.copy(
+    path.resolve(srcPath, 'manifest.json'),
+    path.resolve(distPath, 'manifest.json')
+  );
 
-	// Copy extension icon.
-	const copyExtensionLogos = fs.copy(
-		path.resolve(srcPath, "extensionIcons"),
-		path.resolve(distPath, "icons")
-	);
+  // Copy extension icon.
+  const copyExtensionLogos = fs.copy(
+    path.resolve(srcPath, 'extensionIcons'),
+    path.resolve(distPath, 'icons')
+  );
 
-	// Bundle the main script.
-	const entryFile = path.resolve(srcPath, 'main.js');
-	const bundleMainScript = new Parcel(entryFile, {
-		watch: false,
-		minify: true,
-	}).bundle();
+  // Bundle the main script.
+  const entryFile = path.resolve(srcPath, 'main.js');
+  const bundleMainScript = new Parcel(entryFile, {
+    watch: false,
+    minify: true,
+  }).bundle();
 
-	return Promise.all([copyManifest, copyExtensionLogos, bundleMainScript]);
+  return Promise.all([copyManifest, copyExtensionLogos, bundleMainScript]);
 }
 
 /**
@@ -53,10 +53,10 @@ function copySrc() {
  * @since 1.4.0
  */
 function createIconsCache() {
-	return new Promise((resolve, reject) => {
-		fs.copy(path.resolve(srcPath, 'customIcons'), destSVGPath)
-			.then(() => extractSVGs())
-			.then(resolve)
-			.catch(reject);
-	});
+  return new Promise((resolve, reject) => {
+    fs.copy(path.resolve(srcPath, 'customIcons'), destSVGPath)
+      .then(() => extractSVGs())
+      .then(resolve)
+      .catch(reject);
+  });
 }
