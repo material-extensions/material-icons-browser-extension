@@ -30,7 +30,7 @@ mkdirp(destSVGPath)
   .then(() =>
     git().clone(`https://github.com/PKief/vscode-material-icon-theme.git`, 'temp', ['--depth', '1'])
   )
-  .then(() => child_process.execSync(`npm install`, vsExtExecOptions))
+  .then(() => child_process.execSync(`npm install --ignore-scripts`, vsExtExecOptions))
   .then(() => fs.copy(path.resolve(vsExtPath, 'icons'), path.resolve(destSVGPath)))
   .then(() => child_process.exec(`npx svgo -r .`, distIconsExecOptions))
   .then(() => child_process.execSync(`npm run build`, vsExtExecOptions))
