@@ -5,7 +5,6 @@ const path = require('path');
 const fs = require('fs-extra');
 const mkdirp = require('mkdirp');
 const Parcel = require('parcel-bundler');
-const extractSVGs = require('./extract-svgHtml');
 
 /**
  * Internal depedencies
@@ -13,36 +12,33 @@ const extractSVGs = require('./extract-svgHtml');
 const srcPath = path.resolve(__dirname, '..', 'src');
 const distPath = path.resolve(__dirname, '..', 'dist');
 const destSVGPath = path.resolve(__dirname, '..', 'optimizedSVGs');
+const extractSVGs = require('./extract-svgHtml');
 
-// copy src files to dist.
-mkdirp(distPath).then(createIconsCache).then(copySrc);
+// Copy src files to dist.
+mkdirp(distPath).then(createIconsCache).then(src);
 
 /**
  * Copy the src files.
  *
- * @since 1.4.0
+ * @since 1.0.0
  *
  * @returns a newly generated promise object.
  */
-function copySrc() {
-  // Copy manifest file.
+function src() {
+  const entryFile = path.resolve(srcPath, 'main.js');
+  const parcelOptions = {
+    watch: false,
+    minify: true,
+  };
+  const bundler = new Parcel(entryFile, parcelOptions);
+  const bundleMainScript = bundler.bundle();
+
   const copyManifest = fs.copy(
     path.resolve(srcPath, 'manifest.json'),
     path.resolve(distPath, 'manifest.json')
   );
 
-  // Copy extension icon.
-  const copyExtensionLogos = fs.copy(
-    path.resolve(srcPath, 'extensionIcons'),
-    path.resolve(distPath, 'icons')
-  );
-
-  // Bundle the main script.
-  const entryFile = path.resolve(srcPath, 'main.js');
-  const bundleMainScript = new Parcel(entryFile, {
-    watch: false,
-    minify: true,
-  }).bundle();
+  const copyExtensionLogos = fs.copy(path.resolve(srcPath, 'extensionIcons'), distPath);
 
   return Promise.all([copyManifest, copyExtensionLogos, bundleMainScript]);
 }
@@ -50,7 +46,7 @@ function copySrc() {
 /**
  * Create icons cache.
  *
- * @since 1.4.0
+ * @since 1.0.0
  */
 function createIconsCache() {
   return new Promise((resolve, reject) => {

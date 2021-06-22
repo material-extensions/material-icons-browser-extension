@@ -44,8 +44,8 @@
     "build-src": "node ./scripts/build-src.js",
     "rebuild-logos": "node ./scripts/build-extensionIcons.js",
     "bundle": "run-p bundle-edge bundle-chrome bundle-firefox",
-    "bundle-edge": "zip -r github-material-icons-edge-extension.zip dist",
-    "bundle-chrome": "zip -r github-material-icons-chrome-extension.zip dist",
+    "bundle-edge": "zip -r -j github-material-icons-edge-extension.zip dist",
+    "bundle-chrome": "zip -r -j github-material-icons-chrome-extension.zip dist",
     "bundle-firefox": "web-ext -s ./dist/ -n github-material-icons-firefox-extension.zip -a . build",
     "parcel": "parcel build ./src/main.js"
   }

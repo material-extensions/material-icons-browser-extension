@@ -8,7 +8,7 @@ const { parse } = require('node-html-parser');
 /**
  * Retrieve the SVG elements.
  *
- * @since 1.4.0
+ * @since 1.0.0
  *
  * @returns a newly generated promise object.
  */
