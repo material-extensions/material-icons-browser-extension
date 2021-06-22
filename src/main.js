@@ -56,7 +56,7 @@ function replaceIcon(fileRow, iconMap) {
 /**
  * Lookup for matched icon name.
  *
- * @since 1.4.0
+ * @since 1.0.0
  *
  * @param {*} fileName File name.
  * @param {*} isDir Check if directory or file type.
