@@ -32,7 +32,7 @@ mkdirp(destSVGPath)
   )
   .then(() => child_process.execSync(`npm install`, vsExtExecOptions))
   .then(() => fs.copy(path.resolve(vsExtPath, 'icons'), path.resolve(destSVGPath)))
-  .then(() => child_process.exec(`npx svgo --disable=removeViewBox .`, distIconsExecOptions))
+  .then(() => child_process.exec(`npx svgo -r .`, distIconsExecOptions))
   .then(() => child_process.execSync(`npm run build`, vsExtExecOptions))
   .then(() =>
     fs.copy(
