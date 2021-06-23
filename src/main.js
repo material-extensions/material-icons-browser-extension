@@ -10,9 +10,7 @@ import iconMap from './iconMap';
 import iconsCache from './iconsCache';
 
 // Monitor DOM elements that match a CSS selector.
-const iconSelector = '.js-navigation-container > .js-navigation-item';
-
-observe(iconSelector, {
+observe('.js-navigation-container > .js-navigation-item', {
   add(row) {
     replaceIcon(row, iconMap);
   },
@@ -28,28 +26,28 @@ observe(iconSelector, {
  * @returns Replace icon with material icon.
  */
 function replaceIcon(fileRow, iconMap) {
-  // get file/folder name.
+  // Get file/folder name.
   const fileName =
     fileRow.querySelector('[role=rowheader]')?.firstElementChild?.firstElementChild?.innerText;
   if (!fileName) return; // fileName couldn't be found or we don't have a match for it.
 
-  // svg to be replaced.
+  // SVG to be replaced.
   const svgEl = fileRow.querySelector('.octicon');
   if (!svgEl) return; // couldn't find svg element.
 
-  // get Directory or File type.
+  // Get Directory or File type.
   const isDir = svgEl.getAttribute('aria-label') === 'Directory';
 
-  // get icon filename.
+  // Get icon filename.
   const iconName = lookForMatch(fileName, isDir, iconMap); // returns iconname if found or undefined.
   if (!iconName) return;
 
   const { innerHtml, viewBox } = iconsCache[iconName + '.svg'];
   if (!innerHtml || !viewBox) return;
 
-  // must first reset innerHTML on svgEl to innerHTML of our svg.
+  // Must first reset innerHTML on svgEl to innerHTML of our svg.
   svgEl.innerHTML = innerHtml;
-  // then must set viewBox on svgEl to viewBox on our icon.
+  // Finally set viewBox on svgEl to viewBox on our icon.
   svgEl.setAttribute('viewBox', viewBox);
 }
 
@@ -64,18 +62,10 @@ function replaceIcon(fileRow, iconMap) {
  * @returns {string} The matched icon name.
  */
 function lookForMatch(fileName, isDir, iconMap) {
-  // First look in fileNames and folderNames.
-  if (iconMap.fileNames[fileName] && !isDir) return iconMap.fileNames[fileName];
-  if (iconMap.folderNames[fileName] && isDir) return iconMap.folderNames[fileName];
-
-  // Then check all lowercase.
   const lowerFileName = fileName.toLowerCase();
-  if (iconMap.fileNames[lowerFileName] && !isDir) return iconMap.fileNames[lowerFileName];
-  if (iconMap.folderNames[lowerFileName] && isDir) return iconMap.folderNames[lowerFileName];
-
-  // Look for extension in fileExtensions and languageIds.
   const captureExtension = /.+(?<=\.)(.+)$/;
   const extension = fileName.match(captureExtension)?.[1];
+  const isLightTheme = window.matchMedia('(prefers-color-scheme: light)').matches;
   iconMap.fileExtensions = {
     ...iconMap.fileExtensions,
     ...{
@@ -83,8 +73,40 @@ function lookForMatch(fileName, isDir, iconMap) {
       ts: 'typescript',
     },
   };
-  if (iconMap.fileExtensions[extension] && !isDir) return iconMap.fileExtensions[extension];
-  if (iconMap.languageIds[extension] && !isDir) return iconMap.languageIds[extension];
+
+  // First look in fileNames and folderNames.
+  if (iconMap.fileNames[fileName] && !isDir) {
+    return isLightTheme && iconMap.light.fileNames[fileName]
+      ? iconMap.light.fileNames[fileName]
+      : iconMap.fileNames[fileName];
+  }
+  if (iconMap.folderNames[fileName] && isDir) {
+    return isLightTheme && iconMap.light.folderNames[fileName]
+      ? iconMap.light.folderNames[fileName]
+      : iconMap.folderNames[fileName];
+  }
+
+  // Then check all lowercase.
+  if (iconMap.fileNames[lowerFileName] && !isDir) {
+    return isLightTheme && iconMap.light.fileNames[lowerFileName]
+      ? iconMap.light.fileNames[lowerFileName]
+      : iconMap.fileNames[lowerFileName];
+  }
+  if (iconMap.folderNames[lowerFileName] && isDir) {
+    return isLightTheme && iconMap.light.folderNames[lowerFileName]
+      ? iconMap.light.folderNames[lowerFileName]
+      : iconMap.folderNames[lowerFileName];
+  }
+
+  // Look for extension in fileExtensions and languageIds.
+  if (iconMap.fileExtensions[extension] && !isDir) {
+    return isLightTheme && iconMap.light.fileExtensions[extension]
+      ? iconMap.light.fileExtensions[extension]
+      : iconMap.fileExtensions[extension];
+  }
+  if (iconMap.languageIds[extension] && !isDir) {
+    return iconMap.languageIds[extension];
+  }
 
   // fallback into default file or folder if no matches.
   if (!isDir) return 'file';
