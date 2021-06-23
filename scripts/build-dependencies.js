@@ -3,9 +3,9 @@
  */
 const path = require('path');
 const fs = require('fs-extra');
-const git = require('simple-git');
 const mkdirp = require('mkdirp');
 const rimraf = require('rimraf');
+const git = require('simple-git')();
 const child_process = require('child_process');
 
 /**
@@ -28,7 +28,7 @@ rimraf.sync(vsExtPath);
 rimraf.sync(destSVGPath);
 mkdirp(destSVGPath)
   .then(() =>
-    git().clone(`https://github.com/PKief/vscode-material-icon-theme.git`, 'temp', ['--depth', '1'])
+    git.clone(`https://github.com/PKief/vscode-material-icon-theme.git`, 'temp', ['--depth', '1'])
   )
   .then(() => child_process.execSync(`npm install --ignore-scripts`, vsExtExecOptions))
   .then(() => fs.copy(path.resolve(vsExtPath, 'icons'), path.resolve(destSVGPath)))
