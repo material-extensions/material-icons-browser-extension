@@ -56,10 +56,10 @@ function replaceIcon(fileRow, iconMap) {
  *
  * @since 1.0.0
  *
- * @param {string} fileName File name.
+ * @param {String} fileName File name.
  * @param {Boolean} isDir Check if directory or file type.
  * @param {Object} iconMap Icon map.
- * @returns {string} The matched icon name.
+ * @returns {String} The matched icon name.
  */
 function lookForMatch(fileName, isDir, iconMap) {
   const lowerFileName = fileName.toLowerCase();
