@@ -23,7 +23,7 @@ observe('.js-navigation-container > .js-navigation-item', {
  *
  * @param {*} fileRow File Row.
  * @param {*} iconMap Icon Map.
- * @returns Replace icon with material icon.
+ * @return {undefined}
  */
 function replaceIcon(fileRow, iconMap) {
   // Get file/folder name.
