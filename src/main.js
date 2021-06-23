@@ -54,30 +54,35 @@ function replaceIcon(fileRow, iconMap) {
 }
 
 /**
- * Lookup for matched icon name.
+ * Lookup for matched file/folder icon name.
  *
  * @since 1.0.0
  *
  * @param {*} fileName File name.
  * @param {*} isDir Check if directory or file type.
  * @param {*} iconMap Icon map.
- * @returns the matched icon name.
+ * @returns {string} The matched icon name.
  */
 function lookForMatch(fileName, isDir, iconMap) {
-  // returns icon name string if matches otherwise undefined.
-  const lowerFileName = fileName.toLowerCase();
-  // first look in fileNames and folderNames.
+  // First look in fileNames and folderNames.
   if (iconMap.fileNames[fileName] && !isDir) return iconMap.fileNames[fileName];
   if (iconMap.folderNames[fileName] && isDir) return iconMap.folderNames[fileName];
 
-  // then check all lowercase.
+  // Then check all lowercase.
+  const lowerFileName = fileName.toLowerCase();
   if (iconMap.fileNames[lowerFileName] && !isDir) return iconMap.fileNames[lowerFileName];
   if (iconMap.folderNames[lowerFileName] && isDir) return iconMap.folderNames[lowerFileName];
 
-  // look for extension in fileExtensions and languageIds.
+  // Look for extension in fileExtensions and languageIds.
   const captureExtension = /.+(?<=\.)(.+)$/;
   const extension = fileName.match(captureExtension)?.[1];
-
+  iconMap.fileExtensions = {
+    ...iconMap.fileExtensions,
+    ...{
+      js: 'javascript',
+      ts: 'typescript',
+    },
+  };
   if (iconMap.fileExtensions[extension] && !isDir) return iconMap.fileExtensions[extension];
   if (iconMap.languageIds[extension] && !isDir) return iconMap.languageIds[extension];
 
