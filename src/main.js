@@ -21,8 +21,8 @@ observe('.js-navigation-container > .js-navigation-item', {
  *
  * @since 1.0.0
  *
- * @param {*} fileRow File Row.
- * @param {*} iconMap Icon Map.
+ * @param {String} fileRow File Row.
+ * @param {Object} iconMap Icon Map.
  * @return {undefined}
  */
 function replaceIcon(fileRow, iconMap) {
@@ -56,9 +56,9 @@ function replaceIcon(fileRow, iconMap) {
  *
  * @since 1.0.0
  *
- * @param {*} fileName File name.
- * @param {*} isDir Check if directory or file type.
- * @param {*} iconMap Icon map.
+ * @param {string} fileName File name.
+ * @param {Boolean} isDir Check if directory or file type.
+ * @param {Object} iconMap Icon map.
  * @returns {string} The matched icon name.
  */
 function lookForMatch(fileName, isDir, iconMap) {

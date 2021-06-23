@@ -10,7 +10,7 @@ const { parse } = require('node-html-parser');
  *
  * @since 1.0.0
  *
- * @returns a newly generated promise object.
+ * @returns {Promise} a newly generated promise object.
  */
 module.exports = function extractSVGs() {
   const iconsPath = path.resolve(__dirname, '..', 'optimizedSVGs');
