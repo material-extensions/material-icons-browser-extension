@@ -22,7 +22,7 @@ mkdirp(distPath).then(createIconsCache).then(src);
  *
  * @since 1.0.0
  *
- * @returns a newly generated promise object.
+ * @returns {Promise} a newly generated promise object.
  */
 function src() {
   const entryFile = path.resolve(srcPath, 'main.js');

@@ -71,10 +71,8 @@ function replaceIcon(fileRow, iconMap) {
  * @returns {String} The matched icon name.
  */
 function lookForMatch(fileName, isDir, iconMap) {
-  const lowerFileName = fileName.toLowerCase();
-  const captureExtension = /.+(?<=\.)(.+)$/;
-  const extension = fileName.match(captureExtension)?.[1];
   const isLightTheme = window.matchMedia('(prefers-color-scheme: light)').matches;
+  const fileExtension = fileName.match(/.*?[.](?<ext>xml.dist|yml.dist|\w+)$/)?.[1];
 
   // First look in fileNames and folderNames.
   if (iconMap.fileNames[fileName] && !isDir) {
@@ -89,6 +87,7 @@ function lookForMatch(fileName, isDir, iconMap) {
   }
 
   // Then check all lowercase.
+  const lowerFileName = fileName.toLowerCase();
   if (iconMap.fileNames[lowerFileName] && !isDir) {
     return isLightTheme && iconMap.light.fileNames[lowerFileName]
       ? iconMap.light.fileNames[lowerFileName]
@@ -101,16 +100,16 @@ function lookForMatch(fileName, isDir, iconMap) {
   }
 
   // Look for extension in fileExtensions and languageIds.
-  if (iconMap.fileExtensions[extension] && !isDir) {
-    return isLightTheme && iconMap.light.fileExtensions[extension]
-      ? iconMap.light.fileExtensions[extension]
-      : iconMap.fileExtensions[extension];
+  if (iconMap.fileExtensions[fileExtension] && !isDir) {
+    return isLightTheme && iconMap.light.fileExtensions[fileExtension]
+      ? iconMap.light.fileExtensions[fileExtension]
+      : iconMap.fileExtensions[fileExtension];
   }
-  if (iconMap.languageIds[extension] && !isDir) {
-    return iconMap.languageIds[extension];
+  if (iconMap.languageIds[fileExtension] && !isDir) {
+    return iconMap.languageIds[fileExtension];
   }
 
-  // fallback into default file or folder if no matches.
+  // Fallback into default file or folder if no matches.
   if (!isDir) return 'file';
   if (isDir) return 'folder';
 }

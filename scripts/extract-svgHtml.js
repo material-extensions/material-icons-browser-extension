@@ -44,7 +44,7 @@ module.exports = function extractSVGs() {
  *
  * @since 1.0.0
  *
- * @param {*} obj SVG Object.
+ * @param {Object} obj SVG Object.
  * @returns Cache file contents.
  */
 function formatCache(obj) {
