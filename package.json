@@ -47,6 +47,7 @@
     "bundle-edge": "zip -r -j github-material-icons-edge-extension.zip dist",
     "bundle-chrome": "zip -r -j github-material-icons-chrome-extension.zip dist",
     "bundle-firefox": "web-ext -s ./dist/ -n github-material-icons-firefox-extension.zip -a . build",
-    "parcel": "parcel build ./src/main.js"
+    "parcel": "parcel build ./src/main.js",
+    "parcel-watch": "parcel watch ./src/main.js"
   }
 }
