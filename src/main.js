@@ -9,6 +9,15 @@ import { observe } from 'selector-observer';
 import iconMap from './iconMap';
 import iconsCache from './iconsCache';
 
+// Expected configuration.
+iconMap.fileExtensions = {
+  ...iconMap.fileExtensions,
+  ...{
+    js: 'javascript',
+    ts: 'typescript',
+  },
+};
+
 // Monitor DOM elements that match a CSS selector.
 observe('.js-navigation-container > .js-navigation-item', {
   add(row) {
@@ -66,13 +75,6 @@ function lookForMatch(fileName, isDir, iconMap) {
   const captureExtension = /.+(?<=\.)(.+)$/;
   const extension = fileName.match(captureExtension)?.[1];
   const isLightTheme = window.matchMedia('(prefers-color-scheme: light)').matches;
-  iconMap.fileExtensions = {
-    ...iconMap.fileExtensions,
-    ...{
-      js: 'javascript',
-      ts: 'typescript',
-    },
-  };
 
   // First look in fileNames and folderNames.
   if (iconMap.fileNames[fileName] && !isDir) {
