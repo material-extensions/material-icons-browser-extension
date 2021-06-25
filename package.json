@@ -1,6 +1,6 @@
 {
   "name": "material-icons-github-chrome-extension",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Chrome Extension that enhances the GitHub file browser with material icons",
   "main": "index.js",
   "scripts": {

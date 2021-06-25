@@ -1,6 +1,7 @@
 import { observe } from 'selector-observer';
 import iconsCache from './iconsCache';
 import iconMap from './iconMap';
+import languageMap from './languageMap';
 
 // run on load
 const iconSelector = '.js-navigation-container > .js-navigation-item';
@@ -54,6 +55,11 @@ function lookForMatch(fileName, isDir, iconMap) {
 
   if (iconMap.fileExtensions[extension] && !isDir) return iconMap.fileExtensions[extension];
   if (iconMap.languageIds[extension] && !isDir) return iconMap.languageIds[extension];
+
+  // look for filename and extension in vscode language map
+  if (languageMap.fileNames[fileName] && !isDir) return languageMap.fileNames[fileName];
+  if (languageMap.fileNames[lowerFileName] && !isDir) return languageMap.fileNames[lowerFileName];
+  if (languageMap.fileExtensions[extension] && !isDir) return languageMap.fileExtensions[extension];
 
   // fallback into default file or folder if no matches
   if (!isDir) return 'file';
