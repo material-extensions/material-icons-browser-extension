@@ -120,10 +120,8 @@ function processLanguageContribution(lang) {
   delete lang.aliases;
   delete lang.configuration;
   delete lang.firstLine;
-
   lang.extensions = lang.extensions || [];
   lang.filenames = lang.filenames || [];
-
   if (lang.filenamePatterns) {
     lang.filenamePatterns.forEach((ptn) => {
       if (/^\*\.[^*\/\?]+$/.test(ptn)) {
@@ -135,7 +133,6 @@ function processLanguageContribution(lang) {
     });
     delete lang.filenamePatterns;
   }
-
   lang.extensions = lang.extensions
     .filter((ext) => {
       const isExt = ext.startsWith('.');
@@ -144,8 +141,10 @@ function processLanguageContribution(lang) {
       }
       return isExt;
     })
-    .map(ext => ext.substring(1));
-
+    .map(ext => ext.substring(1))
+    .filter(ext => !/\*|\/|\?/.test(ext));
+  lang.filenames = lang.filenames
+    .filter(name => !/\*|\/|\?/.test(name));
   index++;
   if (index === total) {
     console.log('[5/7] Mapping language contributions into file icon configuration.');
@@ -185,16 +184,16 @@ function mapLanguageContribution(lang) {
       languageMap.fileExtensions[ext] = extIconName;
     }
   });
-  lang.filenames.forEach((ext) => {
+  lang.filenames.forEach((name) => {
     let fileIconName = lang.id;
     if (remap.filenames.hasOwnProperty(fileIconName)) {
       let overrideIcon = remap.filenames[fileIconName];
       if (typeof overrideIcon === 'object') {
         for (const [ptn, override] in Object.entries(overrideIcon)) {
-          if (ptn.startsWith('^') && ext.startsWith(ptn.substring(1))) {
+          if (ptn.startsWith('^') && name.startsWith(ptn.substring(1))) {
             fileIconName = override;
           }
-          if (ptn.length && ext === ptn) {
+          if (ptn.length && name === ptn) {
             fileIconName = override;
           }
         }
@@ -207,10 +206,9 @@ function mapLanguageContribution(lang) {
       && !iconMap.fileNames.hasOwnProperty(fileIconName)
       && iconMap.iconDefinitions.hasOwnProperty(fileIconName)
     ) {
-      languageMap.fileNames[ext] = fileIconName;
+      languageMap.fileNames[name] = fileIconName;
     }
   });
-
   index++;
   if (index === total) {
     index = 0;
