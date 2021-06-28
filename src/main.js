@@ -56,12 +56,13 @@ function replaceIcon(fileRow, iconMap) {
   const svgEl = fileRow.querySelector('.octicon');
   if (!svgEl) return; // couldn't find svg element.
 
-  // Get Directory or File type.
+  // Get Directory or Submodule type.
   const isDir = svgEl.getAttribute('aria-label') === 'Directory';
+  const isSubmodule = svgEl.getAttribute('aria-label') === 'Submodule';
   const lowerFileName = fileName.toLowerCase();
 
   // Get icon name.
-  let iconName = lookForMatch(fileName, lowerFileName, fileExtension, isDir, iconMap); // returns icon name if found or undefined.
+  let iconName = lookForMatch(fileName, lowerFileName, fileExtension, isDir, isSubmodule, iconMap); // returns icon name if found or undefined.
   if (isLightTheme) {
     iconName = lookForLightMatch(iconName, fileName, fileExtension, isDir, iconMap); // returns icon name if found for light mode or undefined.
   }
@@ -90,26 +91,32 @@ function replaceIcon(fileRow, iconMap) {
  * @param {String} fileName File name.
  * @param {String} lowerFileName Lowercase file name.
  * @param {String} fileExtension File extension.
- * @param {Boolean} isDir Check if directory or file type.
+ * @param {Boolean} isDir Check if directory type.
+ * @param {Boolean} isSubmodule Check if submodule type.
  * @param {Object} iconMap Icon map.
  * @returns {String} The matched icon name.
  */
-function lookForMatch(fileName, lowerFileName, fileExtension, isDir, iconMap) {
+function lookForMatch(fileName, lowerFileName, fileExtension, isDir, isSubmodule, iconMap) {
   // First look in fileNames and folderNames.
-  if (iconMap.fileNames[fileName] && !isDir) return iconMap.fileNames[fileName];
-  if (iconMap.folderNames[fileName] && isDir) return iconMap.folderNames[fileName];
+  if (iconMap.fileNames[fileName] && !isDir && !isSubmodule) return iconMap.fileNames[fileName];
+  if (iconMap.folderNames[fileName] && isDir && !isSubmodule) return iconMap.folderNames[fileName];
 
   // Then check all lowercase.
-  if (iconMap.fileNames[lowerFileName] && !isDir) return iconMap.fileNames[lowerFileName];
-  if (iconMap.folderNames[lowerFileName] && isDir) return iconMap.folderNames[lowerFileName];
+  if (iconMap.fileNames[lowerFileName] && !isDir && !isSubmodule)
+    return iconMap.fileNames[lowerFileName];
+  if (iconMap.folderNames[lowerFileName] && isDir && !isSubmodule)
+    return iconMap.folderNames[lowerFileName];
 
   // Look for extension in fileExtensions and languageIds.
-  if (iconMap.fileExtensions[fileExtension] && !isDir) return iconMap.fileExtensions[fileExtension];
-  if (iconMap.languageIds[fileExtension] && !isDir) return iconMap.languageIds[fileExtension];
+  if (iconMap.fileExtensions[fileExtension] && !isDir && !isSubmodule)
+    return iconMap.fileExtensions[fileExtension];
+  if (iconMap.languageIds[fileExtension] && !isDir && !isSubmodule)
+    return iconMap.languageIds[fileExtension];
 
   // Fallback into default file or folder if no matches.
-  if (!isDir) return 'file';
   if (isDir) return 'folder';
+  if (isSubmodule) return 'folder-git';
+  if (!isDir && !isSubmodule) return 'file';
 }
 
 /**
