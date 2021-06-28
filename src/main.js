@@ -1,7 +1,7 @@
 import { observe } from 'selector-observer';
-import iconsCache from './iconsCache';
-import iconMap from './iconMap';
-import languageMap from './languageMap';
+import iconsCache from './icon-cache';
+import iconMap from './icon-map';
+import languageMap from './language-map';
 
 // run on load
 const iconSelector = '.js-navigation-container > .js-navigation-item';

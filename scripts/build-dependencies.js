@@ -1,11 +1,13 @@
-const git = require('simple-git')();
-const child_process = require('child_process');
+const simpleGit = require('simple-git');
+const cp = require('child_process');
 const path = require('path');
 const mkdirp = require('mkdirp');
 const fs = require('fs-extra');
 const rimraf = require('rimraf');
 
-const destSVGPath = path.resolve(__dirname, '..', 'optimizedSVGs');
+const git = simpleGit();
+
+const destSVGPath = path.resolve(__dirname, '..', 'svg');
 const vsExtPath = path.resolve(__dirname, '..', 'temp');
 const srcPath = path.resolve(__dirname, '..', 'src');
 
@@ -14,16 +16,28 @@ const srcPath = path.resolve(__dirname, '..', 'src');
 rimraf.sync(vsExtPath);
 rimraf.sync(destSVGPath);
 mkdirp(destSVGPath)
-  .then(() => git.clone(`https://github.com/PKief/vscode-material-icon-theme.git`, 'temp'))
+  .then(() => {
+    console.log('[1/7] Cloning PKief/vscode-material-icon-theme into temporary cache.');
+    return git.clone(`https://github.com/PKief/vscode-material-icon-theme.git`, 'temp');
+  })
+  .then(() => {
+    console.log('[2/7] Terminate Git repository in temporary cache.');
+    return rimraf.sync(path.resolve(vsExtPath, '.git'));
+  })
   .then(npmInstallExt)
-  .then(() => fs.copy(path.resolve(vsExtPath, 'icons'), path.resolve(destSVGPath)))
+  .then(() => {
+    console.log('[4/7] Terminate Git tracking in temporary cache.');
+    return fs.copy(path.resolve(vsExtPath, 'icons'), path.resolve(destSVGPath))
+  })
   .then(optimizeSVGs)
   .then(npmBuildExt)
-  .then(() =>
-    fs.copy(
+  .then(() => {
+    console.log('[7/7] Copy file icon configuration to source code directory.');
+    return fs.copy(
       path.resolve(vsExtPath, 'dist', 'material-icons.json'),
-      path.resolve(srcPath, 'iconMap.json')
-    )
+      path.resolve(srcPath, 'icon-map.json')
+    );
+  }
   )
   .then(() => rimraf.sync(vsExtPath))
 ////
@@ -33,16 +47,22 @@ const vsExtExecOptions = {
   stdio: 'inherit',
 };
 
+const distIconsExecOptions = {
+  cwd: path.resolve(destSVGPath),
+  stdio: 'inherit'
+}
+
 function npmInstallExt() {
-  child_process.execSync(`npm install`, vsExtExecOptions);
+  console.log('[3/7] Install NPM dependencies for VSC extension.');
+  cp.execSync(`npm install`, vsExtExecOptions);
+}
+
+function optimizeSVGs() {
+  console.log('[5/7] Optimise extension icons using SVGO.');
+  cp.exec(`npx svgo --disable=removeViewBox .`, distIconsExecOptions);
 }
 
 function npmBuildExt() {
-  child_process.execSync(`npm run build`, vsExtExecOptions);
-}
-
-const distIconsExecOptions = { cwd: path.resolve(destSVGPath), stdio: 'inherit' };
-
-function optimizeSVGs() {
-  child_process.exec(`npx svgo --disable=removeViewBox .`, distIconsExecOptions);
+  console.log('[6/7] Run build tasks for VSC extension.');
+  cp.execSync(`npm run build`, vsExtExecOptions);
 }

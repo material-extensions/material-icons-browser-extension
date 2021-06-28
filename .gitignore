@@ -3,9 +3,11 @@ temp/
 .vscode/
 material-icons-github-chrome-extension.zip
 material-icons-firefox-extension.zip
-src/iconsCache.js
-src/iconMap.json
-optimizedSVGs/
+src/icon-cache.js
+src/icon-map.json
+src/language-map.json
+svg/
+data/
 
 # Logs
 logs
