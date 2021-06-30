@@ -39,7 +39,7 @@
     "web-ext": "6.1.0"
   },
   "scripts": {
-    "build": "npx rimraf ./dist && npx run-s build-dependencies build-src bundle",
+    "build": "npx rimraf *.zip ./dist && npx run-s build-dependencies build-src bundle",
     "build-dependencies": "node ./scripts/build-dependencies.js",
     "build-src": "node ./scripts/build-src.js",
     "rebuild-logos": "node ./scripts/build-extensionIcons.js",
