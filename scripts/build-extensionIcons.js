@@ -25,7 +25,7 @@ function generateIcons() {
     sharp(svgPath)
       .png()
       .resize({ width: size, height: size })
-      .toFile(`${iconsPath}/icon${size}.png`)
+      .toFile(`${iconsPath}/icon-${size}.png`)
       .catch(function (err) {
         console.log(err);
       });
