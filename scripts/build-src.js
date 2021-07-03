@@ -29,6 +29,7 @@ function src() {
   const parcelOptions = {
     watch: false,
     minify: true,
+    sourceMaps: false,
   };
   const bundler = new Parcel(entryFile, parcelOptions);
   const bundleMainScript = bundler.bundle();
