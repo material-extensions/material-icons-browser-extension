@@ -26,7 +26,7 @@ iconMap.fileExtensions = {
 };
 
 // Monitor DOM elements that match a CSS selector.
-observe('.js-navigation-container > .js-navigation-item', {
+observe('.js-navigation-container[role=grid] > .js-navigation-item', {
   add(row) {
     replaceIcon(row, iconMap);
   },
@@ -37,23 +37,23 @@ observe('.js-navigation-container > .js-navigation-item', {
  *
  * @since 1.0.0
  *
- * @param {String} fileRow File Row.
+ * @param {String} itemRow Item Row.
  * @param {Object} iconMap Icon Map.
  * @return {undefined}
  */
-function replaceIcon(fileRow, iconMap) {
+function replaceIcon(itemRow, iconMap) {
   const isLightTheme = window.matchMedia('(prefers-color-scheme: light)').matches;
 
   // Get file/folder name.
   const fileName =
-    fileRow.querySelector('[role=rowheader]')?.firstElementChild?.firstElementChild?.innerText;
+    itemRow.querySelector('[role=rowheader]')?.firstElementChild?.firstElementChild?.innerText;
   if (!fileName) return; // fileName couldn't be found or we don't have a match for it.
 
   // Get file extension.
   const fileExtension = fileName.match(/.*?[.](?<ext>xml.dist|yml.dist|\w+)$/)?.[1];
 
   // SVG to be replaced.
-  const svgEl = fileRow.querySelector('.octicon');
+  const svgEl = itemRow.querySelector('.octicon');
   if (!svgEl) return; // couldn't find svg element.
 
   // Get Directory or Submodule type.
