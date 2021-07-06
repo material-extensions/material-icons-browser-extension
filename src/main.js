@@ -28,7 +28,9 @@ iconMap.fileExtensions = {
 // Monitor DOM elements that match a CSS selector.
 observe('.js-navigation-container[role=grid] > .js-navigation-item', {
   add(row) {
-    replaceIcon(row, iconMap);
+    setTimeout(() => {
+      replaceIcon(row, iconMap);
+    }, 0);
   },
 });
 
