@@ -2,8 +2,8 @@
 
 <div align="center">
 
-![Dark GitHub example](/assets/example_dark.png)
-![Light GitHub example](/assets/example_light.png)
+![Dark GitHub example](/assets/example-dark.png)
+![Light GitHub example](/assets/example-light.png)
 
 <p align="center">
   <a href="https://chrome.google.com/webstore/detail/material-icons-for-github/bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc"><img src="https://github.com/Claudiohbsantos/github-material-icons-extension/raw/master/assets/chrome-web-store.png"></a>
