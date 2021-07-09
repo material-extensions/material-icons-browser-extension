@@ -2,10 +2,10 @@
 
 // renders src/logo.svg to desired icon sizes for the extension
 const child_process = require('child_process');
-const mkdirp = require('mkdirp');
+const mkdirp = require('make-dir');
 const path = require('path');
 
-const extIconsPath = path.resolve(__dirname, '..', 'src', 'extensionIcons');
+const extIconsPath = path.resolve(__dirname, '..', 'src', 'icons');
 const srcPath = path.resolve(__dirname, '..', 'src');
 const svgPath = path.resolve(srcPath, 'logo.svg');
 const targetSizes = [16, 32, 48, 128];
