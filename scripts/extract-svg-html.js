@@ -17,7 +17,7 @@ module.exports = function extract(opts) {
       })
       .then((svgEntries) => {
         console.log(`[${opts.task}:3/4] Determine HTML code and viewbox for icon cache.`);
-        svgEntries.map((entry) => [
+        return svgEntries.map((entry) => [
           entry[0],
           {
             innerHtml: entry[1].firstChild.innerHTML,
