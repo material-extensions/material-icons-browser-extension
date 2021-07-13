@@ -108,7 +108,7 @@ function lookForMatch(fileName, lowerFileName, fileExtension, isDir, isSubmodule
   if (iconMap.languageIds[fileExtension] && !isDir && !isSubmodule)
     return iconMap.languageIds[fileExtension];
 
-  // Look for filename and extension in vscode language map.
+  // Look for filename and extension in VSCode language map.
   if (languageMap.fileNames[fileName] && !isDir && !isSubmodule)
     return languageMap.fileNames[fileName];
   if (languageMap.fileNames[lowerFileName] && !isDir && !isSubmodule)
@@ -116,12 +116,7 @@ function lookForMatch(fileName, lowerFileName, fileExtension, isDir, isSubmodule
   if (languageMap.fileExtensions[fileExtension] && !isDir)
     return languageMap.fileExtensions[fileExtension];
 
-  // look for filename and extension in vscode language map
-  if (languageMap.fileNames[fileName] && !isDir) return languageMap.fileNames[fileName];
-  if (languageMap.fileNames[lowerFileName] && !isDir) return languageMap.fileNames[lowerFileName];
-  if (languageMap.fileExtensions[extension] && !isDir) return languageMap.fileExtensions[extension];
-
-  // fallback into default file or folder if no matches
+  // Fallback into default file or folder if no matches.
   if (isDir) return 'folder';
   if (isSubmodule) return 'folder-git';
   return 'file';
