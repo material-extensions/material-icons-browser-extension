@@ -48,7 +48,6 @@ function src() {
   const bundler = new Parcel(parcelOptions);
   const bundleMainScript = bundler.run();
 
-
   const copyManifest = fs.copy(
     path.resolve(srcPath, 'manifest.json'),
     path.resolve(distPath, 'manifest.json')
