@@ -1,21 +1,20 @@
+/**
+ * External depedencies.
+ */
 import { observe } from 'selector-observer';
+
+/**
+ * Internal depedencies.
+ */
+import iconsCache from './icon-cache';
+import iconMap from './icon-map';
+import languageMap from './language-map';
 
 // Expected configuration.
 iconMap.options = {
   ...iconMap.options,
   ...{
     activeIconPack: 'react_redux',
-  },
-};
-import iconsCache from './icon-cache';
-import iconMap from './icon-map';
-import languageMap from './language-map';
-
-iconMap.fileExtensions = {
-  ...iconMap.fileExtensions,
-  ...{
-    js: 'javascript',
-    ts: 'typescript',
   },
 };
 
@@ -109,10 +108,13 @@ function lookForMatch(fileName, lowerFileName, fileExtension, isDir, isSubmodule
   if (iconMap.languageIds[fileExtension] && !isDir && !isSubmodule)
     return iconMap.languageIds[fileExtension];
 
-  // look for filename and extension in vscode language map
-  if (languageMap.fileNames[fileName] && !isDir) return languageMap.fileNames[fileName];
-  if (languageMap.fileNames[lowerFileName] && !isDir) return languageMap.fileNames[lowerFileName];
-  if (languageMap.fileExtensions[fileExtension] && !isDir) return languageMap.fileExtensions[fileExtension];
+  // Look for filename and extension in vscode language map.
+  if (languageMap.fileNames[fileName] && !isDir && !isSubmodule)
+    return languageMap.fileNames[fileName];
+  if (languageMap.fileNames[lowerFileName] && !isDir && !isSubmodule)
+    return languageMap.fileNames[lowerFileName];
+  if (languageMap.fileExtensions[fileExtension] && !isDir)
+    return languageMap.fileExtensions[fileExtension];
 
   // fallback into default file or folder if no matches
   if (isDir) return 'folder';

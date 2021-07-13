@@ -53,7 +53,7 @@ const distIconsExecOptions = {
 
 function npmInstallExt() {
   console.log('[3/7] Install NPM dependencies for VSC extension.');
-  cp.execSync(`npm install`, vsExtExecOptions);
+  cp.execSync(`npm install --ignore-scripts`, vsExtExecOptions);
 }
 
 function optimizeSVGs() {
