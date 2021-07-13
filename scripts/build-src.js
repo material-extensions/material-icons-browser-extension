@@ -5,26 +5,30 @@ const path = require('path');
 const fs = require('fs-extra');
 const mkdirp = require('mkdirp');
 const Parcel = require('parcel-bundler');
+const extractSvgHtml = require('./extract-svg-html');
 
-/**
- * Internal depedencies
- */
-const srcPath = path.resolve(__dirname, '..', 'src');
+const destSVGPath = path.resolve(__dirname, '..', 'svg');
 const distPath = path.resolve(__dirname, '..', 'dist');
-const destSVGPath = path.resolve(__dirname, '..', 'optimizedSVGs');
-const extractSVGs = require('./extract-svgHtml');
+const srcPath = path.resolve(__dirname, '..', 'src');
 
 // Copy src files to dist.
 mkdirp(distPath).then(createIconsCache).then(src);
 
-/**
- * Copy the src files.
- *
- * @since 1.0.0
- *
- * @returns {Promise} a newly generated promise object.
- */
+// copy src files
+
+function createIconsCache() {
+  console.log('[1/2] Generate icon cache for extension.');
+  return new Promise((resolve, reject) => {
+    fs.copy(path.resolve(srcPath, 'custom'), destSVGPath)
+      .then(() => extractSvgHtml({ task: '1' }))
+      .then(resolve)
+      .catch(reject);
+  });
+}
+
 function src() {
+  console.log('[2/2] Bundle extension manifest, images and main script.');
+
   const entryFile = path.resolve(srcPath, 'main.js');
   const parcelOptions = {
     watch: false,
@@ -42,18 +46,4 @@ function src() {
   const copyExtensionLogos = fs.copy(path.resolve(srcPath, 'extensionIcons'), distPath);
 
   return Promise.all([copyManifest, copyExtensionLogos, bundleMainScript]);
-}
-
-/**
- * Create icons cache.
- *
- * @since 1.0.0
- */
-function createIconsCache() {
-  return new Promise((resolve, reject) => {
-    fs.copy(path.resolve(srcPath, 'customIcons'), destSVGPath)
-      .then(() => extractSVGs())
-      .then(resolve)
-      .catch(reject);
-  });
 }
