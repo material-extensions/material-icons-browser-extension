@@ -1,13 +1,4 @@
-/**
- * External depedencies
- */
 import { observe } from 'selector-observer';
-
-/**
- * Internal depedencies
- */
-import iconMap from './iconMap';
-import iconsCache from './iconsCache';
 
 // Expected configuration.
 iconMap.options = {
@@ -16,6 +7,9 @@ iconMap.options = {
     activeIconPack: 'react_redux',
   },
 };
+import iconsCache from './icon-cache';
+import iconMap from './icon-map';
+import languageMap from './language-map';
 
 iconMap.fileExtensions = {
   ...iconMap.fileExtensions,
@@ -115,10 +109,15 @@ function lookForMatch(fileName, lowerFileName, fileExtension, isDir, isSubmodule
   if (iconMap.languageIds[fileExtension] && !isDir && !isSubmodule)
     return iconMap.languageIds[fileExtension];
 
-  // Fallback into default file or folder if no matches.
+  // look for filename and extension in vscode language map
+  if (languageMap.fileNames[fileName] && !isDir) return languageMap.fileNames[fileName];
+  if (languageMap.fileNames[lowerFileName] && !isDir) return languageMap.fileNames[lowerFileName];
+  if (languageMap.fileExtensions[fileExtension] && !isDir) return languageMap.fileExtensions[fileExtension];
+
+  // fallback into default file or folder if no matches
   if (isDir) return 'folder';
   if (isSubmodule) return 'folder-git';
-  if (!isDir && !isSubmodule) return 'file';
+  return 'file';
 }
 
 /**
