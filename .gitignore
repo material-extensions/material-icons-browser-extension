@@ -8,6 +8,7 @@ github-material-icons-edge-extension.zip
 src/icon-cache.js
 src/icon-map.json
 src/language-map.json
+src/extensionIcons/
 svg/
 data/
 
