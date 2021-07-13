@@ -3,7 +3,7 @@
  */
 const path = require('path');
 const sharp = require('sharp');
-const mkdirp = require('mkdirp');
+const mkdirp = require('make-dir');
 
 /**
  * Internal depedencies

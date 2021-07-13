@@ -3,7 +3,7 @@
  */
 const path = require('path');
 const fs = require('fs-extra');
-const mkdirp = require('mkdirp');
+const mkdirp = require('make-dir');
 const rimraf = require('rimraf');
 const simpleGit = require('simple-git');
 const git = simpleGit();

@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs-extra');
-const mkdirp = require('mkdirp');
+const mkdirp = require('make-dir');
 const Parcel = require('parcel-bundler');
 const extractSvgHtml = require('./extract-svg-html');
 const destSVGPath = path.resolve(__dirname, '..', 'svg');
