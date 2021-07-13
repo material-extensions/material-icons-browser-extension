@@ -1,6 +1,7 @@
+.parcel-cache/
+.vscode/
 dist/
 temp/
-.vscode/
 github-material-icons-chrome-extension.zip
 github-material-icons-firefox-extension.zip
 github-material-icons-edge-extension.zip
