@@ -37,13 +37,13 @@ function src() {
 
   const parcelOptions = {
     entries: path.resolve(srcPath, 'main.js'),
-    mode: 'development',
+    mode: 'production',
     defaultTargetOptions: {
       engines: {
         browsers: ['last 1 Chrome version'],
-        node: '12'
-      }
-    }
+        node: '12',
+      },
+    },
   };
   const bundler = new Parcel(parcelOptions);
   const bundleMainScript = bundler.run();

@@ -2,7 +2,7 @@
   "name": "github-material-icons-extension",
   "version": "1.4.0",
   "description": "Browser Extension that enhances the GitHub file browser with material icons.",
-  "main": "src/main.js",
+  "main": "dist/main.js",
   "author": "Claudio Santos",
   "license": "MIT",
   "homepage": "https://github.com/Claudiohbsantos/github-material-icons-extension#readme",
@@ -19,12 +19,19 @@
   "resolutions": {
     "deasync": "0.1.16"
   },
+  "targets": {
+    "default": {
+      "sourceMap": {
+        "inline": false
+      }
+    }
+  },
   "dependencies": {
     "selector-observer": "2.1.6"
   },
   "devDependencies": {
     "@octokit/core": "3.5.1",
-    "@parcel/config-default": "2.0.0-beta.2",
+    "@parcel/config-default": "2.0.0-alpha.3",
     "eslint": "7.29.0",
     "eslint-config": "0.3.0",
     "eslint-config-airbnb": "18.2.1",
