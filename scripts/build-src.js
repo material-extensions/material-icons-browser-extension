@@ -1,17 +1,20 @@
 const path = require('path');
-const mkdirp = require('mkdirp');
 const fs = require('fs-extra');
+const mkdirp = require('make-dir');
 const Parcel = require('parcel-bundler');
 const extractSvgHtml = require('./extract-svg-html');
-
 const destSVGPath = path.resolve(__dirname, '..', 'svg');
 const distPath = path.resolve(__dirname, '..', 'dist');
 const srcPath = path.resolve(__dirname, '..', 'src');
 
+// Copy src files to dist.
 mkdirp(distPath).then(createIconsCache).then(src);
 
-// copy src files
-
+/**
+ * Create icons cache.
+ *
+ * @since 1.0.0
+ */
 function createIconsCache() {
   console.log('[1/2] Generate icon cache for extension.');
   return new Promise((resolve, reject) => {
@@ -22,6 +25,13 @@ function createIconsCache() {
   });
 }
 
+/**
+ * Copy the src files.
+ *
+ * @since 1.0.0
+ *
+ * @returns {Promise} a newly generated promise object.
+ */
 function src() {
   console.log('[2/2] Bundle extension manifest, images and main script.');
 
@@ -29,6 +39,7 @@ function src() {
   const parcelOptions = {
     watch: false,
     minify: true,
+    sourceMaps: false,
   };
   const bundler = new Parcel(entryFile, parcelOptions);
   const bundleMainScript = bundler.bundle();

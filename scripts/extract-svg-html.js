@@ -13,7 +13,7 @@ module.exports = function extract(opts) {
         console.log(`[${opts.task}:2/4] Fetch map of icon file names and SVG data.`);
         return Promise.all(
           icons.map((name) => fs.readFile(path.resolve(iconsPath, name), { encoding: 'utf8' }))
-        ).then((xmlContent) => xmlContent.map((xml, i) => [icons[i], parse(xml)]))
+        ).then((xmlContent) => xmlContent.map((xml, i) => [icons[i], parse(xml)]));
       })
       .then((svgEntries) => {
         console.log(`[${opts.task}:3/4] Determine HTML code and viewbox for icon cache.`);
@@ -23,7 +23,7 @@ module.exports = function extract(opts) {
             innerHtml: entry[1].firstChild.innerHTML,
             viewBox: entry[1].firstChild.getAttribute('viewBox'),
           },
-        ])
+        ]);
       })
       .then((cacheEntries) => Object.fromEntries(cacheEntries))
       .then((svgCacheObj) => {

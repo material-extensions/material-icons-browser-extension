@@ -2,15 +2,15 @@
 
 <div align="center">
 
-![Dark GitHub example](/assets/example_dark.png)
-![Light GitHub example](/assets/example_light.png)
+![Dark GitHub example](/assets/example-dark.png)
+![Light GitHub example](/assets/example-light.png)
 
-<a href="https://chrome.google.com/webstore/detail/material-icons-for-github/bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc"><img src="https://github.com/Claudiohbsantos/github-material-icons-extension/raw/master/assets/chrome-web-store.png"></a>
+<p align="center">
+  <a href="https://chrome.google.com/webstore/detail/material-icons-for-github/bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc"><img src="https://github.com/Claudiohbsantos/github-material-icons-extension/raw/master/assets/chrome-web-store.png"></a>
+  <a href="https://addons.mozilla.org/en-US/firefox/addon/material-icons-for-github/"><img src="https://github.com/Claudiohbsantos/github-material-icons-extension/raw/master/assets/firefox-addon.png"></a>
+</p>
 
-<a href="https://addons.mozilla.org/en-US/firefox/addon/material-icons-for-github/"><img src="https://github.com/Claudiohbsantos/github-material-icons-extension/raw/master/assets/firefox-addon.png"></a>
-
-<b>Install directly from the <a href="https://chrome.google.com/webstore/detail/material-icons-for-github/bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc">Chrome Web Store</a> or the <a href="https://addons.mozilla.org/en-US/firefox/addon/material-icons-for-github/">Addons for Firefox</a></b></div>
-
+<b>Install directly from the <a href="https://chrome.google.com/webstore/detail/material-icons-for-github/bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc">Chrome Web Store</a> | <a href="https://microsoftedge.microsoft.com/addons/detail/material-icons-for-github/khckkdgomkcjjnpgjmdmbceiddlmiolb">Microsoft Edge Addons Store</a> | <a href="https://addons.mozilla.org/en-US/firefox/addon/material-icons-for-github/">Firefox Addons</a></b></div>
 
 ---
 
@@ -42,13 +42,13 @@ Build only files from `src` folder, without re-downloading dependencies from [Ma
 npm run build-src
 ```
 
-Rebuild extension logos from `src/logo.svg`. _This script needs [Inkscape](https://inkscape.org/) to be available on PATH_
+Rebuild extension logos from `src/logo.svg`.
 
 ```shell
 npm run rebuild-logos
 ```
 
-Zip `dist` folder for upload to Chrome Web Store and Firefox. *This script needs 7z (7zip) to be available on PATH*
+Zip `dist` folder for upload to Chrome Web Store and Firefox. _This script needs Zip to be available on PATH_
 
 ```shell
 npm run bundle

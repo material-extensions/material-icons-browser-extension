@@ -1,20 +1,24 @@
 {
+  "name": "Material Icons for GitHub",
+  "version": "1.4",
   "manifest_version": 2,
-  "name": "Material Icons for Github",
-  "version": "1.3",
-  "description": "Replace the file/folder icons on github file browsers with icons representing the file's type and which tool it is used by.",
+  "description": "Replace the file/folder icons on the GitHub file browser with icons representing the file's type and which tool it is used by.",
+  "homepage_url": "https://github.com/Claudiohbsantos/github-material-icons-extension",
   "icons": {
-    "16": "icon16.png",
-    "32": "icon32.png",
-    "48": "icon48.png",
-    "128": "icon128.png"
+    "16": "icon-16.png",
+    "32": "icon-32.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
   },
   "content_scripts": [
     {
-      "matches": ["*://*.github.com/*"],
-      "js": ["./main.js"],
+      "matches": [
+        "*://*.github.com/*"
+      ],
+      "js": [
+        "./main.js"
+      ],
       "run_at": "document_start"
     }
-  ],
-  "homepage_url": "https://github.com/Claudiohbsantos/github-material-icons-extension"
+  ]
 }

@@ -1,5 +1,5 @@
 const rimraf = require('rimraf');
-const path = require('path')
+const path = require('path');
 const api = require('@octokit/core');
 const fs = require('fs-extra');
 const fr = require('follow-redirects');
@@ -7,7 +7,7 @@ const mkdirp = require('make-dir');
 const glob = require('glob');
 const remap = require('./remap.json');
 const iconMap = require('../src/icon-map.json');
-const stringify = require('json-stable-stringify')
+const stringify = require('json-stable-stringify');
 
 const vsDataPath = path.resolve(__dirname, '..', 'data');
 const srcPath = path.resolve(__dirname, '..', 'src');
@@ -30,8 +30,8 @@ const query = {
     'contributes languages',
     'filename:package.json',
     'org:microsoft',
-    '-repo:microsoft/azuredatastudio'
-  ].join(' ')
+    '-repo:microsoft/azuredatastudio',
+  ].join(' '),
 };
 const GITHUB_RATELIMIT = 6000;
 
@@ -57,7 +57,7 @@ const GITHUB_RATELIMIT = 6000;
       }
     );
   } catch (reason) {
-    throw new Error(reason);    
+    throw new Error(reason);
   }
 })();
 
@@ -71,10 +71,10 @@ function fetchLanguageContribution(item) {
     return;
   }
   try {
-    mkdirp(path.join(vsDataPath, extDir)).then(
-      () => {
-        const extFile = fs.createWriteStream(path.join(vsDataPath, extPath));
-        fr.https.get(urlPath, (res) => {
+    mkdirp(path.join(vsDataPath, extDir)).then(() => {
+      const extFile = fs.createWriteStream(path.join(vsDataPath, extPath));
+      fr.https
+        .get(urlPath, (res) => {
           res.pipe(extFile);
           res.on('end', () => {
             index++;
@@ -83,16 +83,16 @@ function fetchLanguageContribution(item) {
               glob(path.join(vsDataPath, '**', 'extension.json'), (err, matches) => {
                 index = 0;
                 total = matches.length;
-                matches.forEach(loadLanguageContribution);    
+                matches.forEach(loadLanguageContribution);
               });
-            }  
+            }
           });
-        }).on('error', (err) => {
+        })
+        .on('error', (err) => {
           fs.unlink(extPath);
           throw new Error(err);
-        })
-      }
-    );
+        });
+    });
   } catch (reason) {
     throw new Error(reason);
   }
@@ -141,22 +141,21 @@ function processLanguageContribution(lang) {
       }
       return isExt;
     })
-    .map(ext => ext.substring(1))
-    .filter(ext => !/\*|\/|\?/.test(ext));
-  lang.filenames = lang.filenames
-    .filter(name => !/\*|\/|\?/.test(name));
+    .map((ext) => ext.substring(1))
+    .filter((ext) => !/\*|\/|\?/.test(ext));
+  lang.filenames = lang.filenames.filter((name) => !/\*|\/|\?/.test(name));
   index++;
   if (index === total) {
     console.log('[5/7] Mapping language contributions into file icon configuration.');
     index = 0;
-    languages.forEach(mapLanguageContribution)
+    languages.forEach(mapLanguageContribution);
   }
 }
 
 const languageMap = {
   fileExtensions: {},
-  fileNames: {}
-}
+  fileNames: {},
+};
 
 function mapLanguageContribution(lang) {
   lang.extensions.forEach((ext) => {
@@ -177,9 +176,9 @@ function mapLanguageContribution(lang) {
       extIconName = iconMap.languageIds[extIconName] || extIconName;
     }
     if (
-      !remap.deletions[`extensions:${extIconName}`]
-      && !iconMap.fileExtensions.hasOwnProperty(extIconName)
-      && iconMap.iconDefinitions.hasOwnProperty(extIconName)
+      !remap.deletions[`extensions:${extIconName}`] &&
+      !iconMap.fileExtensions.hasOwnProperty(extIconName) &&
+      iconMap.iconDefinitions.hasOwnProperty(extIconName)
     ) {
       languageMap.fileExtensions[ext] = extIconName;
     }
@@ -202,9 +201,9 @@ function mapLanguageContribution(lang) {
       fileIconName = iconMap.languageIds[fileIconName] || fileIconName;
     }
     if (
-      !remap.deletions[`filenames:${fileIconName}`]
-      && !iconMap.fileNames.hasOwnProperty(fileIconName)
-      && iconMap.iconDefinitions.hasOwnProperty(fileIconName)
+      !remap.deletions[`filenames:${fileIconName}`] &&
+      !iconMap.fileNames.hasOwnProperty(fileIconName) &&
+      iconMap.iconDefinitions.hasOwnProperty(fileIconName)
     ) {
       languageMap.fileNames[name] = fileIconName;
     }
