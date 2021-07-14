@@ -22,9 +22,9 @@ jobs:
       - name: Build new release
         if: steps.upstream.outputs.release_tag != steps.upstream.outputs.current_tag
         # TODO: enable build step. Only useful when this cuts a release/auto update stores
-        # run: npm install && npm version patch --no-git-tag-version && npm run build
+        # run: npm install && npm version patch --no-git-tag-version && npm run update-manifest-version && npm run build
         # TODO: remove this useless bumper when above is enabled
-        run: npm version patch --no-git-tag-version 
+        run: npm version patch --no-git-tag-version && npm run update-manifest-version
 
       - name: Update current upstream version
         if: steps.upstream.outputs.release_tag != steps.upstream.outputs.current_tag
