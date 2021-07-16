@@ -8,7 +8,7 @@ const distPath = path.resolve(__dirname, '..', 'dist');
 const srcPath = path.resolve(__dirname, '..', 'src');
 
 // Copy src files to dist.
-mkdirp(distPath).then(createIconsCache).then(src);
+mkdirp(distPath).then(createIconsCache).then(src).catch(console.error);
 
 /**
  * Create icons cache.

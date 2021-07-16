@@ -21,9 +21,7 @@ iconMap.options = {
 // Monitor DOM elements that match a CSS selector.
 observe('.js-navigation-container[role=grid] > .js-navigation-item', {
   add(row) {
-    setTimeout(() => {
-      replaceIcon(row, iconMap);
-    }, 0);
+    replaceIcon(row, iconMap);
   },
 });
 

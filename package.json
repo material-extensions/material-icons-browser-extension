@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@octokit/core": "3.5.1",
+    "compare-versions": "3.6.0",
     "eslint": "7.29.0",
     "eslint-config": "0.3.0",
     "eslint-config-airbnb": "18.2.1",
@@ -48,10 +49,12 @@
     "bundle": "run-p bundle-edge bundle-chrome bundle-firefox",
     "bundle-edge": "zip -r -j github-material-icons-edge-extension.zip dist",
     "bundle-chrome": "zip -r -j github-material-icons-chrome-extension.zip dist",
-    "bundle-firefox": "web-ext -s ./dist/ -n github-material-icons-firefox-extension.zip -a . build",
+    "bundle-firefox": "web-ext -s ./dist/ -n github-material-icons-firefox-extension.zip -a . build --overwrite-dest",
     "parcel": "parcel build ./src/main.js",
     "parcel-watch": "parcel watch ./src/main.js",
     "clean": "rimraf *.zip ./dist ./svg ./.cache ./src/icon-cache.js ./src/icon-map.json ./src/language-map.json",
-    "update-manifest-version": "node ./scripts/update-manifest-version.js"
+    "update-manifest-version": "node ./scripts/update-manifest-version.js",
+    "update-upstream-version": "node ./scripts/update-upstream-version",
+    "update": "run-s update-upstream-version update-manifest-version build"
   }
 }
