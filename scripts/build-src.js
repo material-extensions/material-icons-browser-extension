@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs-extra');
 const mkdirp = require('make-dir');
-const Parcel = require('@parcel/core').default;
+const Parcel = require('parcel-bundler');
 const extractSvgHtml = require('./extract-svg-html');
 const destSVGPath = path.resolve(__dirname, '..', 'svg');
 const distPath = path.resolve(__dirname, '..', 'dist');
@@ -35,18 +35,14 @@ function createIconsCache() {
 function src() {
   console.log('[2/2] Bundle extension manifest, images and main script.');
 
+  const entryFile = path.resolve(srcPath, 'main.js');
   const parcelOptions = {
-    entries: path.resolve(srcPath, 'main.js'),
-    mode: 'production',
-    defaultTargetOptions: {
-      engines: {
-        browsers: ['last 1 Chrome version'],
-        node: '12',
-      },
-    },
+    watch: false,
+    minify: true,
+    sourceMaps: false,
   };
-  const bundler = new Parcel(parcelOptions);
-  const bundleMainScript = bundler.run();
+  const bundler = new Parcel(entryFile, parcelOptions);
+  const bundleMainScript = bundler.bundle();
 
   const copyManifest = fs.copy(
     path.resolve(srcPath, 'manifest.json'),
