@@ -56,4 +56,6 @@ npm run bundle
 
 ---
 
+_Special thanks to @shivapoudel for creating and maintaining the Microsoft Edge version of the extension_
+
 _Original extension developed with [Richard Lam](https://github.com/rlam108)_
