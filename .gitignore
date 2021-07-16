@@ -1,14 +1,14 @@
+svg/
+data/
 dist/
 temp/
-.vscode/
-github-material-icons-chrome-extension.zip
-github-material-icons-firefox-extension.zip
-github-material-icons-edge-extension.zip
+src/icons/
 src/icon-cache.js
 src/icon-map.json
 src/language-map.json
-svg/
-data/
+github-material-icons-edge-extension.zip
+github-material-icons-chrome-extension.zip
+github-material-icons-firefox-extension.zip
 
 # Directories/files that may appear in your environment
 node_modules
@@ -16,5 +16,6 @@ node_modules
 .idea
 .cache/
 .vscode/
+.parcel-cache/
 .DS_Store
 Thumbs.db
