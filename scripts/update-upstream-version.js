@@ -1,9 +1,7 @@
-const api = require('@octokit/core');
+const fetch = require('node-fetch');
 const path = require('path');
 const compareVersions = require('compare-versions');
 const fs = require('fs').promises;
-
-const octokit = new api.Octokit();
 
 const upstreamVersionFilePath = path.resolve(__dirname, '..', 'upstream.version');
 
@@ -12,21 +10,10 @@ const upstreamVersionFilePath = path.resolve(__dirname, '..', 'upstream.version'
  *
  * returns version string or undefined
  */
-const getUpstreamVersion = async () => {
-  const response = await octokit.request(
-    'GET https://api.github.com/repos/PKief/vscode-material-icon-theme/commits?per_page=100'
-  );
-
-  // extract array of commit msgs. These are sorted from latest to oldest
-  const commitMsgs = response.data.map((commit) => commit.commit.message);
-
-  const releaseMsgRgx = /^Release\s+(?<version>\d+\.\d+\.\d+)/;
-  const releaseCommits = commitMsgs.filter((msg) => releaseMsgRgx.test(msg));
-
-  const upstreamVersion = releaseMsgRgx.exec(releaseCommits[0])?.groups?.version;
-
-  return upstreamVersion;
-};
+const getUpstreamVersion = () =>
+  fetch('https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/main/package.json')
+    .then((res) => res.json())
+    .then((package) => package.version);
 
 const getLastUpstreamVersion = () => fs.readFile(upstreamVersionFilePath, { encoding: 'utf8' });
 
@@ -35,12 +22,12 @@ const updateReadmeBadge = async (version) => {
 
   const readme = await fs.readFile(readmeFilePath, { encoding: 'utf8' });
 
-  const versionRgx = /(badge\/[\w_]+-v)\d+\.\d+\.\d+/
-  const replacement = `$1${version}`
+  const versionRgx = /(badge\/[\w_]+-v)\d+\.\d+\.\d+/;
+  const replacement = `$1${version}`;
 
-  const updatedReadme = readme.replace(versionRgx, replacement)
+  const updatedReadme = readme.replace(versionRgx, replacement);
 
-  return fs.writeFile(readmeFilePath, updatedReadme)
+  return fs.writeFile(readmeFilePath, updatedReadme);
 };
 
 const run = async () => {

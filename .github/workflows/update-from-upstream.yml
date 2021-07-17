@@ -14,9 +14,8 @@ jobs:
       - name: Fetch release version
         id: upstream
         run: |
-          echo ::set-output name=release_tag::$(curl "https://api.github.com/repos/PKief/vscode-material-icon-theme/commits?per_page=100" \
-          | jq '.[] | .commit.message' \
-          | grep -m 1 -oP '^"Release\s+\K(\d+\.\d+\.\d+)')
+          echo ::set-output name=release_tag::$(curl "https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/main/package.json" \
+          | jq -r .version)
           echo ::set-output name=current_tag::$(<upstream.version)
 
       - name: Attempt update
