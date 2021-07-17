@@ -55,7 +55,7 @@
     "clean": "rimraf *.zip ./dist ./svg ./.cache ./src/icon-cache.js ./src/icon-map.json ./src/language-map.json",
     "update-manifest-version": "node ./scripts/update-manifest-version.js",
     "update-upstream-version": "node ./scripts/update-upstream-version",
-    "update-package-version": "npm version patch --no-git-tag-version",
+    "update-package-version": "npm version patch --no-git-tag-version && echo \"Bumped package.json version\"",
     "update": "run-s update-upstream-version update-package-version update-manifest-version build"
   }
 }

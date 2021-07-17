@@ -34,11 +34,16 @@ const run = async () => {
   const latestVersion = await getUpstreamVersion();
   const lastSeenVersion = await getLastUpstreamVersion();
 
+  console.log(`Latest upstream version: ${latestVersion}`)
+  console.log(`Current repository version: ${lastSeenVersion}`)
+
   if (!latestVersion || compareVersions.compare(lastSeenVersion, latestVersion, '>=')) {
     // exit script with an error. Simplifies chaining of shell commands only in case updates are found
+    console.log('No update necessary.')
     process.exit(1);
   }
 
+  console.log('Updating upstream version in "/upstream.version"')
   await fs.writeFile(upstreamVersionFilePath, latestVersion);
 };
 
