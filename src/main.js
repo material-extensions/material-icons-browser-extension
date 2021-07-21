@@ -18,10 +18,33 @@ iconMap.options = {
   },
 };
 
+// replacing all icons synchronously prevents visual "blinks" but can
+// cause missing icons/rendering delay in very large folders
+// replacing asynchronously instead fixes problems in large folders, but introduces "blinks"
+// Here we compromise, rushing the first n replacements to prevent blinks that will likely be "above the fold"
+// and delaying the replacement of subsequent rows
+let executions = 0;
+const timerIDs = [];
+const rushFirst = (rushBatch, callback) => {
+  if (executions <= rushBatch) {
+    callback(); // immediately run to prevent visual "blink"
+    setTimeout(callback, 20); // run again later to catch any icons that are missed in large repositories
+    executions++;
+  } else {
+    setTimeout(callback, 0); // run without blocking to prevent delayed rendering of large folders too much
+    timerIDs.push(
+      setTimeout(() => {
+        timerIDs.forEach(clearTimeout)
+        executions = 0;
+      }, 1000)
+    ); // reset execution tracker
+  }
+};
+
 // Monitor DOM elements that match a CSS selector.
 observe('.js-navigation-container[role=grid] > .js-navigation-item', {
   add(row) {
-    replaceIcon(row, iconMap);
+    rushFirst(30, () => replaceIcon(row, iconMap));
   },
 });
 
@@ -56,7 +79,15 @@ function replaceIcon(itemRow, iconMap) {
   const lowerFileName = fileName.toLowerCase();
 
   // Get icon name.
-  let iconName = lookForMatch(fileName, lowerFileName, fileExtension, isDir, isSubmodule, isSymlink, iconMap); // returns icon name if found or undefined.
+  let iconName = lookForMatch(
+    fileName,
+    lowerFileName,
+    fileExtension,
+    isDir,
+    isSubmodule,
+    isSymlink,
+    iconMap
+  ); // returns icon name if found or undefined.
   if (isLightTheme) {
     iconName = lookForLightMatch(iconName, fileName, fileExtension, isDir, iconMap); // returns icon name if found for light mode or undefined.
   }
@@ -91,7 +122,15 @@ function replaceIcon(itemRow, iconMap) {
  * @param {Object} iconMap Icon map.
  * @returns {String} The matched icon name.
  */
-function lookForMatch(fileName, lowerFileName, fileExtension, isDir, isSubmodule, isSymlink, iconMap) {
+function lookForMatch(
+  fileName,
+  lowerFileName,
+  fileExtension,
+  isDir,
+  isSubmodule,
+  isSymlink,
+  iconMap
+) {
   // First look in fileNames and folderNames.
   if (iconMap.fileNames[fileName] && !isDir && !isSubmodule) return iconMap.fileNames[fileName];
   if (iconMap.folderNames[fileName] && isDir && !isSubmodule) return iconMap.folderNames[fileName];
@@ -119,7 +158,7 @@ function lookForMatch(fileName, lowerFileName, fileExtension, isDir, isSubmodule
   // Fallback into default file or folder if no matches.
   if (isDir) return 'folder';
   if (isSubmodule) return 'folder-git';
-  if (isSymlink) return 'folder-symlink'
+  if (isSymlink) return 'folder-symlink';
   return 'file';
 }
 
