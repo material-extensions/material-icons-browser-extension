@@ -24,7 +24,7 @@ iconMap.options = {
 // Here we compromise, rushing the first n replacements to prevent blinks that will likely be "above the fold"
 // and delaying the replacement of subsequent rows
 let executions = 0;
-const timerIDs = [];
+let timerID
 const rushFirst = (rushBatch, callback) => {
   if (executions <= rushBatch) {
     callback(); // immediately run to prevent visual "blink"
@@ -32,12 +32,10 @@ const rushFirst = (rushBatch, callback) => {
     executions++;
   } else {
     setTimeout(callback, 0); // run without blocking to prevent delayed rendering of large folders too much
-    timerIDs.push(
-      setTimeout(() => {
-        timerIDs.forEach(clearTimeout)
-        executions = 0;
-      }, 1000)
-    ); // reset execution tracker
+    clearTimeout(timerID)
+    timerID = setTimeout(() => {
+      executions = 0;
+    }, 1000); // reset execution tracker
   }
 };
 
