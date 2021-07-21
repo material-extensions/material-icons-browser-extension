@@ -52,10 +52,11 @@ function replaceIcon(itemRow, iconMap) {
   // Get Directory or Submodule type.
   const isDir = svgEl.getAttribute('aria-label') === 'Directory';
   const isSubmodule = svgEl.getAttribute('aria-label') === 'Submodule';
+  const isSymlink = svgEl.getAttribute('aria-label') === 'Symlink Directory';
   const lowerFileName = fileName.toLowerCase();
 
   // Get icon name.
-  let iconName = lookForMatch(fileName, lowerFileName, fileExtension, isDir, isSubmodule, iconMap); // returns icon name if found or undefined.
+  let iconName = lookForMatch(fileName, lowerFileName, fileExtension, isDir, isSubmodule, isSymlink, iconMap); // returns icon name if found or undefined.
   if (isLightTheme) {
     iconName = lookForLightMatch(iconName, fileName, fileExtension, isDir, iconMap); // returns icon name if found for light mode or undefined.
   }
@@ -86,10 +87,11 @@ function replaceIcon(itemRow, iconMap) {
  * @param {String} fileExtension File extension.
  * @param {Boolean} isDir Check if directory type.
  * @param {Boolean} isSubmodule Check if submodule type.
+ * @param {Boolean} isSymlink Check if symlink
  * @param {Object} iconMap Icon map.
  * @returns {String} The matched icon name.
  */
-function lookForMatch(fileName, lowerFileName, fileExtension, isDir, isSubmodule, iconMap) {
+function lookForMatch(fileName, lowerFileName, fileExtension, isDir, isSubmodule, isSymlink, iconMap) {
   // First look in fileNames and folderNames.
   if (iconMap.fileNames[fileName] && !isDir && !isSubmodule) return iconMap.fileNames[fileName];
   if (iconMap.folderNames[fileName] && isDir && !isSubmodule) return iconMap.folderNames[fileName];
@@ -117,6 +119,7 @@ function lookForMatch(fileName, lowerFileName, fileExtension, isDir, isSubmodule
   // Fallback into default file or folder if no matches.
   if (isDir) return 'folder';
   if (isSubmodule) return 'folder-git';
+  if (isSymlink) return 'folder-symlink'
   return 'file';
 }
 
