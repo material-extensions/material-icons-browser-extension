@@ -64,7 +64,7 @@ function replaceIcon(itemRow, iconMap) {
   if (!fileName) return; // fileName couldn't be found or we don't have a match for it.
 
   // Get file extension.
-  const fileExtension = fileName.match(/.*?[.](?<ext>xml.dist|yml.dist|\w+)$/)?.[1];
+  const fileExtension = fileName.match(/.*?[.](?<ext>xml.dist|xml.dist.sample|yml.dist|\w+)$/)?.[1];
 
   // SVG to be replaced.
   const svgEl = itemRow.querySelector('.octicon');
