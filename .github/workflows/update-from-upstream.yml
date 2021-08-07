@@ -20,7 +20,7 @@ jobs:
 
       - name: Attempt update
         if: steps.upstream.outputs.release_tag != steps.upstream.outputs.current_tag
-        run: npm run update
+        run: npm ci && npm run update
 
       - name: Get package version
         id: package-version
