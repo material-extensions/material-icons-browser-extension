@@ -12,6 +12,8 @@
 
 <b>Install directly from the <a href="https://chrome.google.com/webstore/detail/material-icons-for-github/bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc">Chrome Web Store</a> | <a href="https://microsoftedge.microsoft.com/addons/detail/material-icons-for-github/khckkdgomkcjjnpgjmdmbceiddlmiolb">Microsoft Edge Addons Store</a> | <a href="https://addons.mozilla.org/en-US/firefox/addon/material-icons-for-github/">Firefox Addons</a></b></div>
 
+*Note: The Firefox Addon is currently waiting for review. They seem to be overloaded and the extension has been in the review queue for multiple weeks. In the meantime, you can install the extension manually from the latest release*
+
 ---
 
 <a href="https://github.com/PKief/vscode-material-icon-theme"><img src="https://img.shields.io/badge/last_built_with_vscode_theme-v4.10.0-blue" /></a>
