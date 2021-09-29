@@ -25,33 +25,33 @@ jobs:
         id: package-version
         run: echo ::set-output name=package_version::v$(jq -r .version package.json)
 
-      - name: Commit updated files
-        uses: EndBug/add-and-commit@v7
-        with:
-          add: '.'
-          message: '[auto] release  ${{steps.package-version.outputs.package_version}}'
-          tag: '${{steps.package-version.outputs.package_version}}'
+      # - name: Commit updated files
+      #   uses: EndBug/add-and-commit@v7
+      #   with:
+      #     add: '.'
+      #     message: '[auto] release  ${{steps.package-version.outputs.package_version}}'
+      #     tag: '${{steps.package-version.outputs.package_version}}'
 
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: '${{steps.package-version.outputs.package_version}}'
-          files: '*.zip'
+      # - name: Release
+      #   uses: softprops/action-gh-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     tag_name: '${{steps.package-version.outputs.package_version}}'
+      #     files: '*.zip'
 
-      - name: Upload to chrome store
-        continue-on-error: true
-        uses: trmcnvn/chrome-addon@v2
-        with:
-          extension: bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc
-          zip: github-material-icons-chrome-extension.zip
-          client-id: ${{ secrets.CHROME_CLIENT_ID }}
-          client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
-          refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
-
-      # - name: Upload to firefox store
-      #   if: steps.upstream.outputs.release_tag != steps.upstream.outputs.current_tag
+      # - name: Upload to chrome store
       #   continue-on-error: true
-      #   run: npx web-ext sign -s ./dist/ --channel=listed --api-key=${{ secrets.FIREFOX_API_KEY }} --api-secret=${{ secrets.FIREFOX_API_SECRET }} --id="{eac6e624-97fa-4f28-9d24-c06c9b8aa713}"
+      #   uses: trmcnvn/chrome-addon@v2
+      #   with:
+      #     extension: bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc
+      #     zip: github-material-icons-chrome-extension.zip
+      #     client-id: ${{ secrets.CHROME_CLIENT_ID }}
+      #     client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
+      #     refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
+
+      # # - name: Upload to firefox store
+      # #   if: steps.upstream.outputs.release_tag != steps.upstream.outputs.current_tag
+      # #   continue-on-error: true
+      # #   run: npx web-ext sign -s ./dist/ --channel=listed --api-key=${{ secrets.FIREFOX_API_KEY }} --api-secret=${{ secrets.FIREFOX_API_SECRET }} --id="{eac6e624-97fa-4f28-9d24-c06c9b8aa713}"
 
