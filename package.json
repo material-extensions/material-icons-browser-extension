@@ -58,6 +58,7 @@
     "update-manifest-version": "node ./scripts/update-manifest-version.js",
     "update-upstream-version": "node ./scripts/update-upstream-version",
     "update-package-version": "npm version patch --no-git-tag-version && echo \"Bumped package.json version\"",
-    "update": "run-s update-upstream-version update-package-version update-manifest-version build"
+    "update": "run-s update-upstream-version update-package-version update-manifest-version build",
+    "release": "echo"
   }
 }
