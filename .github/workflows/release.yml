@@ -1,11 +1,11 @@
 name: Release new version
 on:
   workflow_dispatch:
-inputs:
-  type:
-    description: major|minor|patch
-    required: true
-    default: patch
+    inputs:
+      type:
+        description: major|minor|patch
+        required: true
+        default: patch
 jobs:
   get-version:
     runs-on: ubuntu-latest
