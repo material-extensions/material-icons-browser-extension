@@ -59,6 +59,6 @@
     "update-upstream-version": "node ./scripts/update-upstream-version",
     "update-package-version": "npm version --no-git-tag-version",
     "update": "run-s update-upstream-version \"update-package-version patch\" update-manifest-version build",
-    "release": "run-s \"update-package-version {1}\" update-manifest-version build"
+    "release": "run-s \"update-package-version {1}\" update-manifest-version build --"
   }
 }
