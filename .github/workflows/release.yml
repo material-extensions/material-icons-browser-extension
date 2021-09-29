@@ -1,6 +1,11 @@
-name: Auto Update when upstream releases
+name: Release new version
 on:
   workflow_dispatch:
+inputs:
+  type:
+    description: major|minor|patch
+    required: true
+    default: patch
 jobs:
   get-version:
     runs-on: ubuntu-latest
@@ -10,7 +15,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Attempt update
-        run: npm ci && npm run update
+        run: npm ci && npm run release ${{ github.event.inputs.type }}
 
       - name: Get package version
         id: package-version
