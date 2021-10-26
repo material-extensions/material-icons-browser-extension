@@ -12,7 +12,7 @@
 
 <b>Install directly from the <a href="https://chrome.google.com/webstore/detail/material-icons-for-github/bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc">Chrome Web Store</a> | <a href="https://microsoftedge.microsoft.com/addons/detail/material-icons-for-github/khckkdgomkcjjnpgjmdmbceiddlmiolb">Microsoft Edge Addons Store</a> | <a href="https://addons.mozilla.org/en-US/firefox/addon/material-icons-for-github/">Firefox Addons</a></b></div>
 
-*Note: The Firefox Addon is currently waiting for review. They seem to be overloaded and the extension has been in the review queue for multiple weeks.*
+*Note 10/25/2021: I'm currently having some trouble getting the extension's `build` script to reliably work in the firefox reviewer's environment, which has resulted in a delay to release the extension in the firefox store. I have a planned fix for this, but probably won't have the time to finish it for a couple of weeks. Until then the above link will take you nowhere, sorry.*
 
 ---
 
