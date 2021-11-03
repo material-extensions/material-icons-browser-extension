@@ -58,6 +58,12 @@ Zip `dist` folder for upload to Chrome Web Store and Firefox. _This script needs
 npm run bundle
 ```
 
+Update language-map.json with latest language contributions:
+
+```shell
+npm run build-languages
+```
+
 ---
 
 _Special thanks to [@shivapoudel](https://github.com/shivapoudel) for creating and maintaining the Microsoft Edge version of the extension_

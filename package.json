@@ -44,7 +44,7 @@
     "web-ext": "6.2.0"
   },
   "scripts": {
-    "build": "npx rimraf *.zip ./dist && npx run-s build-ext-dependencies build-languages build-src bundle",
+    "build": "npx rimraf *.zip ./dist && npx run-s build-ext-dependencies build-src bundle",
     "build-ext-dependencies": "node ./scripts/build-dependencies.js",
     "build-languages": "node ./scripts/build-languages.js",
     "build-src": "node ./scripts/build-src.js",

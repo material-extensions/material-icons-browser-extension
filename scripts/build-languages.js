@@ -16,6 +16,8 @@ rimraf.sync(vsDataPath);
 mkdirp.sync(vsDataPath);
 rimraf.sync(path.resolve(srcPath, 'language-map.json'));
 
+const resultsPerPage = 100; // max 100
+
 let index = 0;
 let total;
 let items = [];
@@ -26,6 +28,7 @@ console.log('[1/7] Querying Github API for official VSC language contributions.'
 const octokit = new api.Octokit();
 const query = {
   page: 0,
+  per_page: resultsPerPage,
   q: [
     'contributes languages',
     'filename:package.json',
@@ -43,7 +46,7 @@ const GITHUB_RATELIMIT = 6000;
         query.page = index++;
         total = total || res.data.total_count;
         items = items.concat(res.data.items);
-        if (30 * index >= total) {
+        if (resultsPerPage * index >= total) {
           console.log('[2/7] Fetching Microsoft language contributions from Github.');
           index = 0;
           total = items.length;
