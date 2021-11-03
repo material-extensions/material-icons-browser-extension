@@ -129,6 +129,9 @@ function lookForMatch(
   isSymlink,
   iconMap
 ) {
+  if (isSubmodule) return 'folder-git';
+  if (isSymlink) return 'folder-symlink';
+
   // First look in fileNames and folderNames.
   if (iconMap.fileNames[fileName] && !isDir && !isSubmodule) return iconMap.fileNames[fileName];
   if (iconMap.folderNames[fileName] && isDir && !isSubmodule) return iconMap.folderNames[fileName];
@@ -155,8 +158,6 @@ function lookForMatch(
 
   // Fallback into default file or folder if no matches.
   if (isDir) return 'folder';
-  if (isSubmodule) return 'folder-git';
-  if (isSymlink) return 'folder-symlink';
   return 'file';
 }
 
