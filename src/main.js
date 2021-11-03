@@ -15,6 +15,7 @@ iconMap.options = {
   ...iconMap.options,
   ...{
     activeIconPack: 'react_redux',
+    // activeIconPack: 'nest', // TODO: implement interface to choose pack
   },
 };
 
@@ -24,7 +25,7 @@ iconMap.options = {
 // Here we compromise, rushing the first n replacements to prevent blinks that will likely be "above the fold"
 // and delaying the replacement of subsequent rows
 let executions = 0;
-let timerID
+let timerID;
 const rushFirst = (rushBatch, callback) => {
   if (executions <= rushBatch) {
     callback(); // immediately run to prevent visual "blink"
@@ -32,7 +33,7 @@ const rushFirst = (rushBatch, callback) => {
     executions++;
   } else {
     setTimeout(callback, 0); // run without blocking to prevent delayed rendering of large folders too much
-    clearTimeout(timerID)
+    clearTimeout(timerID);
     timerID = setTimeout(() => {
       executions = 0;
     }, 1000); // reset execution tracker
@@ -91,8 +92,9 @@ function replaceIcon(itemRow, iconMap) {
   }
 
   // Get folder icon from active icon pack.
-  if (iconMap.options.activeIconPack && isDir) {
-    iconName = lookForIconPackMatch(iconName, lowerFileName, iconMap);
+
+  if (iconMap.options.activeIconPack) {
+    iconName = lookForIconPackMatch(lowerFileName, iconMap) ?? iconName;
   }
 
   if (!iconName) return;
@@ -186,16 +188,15 @@ function lookForLightMatch(iconName, fileName, fileExtension, isDir, iconMap) {
 }
 
 /**
- * Lookup for matched folder icon from active icon pack.
+ * Lookup for matched icon from active icon pack.
  *
  * @since 1.4.0
  *
- * @param {String} iconName Icon name.
  * @param {String} lowerFileName Lowercase file name.
  * @param {Object} iconMap Icon map.
  * @returns {String} The matched icon name.
  */
-function lookForIconPackMatch(iconName, lowerFileName, iconMap) {
+function lookForIconPackMatch(lowerFileName, iconMap) {
   if (iconMap.options.activeIconPack) {
     switch (iconMap.options.activeIconPack) {
       case 'angular':
@@ -220,8 +221,29 @@ function lookForIconPackMatch(iconName, lowerFileName, iconMap) {
           return `folder-nuxt`;
         }
         break;
+      case 'nest':
+        switch (true) {
+          case /\.controller\.(t|j)s$/.test(lowerFileName):
+            return `nest-controller`;
+          case /\.middleware\.(t|j)s$/.test(lowerFileName):
+            return 'nest-middleware';
+          case /\.module\.(t|j)s$/.test(lowerFileName):
+            return 'nest-module';
+          case /\.service\.(t|j)s$/.test(lowerFileName):
+            return 'nest-service';
+          case /\.decorator\.(t|j)s$/.test(lowerFileName):
+            return 'nest-decorator';
+          case /\.pipe\.(t|j)s$/.test(lowerFileName):
+            return 'nest-pipe';
+          case /\.filter\.(t|j)s$/.test(lowerFileName):
+            return 'nest-filter';
+          case /\.gateway\.(t|j)s$/.test(lowerFileName):
+            return 'nest-gateway';
+          case /\.guard\.(t|j)s$/.test(lowerFileName):
+            return 'nest-guard';
+          case /\.resolver\.(t|j)s$/.test(lowerFileName):
+            return 'nest-resolver';
+        }
     }
   }
-
-  return iconName;
 }

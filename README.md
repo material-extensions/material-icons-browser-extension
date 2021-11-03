@@ -24,21 +24,13 @@ Material Icons for GitHub is a browser Extension that enhances repositories file
 
 Based and dependent on the popular [Material Icon Theme](https://github.com/PKief/vscode-material-icon-theme) extension for Visual Studio Code. All icons and file assignments on this project are pulled directly from that project, so any praise or design issues should be raised on the original repository.
 
-### Development
-
-Clone this repository and install dependencies
-
-```shell
-git clone https://github.com/Claudiohbsantos/github-material-icons-extension.git
-cd github-material-icons-extension
-npm install
-```
-
-Build unpackaged extension for testing in `dist` directory
+### Build locally
 
 ```shell
 npm run build
 ```
+
+### Development
 
 Build only files from `src` folder, without re-downloading dependencies from [Material Icon Theme](https://github.com/PKief/vscode-material-icon-theme)
 
@@ -46,7 +38,7 @@ Build only files from `src` folder, without re-downloading dependencies from [Ma
 npm run build-src
 ```
 
-Rebuild extension logos from `src/logo.svg`.
+Rebuild extension logos from `src/logo.svg`. Only needed when `src/logo.svg` is changed.
 
 ```shell
 npm run rebuild-logos
@@ -58,7 +50,7 @@ Zip `dist` folder for upload to Chrome Web Store and Firefox. _This script needs
 npm run bundle
 ```
 
-Update language-map.json with latest language contributions:
+Update language-map.json with latest language contributions.
 
 ```shell
 npm run build-languages
