@@ -22,6 +22,6 @@
     }
   ],
   "web_accessible_resources": [
-    "svg/*.svg"
+    "*.svg"
   ]
 }

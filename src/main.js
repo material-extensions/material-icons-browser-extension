@@ -99,7 +99,7 @@ function replaceIcon(itemRow, iconMap, languageMap) {
   if (!iconName) return;
 
   const newSVG = document.createElement('img');
-  newSVG.src = chrome.runtime.getURL(`svg/${iconName + '.svg'}`);
+  newSVG.src = chrome.runtime.getURL(`${iconName + '.svg'}`);
   svgEl.getAttributeNames().forEach((att) => newSVG.setAttribute(att, svgEl.getAttribute(att)));
 
   svgEl.parentNode.replaceChild(newSVG, svgEl);

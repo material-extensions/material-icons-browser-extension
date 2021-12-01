@@ -35,9 +35,7 @@ function src() {
   const bundler = new Parcel(entryFile, parcelOptions);
   const bundleMainScript = bundler.bundle();
 
-  const copyIcons = fs
-    .ensureDir(path.resolve(distPath, 'svg'))
-    .then(() => fs.copy(destSVGPath, path.resolve(distPath, 'svg')));
+  const copyIcons = fs.copy(destSVGPath, distPath);
 
   const copyManifest = fs.copy(
     path.resolve(srcPath, 'manifest.json'),
