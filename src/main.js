@@ -103,9 +103,15 @@ function replaceIcon(itemRow, iconMap) {
   if (!innerHtml || !viewBox) return;
 
   // Must first reset innerHTML on svgEl to innerHTML of our svg.
-  svgEl.innerHTML = innerHtml;
+  // svgEl.innerHTML = innerHtml;
   // Finally set viewBox on svgEl to viewBox on our icon.
-  svgEl.setAttribute('viewBox', viewBox);
+  // svgEl.setAttribute('viewBox', viewBox);
+
+  const newSVG = document.createElement('img');
+  newSVG.src = chrome.runtime.getURL(`../svg/${iconName + '.svg'}`);
+  svgEl.getAttributeNames().forEach((att) => newSVG.setAttribute(att, svgEl.getAttribute(att)));
+
+  svgEl.parentNode.replaceChild(newSVG, svgEl);
 }
 
 /**
