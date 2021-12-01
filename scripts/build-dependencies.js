@@ -3,7 +3,6 @@
  */
 const path = require('path');
 const fs = require('fs-extra');
-const mkdirp = require('make-dir');
 const rimraf = require('rimraf');
 const simpleGit = require('simple-git');
 const git = simpleGit();
@@ -27,7 +26,7 @@ const distIconsExecOptions = {
 // Copy dependencies from vs code extension.
 rimraf.sync(vsExtPath);
 rimraf.sync(destSVGPath);
-mkdirp(destSVGPath)
+fs.ensureDir(destSVGPath)
   .then(() => {
     console.log('[1/7] Cloning PKief/vscode-material-icon-theme into temporary cache.');
     return git.clone(`https://github.com/PKief/vscode-material-icon-theme.git`, 'temp', [

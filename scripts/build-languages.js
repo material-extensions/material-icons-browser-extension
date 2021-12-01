@@ -3,7 +3,6 @@ const path = require('path');
 const api = require('@octokit/core');
 const fs = require('fs-extra');
 const fr = require('follow-redirects');
-const mkdirp = require('make-dir');
 const glob = require('glob');
 const remap = require('./remap.json');
 const iconMap = require('../src/icon-map.json');
@@ -13,7 +12,7 @@ const vsDataPath = path.resolve(__dirname, '..', 'data');
 const srcPath = path.resolve(__dirname, '..', 'src');
 
 rimraf.sync(vsDataPath);
-mkdirp.sync(vsDataPath);
+fs.ensureDirSync(vsDataPath);
 rimraf.sync(path.resolve(srcPath, 'language-map.json'));
 
 const resultsPerPage = 100; // max 100
@@ -74,7 +73,7 @@ function fetchLanguageContribution(item) {
     return;
   }
   try {
-    mkdirp(path.join(vsDataPath, extDir)).then(() => {
+    fs.ensureDir(path.join(vsDataPath, extDir)).then(() => {
       const extFile = fs.createWriteStream(path.join(vsDataPath, extPath));
       fr.https
         .get(urlPath, (res) => {

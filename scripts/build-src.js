@@ -1,34 +1,25 @@
 const path = require('path');
 const fs = require('fs-extra');
-const mkdirp = require('make-dir');
 const Parcel = require('parcel-bundler');
-const extractSvgHtml = require('./extract-svg-html');
 const destSVGPath = path.resolve(__dirname, '..', 'svg');
 const distPath = path.resolve(__dirname, '..', 'dist');
 const srcPath = path.resolve(__dirname, '..', 'src');
 
 // Copy src files to dist.
-mkdirp(distPath).then(createIconsCache).then(src).catch(console.error);
+fs.ensureDir(distPath).then(consolidateSVGFiles).then(src).catch(console.error);
 
-/**
- * Create icons cache.
- *
- * @since 1.0.0
- */
-function createIconsCache() {
+/** Create icons cache. */
+function consolidateSVGFiles() {
   console.log('[1/2] Generate icon cache for extension.');
-  return new Promise((resolve, reject) => {
-    fs.copy(path.resolve(srcPath, 'custom'), destSVGPath)
-      .then(() => extractSvgHtml({ task: '1' }))
-      .then(resolve)
-      .catch(reject);
-  });
+  return fs
+    .copy(path.resolve(srcPath, 'custom'), destSVGPath)
+    .then(() => fs.readdir(destSVGPath))
+    .then((files) => Object.fromEntries(files.map((filename) => [filename, filename])))
+    .then((iconsDict) => fs.writeJSON(path.resolve(srcPath, 'icon-list.json'), iconsDict));
 }
 
 /**
  * Copy the src files.
- *
- * @since 1.0.0
  *
  * @returns {Promise} a newly generated promise object.
  */
@@ -44,6 +35,10 @@ function src() {
   const bundler = new Parcel(entryFile, parcelOptions);
   const bundleMainScript = bundler.bundle();
 
+  const copyIcons = fs
+    .ensureDir(path.resolve(distPath, 'svg'))
+    .then(() => fs.copy(destSVGPath, path.resolve(distPath, 'svg')));
+
   const copyManifest = fs.copy(
     path.resolve(srcPath, 'manifest.json'),
     path.resolve(distPath, 'manifest.json')
@@ -51,5 +46,5 @@ function src() {
 
   const copyExtensionLogos = fs.copy(path.resolve(srcPath, 'icons'), distPath);
 
-  return Promise.all([copyManifest, copyExtensionLogos, bundleMainScript]);
+  return Promise.all([copyManifest, copyExtensionLogos, bundleMainScript, copyIcons]);
 }

@@ -3,7 +3,7 @@
  */
 const path = require('path');
 const sharp = require('sharp');
-const mkdirp = require('make-dir');
+const fs = require('fs-extra');
 
 /**
  * Internal depedencies
@@ -13,7 +13,7 @@ const iconsPath = path.resolve(__dirname, '..', 'src', 'extensionIcons');
 const targetSizes = [16, 32, 48, 128];
 
 // Build extension icons.
-mkdirp(iconsPath).then(generateIcons);
+fs.ensureDir(iconsPath).then(generateIcons);
 
 /**
  * Generate extension icons.

@@ -6,6 +6,7 @@ github-material-icons-firefox-extension.zip
 github-material-icons-edge-extension.zip
 src/icon-cache.js
 src/icon-map.json
+src/icon-list.json
 svg/
 data/
 

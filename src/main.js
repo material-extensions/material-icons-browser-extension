@@ -6,7 +6,7 @@ import { observe } from 'selector-observer';
 /**
  * Internal depedencies.
  */
-import iconsCache from './icon-cache';
+import iconsList from './icon-list';
 import iconMap from './icon-map';
 import languageMap from './language-map';
 
@@ -43,20 +43,18 @@ const rushFirst = (rushBatch, callback) => {
 // Monitor DOM elements that match a CSS selector.
 observe('.js-navigation-container[role=grid] > .js-navigation-item', {
   add(row) {
-    rushFirst(30, () => replaceIcon(row, iconMap));
+    rushFirst(30, () => replaceIcon(row, iconMap, languageMap));
   },
 });
 
 /**
  * Replace file/folder icons.
  *
- * @since 1.0.0
- *
  * @param {String} itemRow Item Row.
  * @param {Object} iconMap Icon Map.
  * @return {undefined}
  */
-function replaceIcon(itemRow, iconMap) {
+function replaceIcon(itemRow, iconMap, languageMap) {
   const isLightTheme = window.matchMedia('(prefers-color-scheme: light)').matches;
 
   // Get file/folder name.
@@ -85,7 +83,8 @@ function replaceIcon(itemRow, iconMap) {
     isDir,
     isSubmodule,
     isSymlink,
-    iconMap
+    iconMap,
+    languageMap
   ); // returns icon name if found or undefined.
   if (isLightTheme) {
     iconName = lookForLightMatch(iconName, fileName, fileExtension, isDir, iconMap); // returns icon name if found for light mode or undefined.
@@ -99,16 +98,8 @@ function replaceIcon(itemRow, iconMap) {
 
   if (!iconName) return;
 
-  const { innerHtml, viewBox } = iconsCache[iconName + '.svg'];
-  if (!innerHtml || !viewBox) return;
-
-  // Must first reset innerHTML on svgEl to innerHTML of our svg.
-  // svgEl.innerHTML = innerHtml;
-  // Finally set viewBox on svgEl to viewBox on our icon.
-  // svgEl.setAttribute('viewBox', viewBox);
-
   const newSVG = document.createElement('img');
-  newSVG.src = chrome.runtime.getURL(`../svg/${iconName + '.svg'}`);
+  newSVG.src = chrome.runtime.getURL(`svg/${iconName + '.svg'}`);
   svgEl.getAttributeNames().forEach((att) => newSVG.setAttribute(att, svgEl.getAttribute(att)));
 
   svgEl.parentNode.replaceChild(newSVG, svgEl);
@@ -135,7 +126,8 @@ function lookForMatch(
   isDir,
   isSubmodule,
   isSymlink,
-  iconMap
+  iconMap,
+  languageMap
 ) {
   if (isSubmodule) return 'folder-git';
   if (isSymlink) return 'folder-symlink';
@@ -207,21 +199,21 @@ function lookForIconPackMatch(lowerFileName, iconMap) {
     switch (iconMap.options.activeIconPack) {
       case 'angular':
       case 'angular_ngrx':
-        if (iconsCache[`folder-react-${lowerFileName}.svg`]) return `folder-ngrx-${lowerFileName}`;
+        if (iconsList[`folder-react-${lowerFileName}.svg`]) return `folder-ngrx-${lowerFileName}`;
         break;
       case 'react':
       case 'react_redux':
-        if (iconsCache[`folder-react-${lowerFileName}.svg`]) {
+        if (iconsList[`folder-react-${lowerFileName}.svg`]) {
           return `folder-react-${lowerFileName}`;
-        } else if (iconsCache[`folder-redux-${lowerFileName}.svg`]) {
+        } else if (iconsList[`folder-redux-${lowerFileName}.svg`]) {
           return `folder-redux-${lowerFileName}`;
         }
         break;
       case 'vue':
       case 'vue_vuex':
-        if (iconsCache[`folder-vuex-${lowerFileName}.svg`]) {
+        if (iconsList[`folder-vuex-${lowerFileName}.svg`]) {
           return `folder-vuex-${lowerFileName}`;
-        } else if (iconsCache[`folder-vue-${lowerFileName}.svg`]) {
+        } else if (iconsList[`folder-vue-${lowerFileName}.svg`]) {
           return `folder-vue-${lowerFileName}`;
         } else if ('nuxt' === lowerFileName) {
           return `folder-nuxt`;
