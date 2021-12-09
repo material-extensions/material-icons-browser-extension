@@ -5,7 +5,6 @@ const path = require('path');
 const fs = require('fs-extra');
 const rimraf = require('rimraf');
 const simpleGit = require('simple-git');
-const git = simpleGit();
 const child_process = require('child_process');
 
 /**
@@ -14,6 +13,8 @@ const child_process = require('child_process');
 const srcPath = path.resolve(__dirname, '..', 'src');
 const vsExtPath = path.resolve(__dirname, '..', 'temp');
 const destSVGPath = path.resolve(__dirname, '..', 'svg');
+const commitLockPath = path.resolve(__dirname, '..', 'upstream.commit')
+
 const vsExtExecOptions = {
   cwd: vsExtPath,
   stdio: 'inherit',
@@ -23,42 +24,45 @@ const distIconsExecOptions = {
   stdio: 'inherit',
 };
 
-// Copy dependencies from vs code extension.
-rimraf.sync(vsExtPath);
-rimraf.sync(destSVGPath);
-fs.ensureDir(destSVGPath)
-  .then(() => {
-    console.log('[1/7] Cloning PKief/vscode-material-icon-theme into temporary cache.');
-    return git.clone(`https://github.com/PKief/vscode-material-icon-theme.git`, 'temp', [
-      '--depth',
-      '1',
-    ]);
-  })
-  .then(() => {
-    console.log('[2/7] Terminate Git repository in temporary cache.');
-    return rimraf.sync(path.resolve(vsExtPath, '.git'));
-  })
-  .then(() => {
-    console.log('[3/7] Install NPM dependencies for VSC extension.');
-    child_process.execSync(`npm install --ignore-scripts`, vsExtExecOptions);
-  })
-  .then(() => {
-    console.log('[4/7] Terminate Git tracking in temporary cache.');
-    return fs.copy(path.resolve(vsExtPath, 'icons'), path.resolve(destSVGPath));
-  })
-  .then(() => {
-    console.log('[5/7] Optimise extension icons using SVGO.');
-    child_process.exec(`npx svgo -r .`, distIconsExecOptions);
-  })
-  .then(() => {
-    console.log('[6/7] Run build tasks for VSC extension.');
-    child_process.execSync(`npm run build`, vsExtExecOptions);
-  })
-  .then(() => {
-    console.log('[7/7] Copy file icon configuration to source code directory.');
-    return fs.copy(
-      path.resolve(vsExtPath, 'dist', 'material-icons.json'),
-      path.resolve(srcPath, 'icon-map.json')
-    );
-  })
-  .then(() => rimraf.sync(vsExtPath));
+async function main() {
+  rimraf.sync(vsExtPath);
+  rimraf.sync(destSVGPath);
+  await fs.ensureDir(destSVGPath)
+
+  console.log('[1/7] Cloning PKief/vscode-material-icon-theme into temporary cache.');
+  const git = simpleGit();
+  await git.clone(`https://github.com/PKief/vscode-material-icon-theme.git`, vsExtPath, [
+    '--depth',
+    '100', // fetch only last 100 commits. Guesswork, could be too shallow if upstream doesnt release often
+  ]);
+
+  const commit = fs.readFileSync(commitLockPath, {encoding: 'utf8'})?.trim()
+  console.log('Checking out to upstream commit:', commit)
+  const upstreamGit = simpleGit(vsExtPath)
+  upstreamGit.checkout(commit, ['--force'])
+
+  console.log('[2/7] Terminate Git repository in temporary cache.');
+  rimraf.sync(path.resolve(vsExtPath, '.git'));
+
+  console.log('[3/7] Install NPM dependencies for VSC extension.');
+  child_process.execSync(`npm install --ignore-scripts`, vsExtExecOptions);
+
+  console.log('[4/7] Terminate Git tracking in temporary cache.');
+  await fs.copy(path.resolve(vsExtPath, 'icons'), path.resolve(destSVGPath));
+
+  console.log('[5/7] Optimise extension icons using SVGO.');
+  child_process.execSync(`npx svgo -r .`, distIconsExecOptions);
+
+  console.log('[6/7] Run build tasks for VSC extension.');
+  child_process.execSync(`npm run build`, vsExtExecOptions);
+
+  console.log('[7/7] Copy file icon configuration to source code directory.');
+  await fs.copy(
+    path.resolve(vsExtPath, 'dist', 'material-icons.json'),
+    path.resolve(srcPath, 'icon-map.json')
+  );
+
+  rimraf.sync(vsExtPath);
+}
+
+main()
