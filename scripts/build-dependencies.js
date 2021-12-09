@@ -39,7 +39,7 @@ async function main() {
   const commit = fs.readFileSync(commitLockPath, {encoding: 'utf8'})?.trim()
   console.log('Checking out to upstream commit:', commit)
   const upstreamGit = simpleGit(vsExtPath)
-  upstreamGit.checkout(commit, ['--force'])
+  await upstreamGit.checkout(commit, ['--force'])
 
   console.log('[2/7] Terminate Git repository in temporary cache.');
   rimraf.sync(path.resolve(vsExtPath, '.git'));
