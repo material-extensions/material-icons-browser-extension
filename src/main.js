@@ -40,10 +40,144 @@ const rushFirst = (rushBatch, callback) => {
   }
 };
 
+/** The name of the class used to hide the pseudo element `:before` on Azure */
+const HIDE_PSEUDO_CLASS = 'hide-pseudo';
+
+/**
+ * Get all selectors and functions specific to the Git provider
+ *
+ * @returns {object} All of the values needed for the provider
+ */
+const getGitProvider = () => {
+  const hostname = window.location.hostname;
+
+  if (/.*github.*/.test(hostname)) {
+    return {
+      name: 'github',
+      selectors: {
+        row: '.js-navigation-container[role=grid] > .js-navigation-item',
+        filename: 'div[role="rowheader"] > span',
+        icon: '.octicon',
+      },
+      getIsLightTheme: () =>
+        document.querySelector('html').getAttribute('data-color-mode') === 'light',
+      getIsDirectory: (svgEl) => svgEl.getAttribute('aria-label') === 'Directory',
+      getIsSubmodule: (svgEl) => svgEl.getAttribute('aria-label') === 'Submodule',
+      getIsSymlink: (svgEl) => svgEl.getAttribute('aria-label') === 'Symlink Directory',
+      replaceIcon: (svgEl, newSVG) => {
+        svgEl
+          .getAttributeNames()
+          .forEach((attr) => newSVG.setAttribute(attr, svgEl.getAttribute(attr)));
+
+        svgEl.parentNode.replaceChild(newSVG, svgEl);
+      },
+    };
+  }
+
+  if (/.*bitbucket.*/.test(hostname)) {
+    return {
+      name: 'bitbucket',
+      selectors: {
+        // Don't replace the icon for the parent directory row
+        row: 'table[data-qa="repository-directory"] td:first-child a:first-child:not([aria-label="Parent directory,"])',
+        filename: 'span',
+        icon: 'svg',
+      },
+      getIsLightTheme: () => true, // No dark mode available for bitbucket currently
+      getIsDirectory: (svgEl) => svgEl.parentNode?.getAttribute('aria-label') === 'Directory,',
+      getIsSubmodule: (svgEl) => svgEl.parentNode?.getAttribute('aria-label') === 'Submodule,',
+      getIsSymlink: (svgEl) => false, // There appears to be no way to determine this for bitbucket
+      replaceIcon: (svgEl, newSVG) => {
+        newSVG.style.overflow = 'hidden';
+        newSVG.style.pointerEvents = 'none';
+        newSVG.style.maxHeight = '100%';
+        newSVG.style.maxWidth = '100%';
+        newSVG.style.verticalAlign = 'bottom';
+
+        svgEl
+          .getAttributeNames()
+          .forEach((attr) => newSVG.setAttribute(attr, svgEl.getAttribute(attr)));
+
+        svgEl.parentNode.replaceChild(newSVG, svgEl);
+      },
+    };
+  }
+
+  if (/.*azure.*/.test(hostname)) {
+    return {
+      name: 'azure',
+      selectors: {
+        row: 'table.bolt-table tbody > a',
+        filename: 'table.bolt-table tbody > a > td[aria-colindex="1"] span.text-ellipsis',
+        icon: 'td[aria-colindex="1"] span.icon-margin',
+      },
+      getIsLightTheme: () =>
+        document.defaultView.getComputedStyle(document.body).getPropertyValue('color') ===
+        'rgba(0, 0, 0, 0.9)', // TODO: There is probably a better way to determine whether Azure is in light mode
+      getIsDirectory: (svgEl) => svgEl.classList.contains('repos-folder-icon'),
+      getIsSubmodule: (svgEl) => false, // There appears to be no way to tell if a folder is a submodule
+      getIsSymlink: (svgEl) => svgEl.classList.contains('ms-Icon--PageArrowRight'),
+      replaceIcon: (svgEl, newSVG) => {
+        newSVG.style.display = 'inline-flex';
+        newSVG.style.height = '1rem';
+        newSVG.style.width = '1rem';
+
+        if (!svgEl.classList.contains(HIDE_PSEUDO_CLASS)) {
+          svgEl.classList.add(HIDE_PSEUDO_CLASS);
+        }
+
+        // Instead of replacing the child icon, add the new icon as a child,
+        // otherwise Azure DevOps crashes when you navigate through the repository
+        if (svgEl.hasChildNodes()) {
+          svgEl.replaceChild(newSVG, svgEl.firstChild);
+        } else {
+          svgEl.appendChild(newSVG);
+        }
+      },
+    };
+  }
+};
+
+const provider = getGitProvider();
+
+let hasAddedAzureStyle = false;
+
 // Monitor DOM elements that match a CSS selector.
-observe('.js-navigation-container[role=grid] > .js-navigation-item', {
+observe(provider.selectors.row, {
   add(row) {
-    rushFirst(30, () => replaceIcon(row, iconMap, languageMap));
+    const callback = () => replaceIcon(row, iconMap, languageMap);
+
+    rushFirst(30, callback);
+
+    if (provider.name === 'azure') {
+      // Mutation observer is required for azure to work properly because the rows are not removed
+      // from the page when navigating through the repository.  Without this the page will render
+      // fine initially but any subsequent changes will reult in inaccurate icons.
+      const mutationCallback = (mutationsList) => {
+        // Check whether the mutation was made by this extension
+        // this is determined by whether there is an image node added to the dom
+        const isExtensionMutation = mutationsList.some((mutation) =>
+          Array.from(mutation.addedNodes).some((node) => node.nodeName === 'IMG')
+        );
+
+        // If the mutation was not caused by the extension, run the icon replacement
+        // otherwise there will be an infinite loop
+        if (!isExtensionMutation) callback();
+      };
+
+      const observer = new MutationObserver(mutationCallback);
+      observer.observe(row, { attributes: true, childList: true, subtree: true });
+
+      if (!hasAddedAzureStyle) {
+        // Azure requires the icon element to be left on the page so add a style rule to hide its icon
+        document.styleSheets[0].insertRule(
+          `.${HIDE_PSEUDO_CLASS}::before { display: none !important }`,
+          0
+        );
+        // but only add the style once
+        hasAddedAzureStyle = true;
+      }
+    }
   },
 });
 
@@ -55,24 +189,24 @@ observe('.js-navigation-container[role=grid] > .js-navigation-item', {
  * @return {undefined}
  */
 function replaceIcon(itemRow, iconMap, languageMap) {
-  const isLightTheme = window.matchMedia('(prefers-color-scheme: light)').matches;
+  const isLightTheme = provider.getIsLightTheme();
+  console.log('isLightTheme', isLightTheme);
 
   // Get file/folder name.
-  const fileName =
-    itemRow.querySelector('[role=rowheader]')?.firstElementChild?.firstElementChild?.innerText;
+  const fileName = itemRow.querySelector(provider.selectors.filename)?.innerText.trim();
   if (!fileName) return; // fileName couldn't be found or we don't have a match for it.
 
   // Get file extension.
   const fileExtension = fileName.match(/.*?[.](?<ext>xml.dist|xml.dist.sample|yml.dist|\w+)$/)?.[1];
 
   // SVG to be replaced.
-  const svgEl = itemRow.querySelector('.octicon');
+  const svgEl = itemRow.querySelector(provider.selectors.icon);
   if (!svgEl) return; // couldn't find svg element.
 
   // Get Directory or Submodule type.
-  const isDir = svgEl.getAttribute('aria-label') === 'Directory';
-  const isSubmodule = svgEl.getAttribute('aria-label') === 'Submodule';
-  const isSymlink = svgEl.getAttribute('aria-label') === 'Symlink Directory';
+  const isDir = provider.getIsDirectory(svgEl);
+  const isSubmodule = provider.getIsSubmodule(svgEl);
+  const isSymlink = provider.getIsSymlink(svgEl);
   const lowerFileName = fileName.toLowerCase();
 
   // Get icon name.
@@ -99,10 +233,9 @@ function replaceIcon(itemRow, iconMap, languageMap) {
   if (!iconName) return;
 
   const newSVG = document.createElement('img');
-  newSVG.src = chrome.runtime.getURL(`${iconName + '.svg'}`);
-  svgEl.getAttributeNames().forEach((att) => newSVG.setAttribute(att, svgEl.getAttribute(att)));
+  newSVG.src = chrome.runtime.getURL(`${iconName}.svg`);
 
-  svgEl.parentNode.replaceChild(newSVG, svgEl);
+  provider.replaceIcon(svgEl, newSVG);
 }
 
 /**
