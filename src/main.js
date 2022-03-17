@@ -190,7 +190,6 @@ observe(provider.selectors.row, {
  */
 function replaceIcon(itemRow, iconMap, languageMap) {
   const isLightTheme = provider.getIsLightTheme();
-  console.log('isLightTheme', isLightTheme);
 
   // Get file/folder name.
   const fileName = itemRow.querySelector(provider.selectors.filename)?.innerText.trim();
