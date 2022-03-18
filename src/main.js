@@ -6,9 +6,9 @@ import { observe } from 'selector-observer';
 /**
  * Internal depedencies.
  */
-import iconsList from './icon-list';
-import iconMap from './icon-map';
-import languageMap from './language-map';
+import iconsList from './icon-list.json';
+import iconMap from './icon-map.json';
+import languageMap from './language-map.json';
 
 // Expected configuration.
 iconMap.options = {
@@ -30,7 +30,7 @@ const rushFirst = (rushBatch, callback) => {
   if (executions <= rushBatch) {
     callback(); // immediately run to prevent visual "blink"
     setTimeout(callback, 20); // run again later to catch any icons that are missed in large repositories
-    executions++;
+    executions += 1;
   } else {
     setTimeout(callback, 0); // run without blocking to prevent delayed rendering of large folders too much
     clearTimeout(timerID);
@@ -43,18 +43,17 @@ const rushFirst = (rushBatch, callback) => {
 // Monitor DOM elements that match a CSS selector.
 observe('.js-navigation-container[role=grid] > .js-navigation-item', {
   add(row) {
-    rushFirst(30, () => replaceIcon(row, iconMap, languageMap));
+    rushFirst(30, () => replaceIcon(row));
   },
 });
 
 /**
  * Replace file/folder icons.
  *
- * @param {String} itemRow Item Row.
- * @param {Object} iconMap Icon Map.
+ * @param {HTMLElement} itemRow Item Row.
  * @return {undefined}
  */
-function replaceIcon(itemRow, iconMap, languageMap) {
+function replaceIcon(itemRow) {
   const isLightTheme = window.matchMedia('(prefers-color-scheme: light)').matches;
 
   // Get file/folder name.
@@ -82,24 +81,22 @@ function replaceIcon(itemRow, iconMap, languageMap) {
     fileExtension,
     isDir,
     isSubmodule,
-    isSymlink,
-    iconMap,
-    languageMap
+    isSymlink
   ); // returns icon name if found or undefined.
   if (isLightTheme) {
-    iconName = lookForLightMatch(iconName, fileName, fileExtension, isDir, iconMap); // returns icon name if found for light mode or undefined.
+    iconName = lookForLightMatch(iconName, fileName, fileExtension, isDir); // returns icon name if found for light mode or undefined.
   }
 
   // Get folder icon from active icon pack.
 
   if (iconMap.options.activeIconPack) {
-    iconName = lookForIconPackMatch(lowerFileName, iconMap) ?? iconName;
+    iconName = lookForIconPackMatch(lowerFileName) ?? iconName;
   }
 
   if (!iconName) return;
 
   const newSVG = document.createElement('img');
-  newSVG.src = chrome.runtime.getURL(`${iconName + '.svg'}`);
+  newSVG.src = chrome.runtime.getURL(`${`${iconName}.svg`}`);
   svgEl.getAttributeNames().forEach((att) => newSVG.setAttribute(att, svgEl.getAttribute(att)));
 
   svgEl.parentNode.replaceChild(newSVG, svgEl);
@@ -116,19 +113,9 @@ function replaceIcon(itemRow, iconMap, languageMap) {
  * @param {Boolean} isDir Check if directory type.
  * @param {Boolean} isSubmodule Check if submodule type.
  * @param {Boolean} isSymlink Check if symlink
- * @param {Object} iconMap Icon map.
  * @returns {String} The matched icon name.
  */
-function lookForMatch(
-  fileName,
-  lowerFileName,
-  fileExtension,
-  isDir,
-  isSubmodule,
-  isSymlink,
-  iconMap,
-  languageMap
-) {
+function lookForMatch(fileName, lowerFileName, fileExtension, isDir, isSubmodule, isSymlink) {
   if (isSubmodule) return 'folder-git';
   if (isSymlink) return 'folder-symlink';
 
@@ -170,10 +157,9 @@ function lookForMatch(
  * @param {String} fileName File name.
  * @param {String} fileExtension File extension.
  * @param {Boolean} isDir Check if directory or file type.
- * @param {Object} iconMap Icon map.
  * @returns {String} The matched icon name.
  */
-function lookForLightMatch(iconName, fileName, fileExtension, isDir, iconMap) {
+function lookForLightMatch(iconName, fileName, fileExtension, isDir) {
   // First look in fileNames and folderNames.
   if (iconMap.light.fileNames[fileName] && !isDir) return iconMap.light.fileNames[fileName];
   if (iconMap.light.folderNames[fileName] && isDir) return iconMap.light.folderNames[fileName];
@@ -191,10 +177,9 @@ function lookForLightMatch(iconName, fileName, fileExtension, isDir, iconMap) {
  * @since 1.4.0
  *
  * @param {String} lowerFileName Lowercase file name.
- * @param {Object} iconMap Icon map.
  * @returns {String} The matched icon name.
  */
-function lookForIconPackMatch(lowerFileName, iconMap) {
+function lookForIconPackMatch(lowerFileName) {
   if (iconMap.options.activeIconPack) {
     switch (iconMap.options.activeIconPack) {
       case 'angular':
@@ -205,7 +190,8 @@ function lookForIconPackMatch(lowerFileName, iconMap) {
       case 'react_redux':
         if (iconsList[`folder-react-${lowerFileName}.svg`]) {
           return `folder-react-${lowerFileName}`;
-        } else if (iconsList[`folder-redux-${lowerFileName}.svg`]) {
+        }
+        if (iconsList[`folder-redux-${lowerFileName}.svg`]) {
           return `folder-redux-${lowerFileName}`;
         }
         break;
@@ -213,9 +199,11 @@ function lookForIconPackMatch(lowerFileName, iconMap) {
       case 'vue_vuex':
         if (iconsList[`folder-vuex-${lowerFileName}.svg`]) {
           return `folder-vuex-${lowerFileName}`;
-        } else if (iconsList[`folder-vue-${lowerFileName}.svg`]) {
+        }
+        if (iconsList[`folder-vue-${lowerFileName}.svg`]) {
           return `folder-vue-${lowerFileName}`;
-        } else if ('nuxt' === lowerFileName) {
+        }
+        if (lowerFileName === 'nuxt') {
           return `folder-nuxt`;
         }
         break;
@@ -241,7 +229,12 @@ function lookForIconPackMatch(lowerFileName, iconMap) {
             return 'nest-guard';
           case /\.resolver\.(t|j)s$/.test(lowerFileName):
             return 'nest-resolver';
+          default:
+            return null;
         }
+      default:
+        return null;
     }
   }
+  return null;
 }

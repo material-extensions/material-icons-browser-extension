@@ -1,24 +1,16 @@
 {
-  "extends": [
-    "config:base"
-  ],
+  "extends": ["config:base"],
   "lockFileMaintenance": {
     "enabled": false
   },
   "packageRules": [
     {
-      "packageNames": [
-        "npm"
-      ],
+      "packageNames": ["npm"],
       "enabled": false
     },
     {
-      "matchManagers": [
-        "npm"
-      ],
-      "matchDepTypes": [
-        "devDependencies"
-      ],
+      "matchManagers": ["npm"],
+      "matchDepTypes": ["devDependencies"],
       "enabled": false
     }
   ]

@@ -12,16 +12,10 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "*://*.github.com/*"
-      ],
-      "js": [
-        "./main.js"
-      ],
+      "matches": ["*://*.github.com/*"],
+      "js": ["./main.js"],
       "run_at": "document_start"
     }
   ],
-  "web_accessible_resources": [
-    "*.svg"
-  ]
+  "web_accessible_resources": ["*.svg"]
 }

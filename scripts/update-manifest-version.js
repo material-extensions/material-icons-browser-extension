@@ -11,7 +11,7 @@ const manifestPath = path.resolve(__dirname, '..', 'src', 'manifest.json');
 const manifest = require(manifestPath);
 
 const updatedManifest = { ...manifest, version: package.version };
-const updatedManifestStr = JSON.stringify(updatedManifest, null, 2) + '\n';
+const updatedManifestStr = `${JSON.stringify(updatedManifest, null, 2)}\n`;
 
 fs.writeFile(manifestPath, updatedManifestStr)
   .then(() => {
