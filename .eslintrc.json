@@ -1,11 +1,31 @@
 {
-  "extends": ["airbnb", "prettier"],
-  "plugins": ["prettier"],
-  "rules": {
-    "prettier/prettier": ["error"]
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
   },
   "globals": {
-    "window": true,
-    "document": true
-  }
+    "chrome": "readonly"
+  },
+  "extends": ["airbnb-base", "prettier"],
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-use-before-define": ["error", { "functions": false }]
+  },
+  "overrides": [
+    {
+      "files": ["scripts/*.js", "svgo.config.js"],
+      "parserOptions": {
+        "sourceType": "script"
+      },
+      "rules": {
+        "import/no-extraneous-dependencies": "off",
+        "import/no-dynamic-require": "off",
+        "no-console": "off"
+      }
+    }
+  ]
 }

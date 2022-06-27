@@ -18,10 +18,13 @@ const getUpstreamVersion = () =>
     .then((package) => package.version);
 
 const octokit = new api.Octokit();
-const getUpstreamCommit = () => 
-  octokit.request('GET /repos/PKief/vscode-material-icon-theme/commits', {per_page: 1}).then(res => res.data?.[0].sha)
+const getUpstreamCommit = () =>
+  octokit
+    .request('GET /repos/PKief/vscode-material-icon-theme/commits', { per_page: 1 })
+    .then((res) => res.data?.[0].sha);
 
-const getLastUpstreamVersion = () => fs.readFile(upstreamVersionFilePath, { encoding: 'utf8' }).then(data => data.trim());
+const getLastUpstreamVersion = () =>
+  fs.readFile(upstreamVersionFilePath, { encoding: 'utf8' }).then((data) => data.trim());
 
 const updateReadmeBadge = async (version) => {
   const readmeFilePath = path.resolve(__dirname, '..', 'README.md');

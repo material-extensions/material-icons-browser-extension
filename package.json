@@ -24,13 +24,15 @@
     "@octokit/core": "3.5.1",
     "@types/node-fetch": "2.5.11",
     "compare-versions": "3.6.0",
-    "eslint": "7.29.0",
-    "eslint-config": "0.3.0",
-    "eslint-config-airbnb": "18.2.1",
-    "eslint-config-prettier": "8.3.0",
-    "eslint-plugin-prettier": "3.4.0",
+    "eslint": "8.11.0",
+    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-import": "2.25.4",
     "follow-redirects": "1.14.1",
     "fs-extra": "10.0.0",
+    "husky": "7.0.4",
+    "json-stable-stringify": "1.0.1",
+    "lint-staged": "12.3.7",
     "node-fetch": "2.6.1",
     "npm-run-all": "4.1.5",
     "parcel-bundler": "1.12.5",
@@ -59,6 +61,14 @@
     "update-upstream-version": "node ./scripts/update-upstream-version",
     "update-package-version": "npm version --no-git-tag-version",
     "update": "run-s update-upstream-version \"update-package-version patch\" update-manifest-version build",
-    "release": "run-s \"update-package-version {1}\" update-manifest-version build --"
+    "release": "run-s \"update-package-version {1}\" update-manifest-version build --",
+    "lint": "eslint .",
+    "lint-fix": "eslint --fix .",
+    "format": "prettier --write --ignore-unknown .",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix",
+    "*": "prettier --write --ignore-unknown"
   }
 }

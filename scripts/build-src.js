@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs-extra');
 const Parcel = require('parcel-bundler');
+
 const destSVGPath = path.resolve(__dirname, '..', 'svg');
 const distPath = path.resolve(__dirname, '..', 'dist');
 const srcPath = path.resolve(__dirname, '..', 'src');
