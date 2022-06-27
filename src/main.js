@@ -77,7 +77,7 @@ observe(provider.selectors.row, {
   add(row) {
     const callback = () => replaceIcon(row, iconMap, languageMap);
 
-    rushFirst(30, callback);
+    rushFirst(90, callback);
 
     if (provider.name === 'azure') {
       // Mutation observer is required for azure to work properly because the rows are not removed
