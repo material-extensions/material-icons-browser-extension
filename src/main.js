@@ -43,7 +43,7 @@ const rushFirst = (rushBatch, callback) => {
 // Monitor DOM elements that match a CSS selector.
 observe('.js-navigation-container[role=grid] > .js-navigation-item', {
   add(row) {
-    rushFirst(30, () => replaceIcon(row, iconMap, languageMap));
+    rushFirst(90, () => replaceIcon(row, iconMap, languageMap));
   },
 });
 
