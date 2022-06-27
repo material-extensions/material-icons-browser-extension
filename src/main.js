@@ -10,7 +10,7 @@ import iconsList from './icon-list';
 import iconMap from './icon-map';
 import languageMap from './language-map';
 
-import providerConfig from './provider.config';
+import providerConfig from './providers';
 
 // Expected configuration.
 iconMap.options = {
@@ -42,9 +42,6 @@ const rushFirst = (rushBatch, callback) => {
   }
 };
 
-/** The name of the class used to hide the pseudo element `:before` on Azure */
-const HIDE_PSEUDO_CLASS = 'hide-pseudo';
-
 /**
  * Get all selectors and functions specific to the Git provider
  *
@@ -54,64 +51,34 @@ const getGitProvider = () => {
   const hostname = window.location.hostname;
 
   switch (hostname) {
-    case /.*github.*/.test(hostname):
+    case 'github.com':
       return providerConfig.github;
 
-    case /.*bitbucket.*/.test(hostname):
+    case 'bitbucket.org':
       return providerConfig.bitbucket;
 
-    case /.*azure.*/.test(hostname):
+    case 'dev.azure.com':
       return providerConfig.azure;
 
     default:
-      return {};
+      return null;
   }
 };
 
-const provider = getGitProvider();
-
-let hasAddedAzureStyle = false;
+const gitProvider = getGitProvider();
 
 // Monitor DOM elements that match a CSS selector.
-observe(provider.selectors.row, {
-  add(row) {
-    const callback = () => replaceIcon(row, iconMap, languageMap);
+if (gitProvider) {
+  observe(gitProvider.selectors.row, {
+    add(row) {
+      const callback = () => replaceIcon(row, iconMap, languageMap, gitProvider);
 
-    rushFirst(90, callback);
+      rushFirst(90, callback);
 
-    if (provider.name === 'azure') {
-      // Mutation observer is required for azure to work properly because the rows are not removed
-      // from the page when navigating through the repository.  Without this the page will render
-      // fine initially but any subsequent changes will reult in inaccurate icons.
-      const mutationCallback = (mutationsList) => {
-        // Check whether the mutation was made by this extension
-        // this is determined by whether there is an image node added to the dom
-        const isExtensionMutation = mutationsList.some((mutation) =>
-          Array.from(mutation.addedNodes).some((node) => node.nodeName === 'IMG')
-        );
-
-        // If the mutation was not caused by the extension, run the icon replacement
-        // otherwise there will be an infinite loop
-        if (!isExtensionMutation) {
-          callback();
-        }
-      };
-
-      const observer = new MutationObserver(mutationCallback);
-      observer.observe(row, { attributes: true, childList: true, subtree: true });
-
-      if (!hasAddedAzureStyle) {
-        // Azure requires the icon element to be left on the page so add a style rule to hide its icon
-        document.styleSheets[0].insertRule(
-          `.${HIDE_PSEUDO_CLASS}::before { display: none !important }`,
-          0
-        );
-        // but only add the style once
-        hasAddedAzureStyle = true;
-      }
-    }
-  },
-});
+      gitProvider.onAdd(row, callback);
+    },
+  });
+}
 
 /**
  * Replace file/folder icons.
@@ -120,7 +87,7 @@ observe(provider.selectors.row, {
  * @param {Object} iconMap Icon Map.
  * @return {undefined}
  */
-function replaceIcon(itemRow, iconMap, languageMap) {
+function replaceIcon(itemRow, iconMap, languageMap, provider) {
   const isLightTheme = provider.getIsLightTheme();
 
   // Get file/folder name.
