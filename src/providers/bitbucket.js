@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 const bitbucketConfig = {
   name: 'bitbucket',
   selectors: {
@@ -9,7 +10,7 @@ const bitbucketConfig = {
   getIsLightTheme: () => true, // No dark mode available for bitbucket currently
   getIsDirectory: (svgEl) => svgEl.parentNode?.getAttribute('aria-label') === 'Directory,',
   getIsSubmodule: (svgEl) => svgEl.parentNode?.getAttribute('aria-label') === 'Submodule,',
-  getIsSymlink: (svgEl) => false, // There appears to be no way to determine this for bitbucket
+  getIsSymlink: () => false, // There appears to be no way to determine this for bitbucket
   replaceIcon: (svgEl, newSVG) => {
     newSVG.style.overflow = 'hidden';
     newSVG.style.pointerEvents = 'none';

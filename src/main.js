@@ -48,7 +48,7 @@ const rushFirst = (rushBatch, callback) => {
  * @returns {object} All of the values needed for the provider
  */
 const getGitProvider = () => {
-  const hostname = window.location.hostname;
+  const { hostname } = window.location;
 
   switch (hostname) {
     case 'github.com':
@@ -84,7 +84,7 @@ if (gitProvider) {
  * Replace file/folder icons.
  *
  * @param {HTMLElement} itemRow Item Row.
- * @param {object} Git provider object
+ * @param {object} provider Git provider object
  * @return {undefined}
  */
 function replaceIcon(itemRow, provider) {
