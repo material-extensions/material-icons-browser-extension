@@ -48,16 +48,16 @@ const rushFirst = (rushBatch, callback) => {
  * @returns {object} All of the values needed for the provider
  */
 const getGitProvider = () => {
-  const hostname = window.location.hostname;
+  const { href } = window.location;
 
-  switch (hostname) {
-    case 'github.com':
+  switch (true) {
+    case /github\.com.*/.test(href):
       return providerConfig.github;
 
-    case 'bitbucket.org':
+    case /bitbucket\.org/.test(href):
       return providerConfig.bitbucket;
 
-    case 'dev.azure.com':
+    case /dev\.azure\.com/.test(href):
       return providerConfig.azure;
 
     default:
@@ -85,6 +85,8 @@ if (gitProvider) {
  *
  * @param {String} itemRow Item Row.
  * @param {Object} iconMap Icon Map.
+ * @param {Object} languageMap Language Map.
+ * @param {Object} provider Git Provider specs.
  * @return {undefined}
  */
 function replaceIcon(itemRow, iconMap, languageMap, provider) {
