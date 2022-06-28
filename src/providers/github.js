@@ -1,9 +1,9 @@
 const githubConfig = {
   name: 'github',
   selectors: {
-    row: '.js-navigation-container[role=grid] > .js-navigation-item',
-    filename: 'div[role="rowheader"] > span',
-    icon: '.octicon',
+    row: '.js-navigation-container[role=grid] > .js-navigation-item, file-tree .ActionList-content',
+    filename: 'div[role="rowheader"] > span, .ActionList-item-label',
+    icon: '.octicon-file, .octicon-file-directory-fill',
   },
   getIsLightTheme: () => document.querySelector('html').getAttribute('data-color-mode') === 'light',
   getIsDirectory: (svgEl) => svgEl.getAttribute('aria-label') === 'Directory',
