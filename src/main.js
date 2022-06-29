@@ -57,6 +57,9 @@ const getGitProvider = () => {
     case /bitbucket\.org/.test(href):
       return providerConfig.bitbucket;
 
+    case /gitea\.com/.test(href):
+      return providerConfig.gitea;
+
     case /dev\.azure\.com/.test(href):
       return providerConfig.azure;
 
