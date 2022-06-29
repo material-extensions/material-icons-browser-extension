@@ -10,6 +10,8 @@ import iconsList from './icon-list';
 import iconMap from './icon-map';
 import languageMap from './language-map';
 
+import providerConfig from './providers';
+
 // Expected configuration.
 iconMap.options = {
   ...iconMap.options,
@@ -40,39 +42,71 @@ const rushFirst = (rushBatch, callback) => {
   }
 };
 
+/**
+ * Get all selectors and functions specific to the Git provider
+ *
+ * @returns {object} All of the values needed for the provider
+ */
+const getGitProvider = () => {
+  const { href } = window.location;
+
+  switch (true) {
+    case /github\.com.*/.test(href):
+      return providerConfig.github;
+
+    case /bitbucket\.org/.test(href):
+      return providerConfig.bitbucket;
+
+    case /dev\.azure\.com/.test(href):
+      return providerConfig.azure;
+
+    default:
+      return null;
+  }
+};
+
+const gitProvider = getGitProvider();
+
 // Monitor DOM elements that match a CSS selector.
-observe('.js-navigation-container[role=grid] > .js-navigation-item', {
-  add(row) {
-    rushFirst(90, () => replaceIcon(row, iconMap, languageMap));
-  },
-});
+if (gitProvider) {
+  observe(gitProvider.selectors.row, {
+    add(row) {
+      const callback = () => replaceIcon(row, iconMap, languageMap, gitProvider);
+
+      rushFirst(90, callback);
+
+      gitProvider.onAdd(row, callback);
+    },
+  });
+}
 
 /**
  * Replace file/folder icons.
  *
  * @param {String} itemRow Item Row.
  * @param {Object} iconMap Icon Map.
+ * @param {Object} languageMap Language Map.
+ * @param {Object} provider Git Provider specs.
  * @return {undefined}
  */
-function replaceIcon(itemRow, iconMap, languageMap) {
-  const isLightTheme = window.matchMedia('(prefers-color-scheme: light)').matches;
+function replaceIcon(itemRow, iconMap, languageMap, provider) {
+  const isLightTheme = provider.getIsLightTheme();
 
   // Get file/folder name.
-  const fileName =
-    itemRow.querySelector('[role=rowheader]')?.firstElementChild?.firstElementChild?.innerText;
+  const fileName = itemRow.querySelector(provider.selectors.filename)?.innerText.trim();
   if (!fileName) return; // fileName couldn't be found or we don't have a match for it.
 
   // Get file extension.
   const fileExtension = fileName.match(/.*?[.](?<ext>xml.dist|xml.dist.sample|yml.dist|\w+)$/)?.[1];
 
   // SVG to be replaced.
-  const svgEl = itemRow.querySelector('.octicon');
+  const svgEl = itemRow.querySelector(provider.selectors.icon);
   if (!svgEl) return; // couldn't find svg element.
 
   // Get Directory or Submodule type.
-  const isDir = svgEl.getAttribute('aria-label') === 'Directory';
-  const isSubmodule = svgEl.getAttribute('aria-label') === 'Submodule';
-  const isSymlink = svgEl.getAttribute('aria-label') === 'Symlink Directory';
+  const isDir = provider.getIsDirectory(svgEl);
+  const isSubmodule = provider.getIsSubmodule(svgEl);
+  const isSymlink = provider.getIsSymlink(svgEl);
   const lowerFileName = fileName.toLowerCase();
 
   // Get icon name.
@@ -99,10 +133,9 @@ function replaceIcon(itemRow, iconMap, languageMap) {
   if (!iconName) return;
 
   const newSVG = document.createElement('img');
-  newSVG.src = chrome.runtime.getURL(`${iconName + '.svg'}`);
-  svgEl.getAttributeNames().forEach((att) => newSVG.setAttribute(att, svgEl.getAttribute(att)));
+  newSVG.src = chrome.runtime.getURL(`${iconName}.svg`);
 
-  svgEl.parentNode.replaceChild(newSVG, svgEl);
+  provider.replaceIcon(svgEl, newSVG);
 }
 
 /**
