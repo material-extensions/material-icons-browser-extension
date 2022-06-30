@@ -63,5 +63,5 @@ jobs:
       - name: Upload to firefox store
         if: steps.upstream.outputs.release_tag != steps.upstream.outputs.current_tag
         continue-on-error: true
-        run: npx web-ext sign -s ./dist/ --channel=listed --api-key=${{ secrets.FIREFOX_API_JWT_ISSUER }} --api-secret=${{ secrets.FIREFOX_API_JWT_SECRET }} --id="{eac6e624-97fa-4f28-9d24-c06c9b8aa713}"
+        run: npx web-ext sign -s ./dist/ --channel=listed --api-key=${{ secrets.FIREFOX_API_JWT_ISSUER }} --api-secret=${{ secrets.FIREFOX_API_JWT_SECRET }}
 
