@@ -14,8 +14,8 @@
     "url": "https://github.com/Claudiohbsantos/github-material-icons-extension/issues"
   },
   "engines": {
-    "node": "^16",
-    "npm": "^8"
+    "node": "16.13.0",
+    "npm": "8.1.0"
   },
   "dependencies": {
     "selector-observer": "2.1.6"
