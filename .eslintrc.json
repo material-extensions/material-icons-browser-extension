@@ -27,6 +27,12 @@
         "import/no-dynamic-require": "off",
         "no-console": "off"
       }
+    },
+    {
+      "files": ["src/providers/*.js"],
+      "rules": {
+        "no-param-reassign": "off"
+      }
     }
   ]
 }
