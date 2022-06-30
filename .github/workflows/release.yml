@@ -69,4 +69,4 @@ jobs:
       - name: Upload to firefox store
         if: ${{ github.event.inputs.onlyUpload != 'chrome' && github.event.inputs.onlyUpload != 'none'}}
         continue-on-error: true
-        run: npx web-ext sign -s ./dist/ --channel=listed --api-key=${{ secrets.FIREFOX_API_JWT_ISSUER }} --api-secret=${{ secrets.FIREFOX_API_JWT_SECRET }}
+        run: npx web-ext sign -s ./dist/firefox/ --channel=listed --api-key=${{ secrets.FIREFOX_API_JWT_ISSUER }} --api-secret=${{ secrets.FIREFOX_API_JWT_SECRET }}

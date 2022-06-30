@@ -7,7 +7,7 @@ const fs = require('fs').promises;
 
 const package = require(path.resolve(__dirname, '..', 'package.json'));
 
-const manifestPath = path.resolve(__dirname, '..', 'src', 'manifest.json');
+const manifestPath = path.resolve(__dirname, '..', 'src', 'manifests', 'base.json');
 const manifest = require(manifestPath);
 
 const updatedManifest = { ...manifest, version: package.version };

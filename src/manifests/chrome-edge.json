@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "web_accessible_resources": [
+    {
+      "resources": ["*.svg"],
+      "matches": [
+        "*://*.github.com/*",
+        "*://*.bitbucket.org/*",
+        "*://dev.azure.com/*",
+        "*://*.gitea.com/*"
+      ]
+    }
+  ]
+}
