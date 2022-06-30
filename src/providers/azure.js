@@ -13,7 +13,7 @@ const azureConfig = {
     document.defaultView.getComputedStyle(document.body).getPropertyValue('color') ===
     'rgba(0, 0, 0, 0.9)', // TODO: There is probably a better way to determine whether Azure is in light mode
   getIsDirectory: (svgEl) => svgEl.classList.contains('repos-folder-icon'),
-  getIsSubmodule: (svgEl) => false, // There appears to be no way to tell if a folder is a submodule
+  getIsSubmodule: () => false, // There appears to be no way to tell if a folder is a submodule
   getIsSymlink: (svgEl) => svgEl.classList.contains('ms-Icon--PageArrowRight'),
   replaceIcon: (svgEl, newSVG) => {
     newSVG.style.display = 'inline-flex';

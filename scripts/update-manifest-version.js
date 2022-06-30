@@ -17,4 +17,4 @@ fs.writeFile(manifestPath, updatedManifestStr)
   .then(() => {
     console.log(`Updated manifest.json version to ${package.version}`);
   })
-  .catch((err) => console.error(err));
+  .catch(console.error);

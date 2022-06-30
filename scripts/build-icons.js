@@ -26,6 +26,6 @@ function generateIcons() {
       .png()
       .resize({ width: size, height: size })
       .toFile(`${iconsPath}/icon-${size}.png`)
-      .catch(console.log);
+      .catch(console.error);
   });
 }

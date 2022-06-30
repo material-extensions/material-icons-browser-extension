@@ -14,10 +14,8 @@ import providerConfig from './providers';
 // Expected configuration.
 iconMap.options = {
   ...iconMap.options,
-  ...{
-    activeIconPack: 'react_redux',
-    // activeIconPack: 'nest', // TODO: implement interface to choose pack
-  },
+  activeIconPack: 'react_redux',
+  // activeIconPack: 'nest', // TODO: implement interface to choose pack
 };
 
 // replacing all icons synchronously prevents visual "blinks" but can

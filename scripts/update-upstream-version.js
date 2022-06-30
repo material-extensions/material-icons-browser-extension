@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const path = require('path');
 const api = require('@octokit/core');
 const compareVersions = require('compare-versions');
-const fs = require('fs').promises;
+const fs = require('fs/promises');
 
 const upstreamVersionFilePath = path.resolve(__dirname, '..', 'upstream.version');
 const upstreamCommitFilePath = path.resolve(__dirname, '..', 'upstream.commit');
