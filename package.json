@@ -1,6 +1,6 @@
 {
   "name": "github-material-icons-extension",
-  "version": "1.5.10",
+  "version": "1.6.1",
   "description": "Browser Extension that enhances the GitHub file browser with material icons.",
   "main": "src/main.js",
   "author": "Claudio Santos",
@@ -41,7 +41,7 @@
     "sharp": "0.28.3",
     "simple-git": "2.40.0",
     "svgo": "2.3.1",
-    "web-ext": "6.2.0"
+    "web-ext": "7.1.0"
   },
   "scripts": {
     "prebuild": "rimraf *.zip ./dist",
@@ -51,9 +51,9 @@
     "build-src": "node ./scripts/build-src.js",
     "rebuild-logos": "node ./scripts/build-icons.js",
     "bundle": "run-p bundle-edge bundle-chrome bundle-firefox",
-    "bundle-edge": "zip -r -j github-material-icons-edge-extension.zip dist",
-    "bundle-chrome": "zip -r -j github-material-icons-chrome-extension.zip dist",
-    "bundle-firefox": "web-ext -s ./dist/ -n github-material-icons-firefox-extension.zip -a . build --overwrite-dest",
+    "bundle-edge": "zip -r -j github-material-icons-edge-extension.zip dist/chrome-edge",
+    "bundle-chrome": "zip -r -j github-material-icons-chrome-extension.zip dist/chrome-edge",
+    "bundle-firefox": "web-ext -s ./dist/firefox/ -n github-material-icons-firefox-extension.zip -a . build --overwrite-dest",
     "parcel": "parcel build ./src/main.js",
     "parcel-watch": "parcel watch ./src/main.js",
     "clean": "rimraf *.zip ./dist ./svg ./.cache ./src/icon-list.json ./src/icon-map.json",

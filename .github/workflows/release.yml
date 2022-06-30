@@ -6,6 +6,10 @@ on:
         description: major|minor|patch - defaults to patch
         required: true
         default: patch
+      onlyUpload:
+        description: chrome|firefox|both|not|none  - Only upload to store(s) without bumping version or releasing
+        required: true
+        default: not
 jobs:
   get-version:
     runs-on: ubuntu-latest
@@ -14,18 +18,28 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '16.13.0'
+
+      - name: install dependencies
+        run: npm ci
+
+      - name: build extension
+        if: ${{ github.event.inputs.onlyUpload != 'not' && github.event.inputs.onlyUpload != 'none' }}
+        run: npm run build
 
       - name: Attempt update
-        run: npm ci && npm run release ${{ github.event.inputs.type }}
+        if: ${{ github.event.inputs.onlyUpload == 'not' || github.event.inputs.onlyUpload == 'none' }}
+        run: npm run release ${{ github.event.inputs.type }}
 
       - name: Get package version
+        if: ${{ github.event.inputs.onlyUpload == 'not' || github.event.inputs.onlyUpload == 'none' }}
         id: package-version
         run: echo ::set-output name=package_version::v$(jq -r .version package.json)
 
       - name: Commit updated files
+        if: ${{ github.event.inputs.onlyUpload == 'not' || github.event.inputs.onlyUpload == 'none' }}
         uses: EndBug/add-and-commit@v7
         with:
           add: '.'
@@ -33,6 +47,7 @@ jobs:
           tag: '${{steps.package-version.outputs.package_version}}'
 
       - name: Release
+        if: ${{ github.event.inputs.onlyUpload == 'not' || github.event.inputs.onlyUpload == 'none' }}
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -41,6 +56,7 @@ jobs:
           files: '*.zip'
 
       - name: Upload to chrome store
+        if: ${{ github.event.inputs.onlyUpload != 'firefox' && github.event.inputs.onlyUpload != 'none' }}
         continue-on-error: true
         uses: trmcnvn/chrome-addon@v2
         with:
@@ -51,5 +67,6 @@ jobs:
           refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
 
       - name: Upload to firefox store
+        if: ${{ github.event.inputs.onlyUpload != 'chrome' && github.event.inputs.onlyUpload != 'none'}}
         continue-on-error: true
-        run: npx web-ext sign -s ./dist/ --channel=listed --api-key=${{ secrets.FIREFOX_API_KEY }} --api-secret=${{ secrets.FIREFOX_API_SECRET }} --id="{eac6e624-97fa-4f28-9d24-c06c9b8aa713}"
+        run: npx web-ext sign -s ./dist/firefox/ --channel=listed --api-key=${{ secrets.FIREFOX_API_JWT_ISSUER }} --api-secret=${{ secrets.FIREFOX_API_JWT_SECRET }}
