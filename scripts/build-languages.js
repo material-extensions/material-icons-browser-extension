@@ -93,7 +93,7 @@ function fetchLanguageContribution(item) {
         })
         .on('error', (err) => {
           fs.unlink(extPath);
-          throw new Error(err);
+          throw err;
         });
     });
   } catch (reason) {
@@ -103,7 +103,7 @@ function fetchLanguageContribution(item) {
 
 function loadLanguageContribution(filePath) {
   try {
-    const data = JSON.parse(fs.readFileSync(path));
+    const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
     data.contributes = data.contributes || {};
     data.contributes.languages = data.contributes.languages || [];
     languages.push(...data.contributes.languages);

@@ -17,4 +17,5 @@ node_modules
 .cache/
 .vscode/
 .DS_Store
+.eslintcache
 Thumbs.db

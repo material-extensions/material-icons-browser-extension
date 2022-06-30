@@ -9,9 +9,6 @@ import { observe } from 'selector-observer';
 import iconsList from './icon-list.json';
 import iconMap from './icon-map.json';
 import languageMap from './language-map.json';
-
-import providerConfig from './providers';
-
 import providerConfig from './providers';
 
 // Expected configuration.
@@ -76,7 +73,7 @@ const gitProvider = getGitProvider();
 if (gitProvider) {
   observe(gitProvider.selectors.row, {
     add(row) {
-      const callback = () => replaceIcon(row, iconMap, languageMap, gitProvider);
+      const callback = () => replaceIcon(row, gitProvider);
 
       rushFirst(90, callback);
 
@@ -88,13 +85,11 @@ if (gitProvider) {
 /**
  * Replace file/folder icons.
  *
- * @param {String} itemRow Item Row.
- * @param {Object} iconMap Icon Map.
- * @param {Object} languageMap Language Map.
+ * @param {Element} itemRow Item Row.
  * @param {Object} provider Git Provider specs.
  * @return {undefined}
  */
-function replaceIcon(itemRow, iconMap, languageMap, provider) {
+function replaceIcon(itemRow, provider) {
   const isLightTheme = provider.getIsLightTheme();
 
   // Get file/folder name.
