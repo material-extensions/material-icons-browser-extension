@@ -12,6 +12,8 @@ import languageMap from './language-map.json';
 
 import providerConfig from './providers';
 
+import providerConfig from './providers';
+
 // Expected configuration.
 iconMap.options = {
   ...iconMap.options,
@@ -48,16 +50,19 @@ const rushFirst = (rushBatch, callback) => {
  * @returns {object} All of the values needed for the provider
  */
 const getGitProvider = () => {
-  const { hostname } = window.location;
+  const { href } = window.location;
 
-  switch (hostname) {
-    case 'github.com':
+  switch (true) {
+    case /github\.com.*/.test(href):
       return providerConfig.github;
 
-    case 'bitbucket.org':
+    case /bitbucket\.org/.test(href):
       return providerConfig.bitbucket;
 
-    case 'dev.azure.com':
+    case /gitea\.com/.test(href):
+      return providerConfig.gitea;
+
+    case /dev\.azure\.com/.test(href):
       return providerConfig.azure;
 
     default:
@@ -71,7 +76,7 @@ const gitProvider = getGitProvider();
 if (gitProvider) {
   observe(gitProvider.selectors.row, {
     add(row) {
-      const callback = () => replaceIcon(row, gitProvider);
+      const callback = () => replaceIcon(row, iconMap, languageMap, gitProvider);
 
       rushFirst(90, callback);
 
@@ -83,11 +88,13 @@ if (gitProvider) {
 /**
  * Replace file/folder icons.
  *
- * @param {HTMLElement} itemRow Item Row.
- * @param {object} provider Git provider object
+ * @param {String} itemRow Item Row.
+ * @param {Object} iconMap Icon Map.
+ * @param {Object} languageMap Language Map.
+ * @param {Object} provider Git Provider specs.
  * @return {undefined}
  */
-function replaceIcon(itemRow, provider) {
+function replaceIcon(itemRow, iconMap, languageMap, provider) {
   const isLightTheme = provider.getIsLightTheme();
 
   // Get file/folder name.
