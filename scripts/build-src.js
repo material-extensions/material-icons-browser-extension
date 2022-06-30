@@ -10,9 +10,9 @@ const srcPath = path.resolve(__dirname, '..', 'src');
 fs.ensureDir(distPath).then(consolidateSVGFiles).then(src).catch(console.error);
 
 /** Create icons cache. */
-function consolidateSVGFiles() {
+async function consolidateSVGFiles() {
   console.log('[1/2] Generate icon cache for extension.');
-  return fs
+  await fs
     .copy(path.resolve(srcPath, 'custom'), destSVGPath)
     .then(() => fs.readdir(destSVGPath))
     .then((files) => Object.fromEntries(files.map((filename) => [filename, filename])))

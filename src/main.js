@@ -85,9 +85,9 @@ if (gitProvider) {
 /**
  * Replace file/folder icons.
  *
- * @param {Element} itemRow Item Row.
- * @param {Object} provider Git Provider specs.
- * @return {undefined}
+ * @param {HTMLElement} itemRow Item Row.
+ * @param {object} provider Git Provider specs.
+ * @returns {undefined}
  */
 function replaceIcon(itemRow, provider) {
   const isLightTheme = provider.getIsLightTheme();
@@ -140,14 +140,13 @@ function replaceIcon(itemRow, provider) {
  * Lookup for matched file/folder icon name.
  *
  * @since 1.0.0
- *
- * @param {String} fileName File name.
- * @param {String} lowerFileName Lowercase file name.
- * @param {String} fileExtension File extension.
- * @param {Boolean} isDir Check if directory type.
- * @param {Boolean} isSubmodule Check if submodule type.
- * @param {Boolean} isSymlink Check if symlink
- * @returns {String} The matched icon name.
+ * @param {string} fileName File name.
+ * @param {string} lowerFileName Lowercase file name.
+ * @param {string} fileExtension File extension.
+ * @param {boolean} isDir Check if directory type.
+ * @param {boolean} isSubmodule Check if submodule type.
+ * @param {boolean} isSymlink Check if symlink
+ * @returns {string} The matched icon name.
  */
 function lookForMatch(fileName, lowerFileName, fileExtension, isDir, isSubmodule, isSymlink) {
   if (isSubmodule) return 'folder-git';
@@ -186,12 +185,11 @@ function lookForMatch(fileName, lowerFileName, fileExtension, isDir, isSubmodule
  * Lookup for matched light file/folder icon name.
  *
  * @since 1.4.0
- *
- * @param {String} iconName Icon name.
- * @param {String} fileName File name.
- * @param {String} fileExtension File extension.
- * @param {Boolean} isDir Check if directory or file type.
- * @returns {String} The matched icon name.
+ * @param {string} iconName Icon name.
+ * @param {string} fileName File name.
+ * @param {string} fileExtension File extension.
+ * @param {boolean} isDir Check if directory or file type.
+ * @returns {string} The matched icon name.
  */
 function lookForLightMatch(iconName, fileName, fileExtension, isDir) {
   // First look in fileNames and folderNames.
@@ -209,9 +207,8 @@ function lookForLightMatch(iconName, fileName, fileExtension, isDir) {
  * Lookup for matched icon from active icon pack.
  *
  * @since 1.4.0
- *
- * @param {String} lowerFileName Lowercase file name.
- * @returns {String} The matched icon name.
+ * @param {string} lowerFileName Lowercase file name.
+ * @returns {string} The matched icon name.
  */
 function lookForIconPackMatch(lowerFileName) {
   if (iconMap.options.activeIconPack) {

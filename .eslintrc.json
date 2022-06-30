@@ -7,13 +7,14 @@
   "globals": {
     "chrome": "readonly"
   },
-  "extends": ["airbnb-base", "prettier"],
+  "extends": ["airbnb-base", "plugin:jsdoc/recommended", "prettier"],
   "parserOptions": {
     "ecmaVersion": 12,
     "sourceType": "module"
   },
   "rules": {
-    "no-use-before-define": ["error", { "functions": false }]
+    "no-use-before-define": ["error", { "functions": false }],
+    "jsdoc/require-jsdoc": "off"
   },
   "overrides": [
     {
