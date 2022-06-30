@@ -14,8 +14,8 @@
     "url": "https://github.com/Claudiohbsantos/github-material-icons-extension/issues"
   },
   "engines": {
-    "node": "16.13.0",
-    "npm": "8.1.0"
+    "node": "^16.0.0",
+    "npm": "^8.0.0"
   },
   "dependencies": {
     "selector-observer": "2.1.6"
@@ -68,7 +68,7 @@
     "prepare": "husky install"
   },
   "lint-staged": {
-    "*.js": "eslint --cache --fix",
+    "*.js": "eslint --fix",
     "*": "prettier --write --ignore-unknown"
   }
 }
