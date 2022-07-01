@@ -4,9 +4,9 @@ const api = require('@octokit/core');
 const fs = require('fs-extra');
 const fr = require('follow-redirects');
 const glob = require('glob');
+const stringify = require('json-stable-stringify');
 const remap = require('./remap.json');
 const iconMap = require('../src/icon-map.json');
-const stringify = require('json-stable-stringify');
 
 const vsDataPath = path.resolve(__dirname, '..', 'data');
 const srcPath = path.resolve(__dirname, '..', 'src');
@@ -20,7 +20,7 @@ const resultsPerPage = 100; // max 100
 let index = 0;
 let total;
 let items = [];
-let languages = [];
+const languages = [];
 
 console.log('[1/7] Querying Github API for official VSC language contributions.');
 
@@ -42,7 +42,8 @@ const GITHUB_RATELIMIT = 6000;
     octokit.request('GET /search/code', query).then(
       (res) => {
         if (!res.data) throw new Error();
-        query.page = index++;
+        query.page = index;
+        index += 1;
         total = total || res.data.total_count;
         items = items.concat(res.data.items);
         if (resultsPerPage * index >= total) {
@@ -69,7 +70,7 @@ function fetchLanguageContribution(item) {
   const extPath = path.join(item.repository.name, resPath);
   const extDir = path.dirname(extPath);
   if (/sample|template/.test(extDir)) {
-    total--;
+    total -= 1;
     return;
   }
   try {
@@ -79,7 +80,7 @@ function fetchLanguageContribution(item) {
         .get(urlPath, (res) => {
           res.pipe(extFile);
           res.on('end', () => {
-            index++;
+            index += 1;
             if (index === total) {
               console.log('[3/7] Loading VSC language contributions into Node.');
               glob(path.join(vsDataPath, '**', 'extension.json'), (err, matches) => {
@@ -92,7 +93,7 @@ function fetchLanguageContribution(item) {
         })
         .on('error', (err) => {
           fs.unlink(extPath);
-          throw new Error(err);
+          throw err;
         });
     });
   } catch (reason) {
@@ -100,13 +101,13 @@ function fetchLanguageContribution(item) {
   }
 }
 
-function loadLanguageContribution(path) {
+function loadLanguageContribution(filePath) {
   try {
-    const data = JSON.parse(fs.readFileSync(path));
+    const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
     data.contributes = data.contributes || {};
     data.contributes.languages = data.contributes.languages || [];
     languages.push(...data.contributes.languages);
-    index++;
+    index += 1;
     if (index === total) {
       console.log('[4/7] Processing language contributions for VSC File Icon API compatibility.');
       index = 0;
@@ -114,22 +115,21 @@ function loadLanguageContribution(path) {
       languages.forEach(processLanguageContribution);
     }
   } catch (error) {
-    throw new Error(`${error} (${path})`);
+    throw new Error(`${error} (${filePath})`);
   }
 }
 
-function processLanguageContribution(lang) {
-  delete lang.aliases;
-  delete lang.configuration;
-  delete lang.firstLine;
+function processLanguageContribution(language) {
+  const { aliases, configuration, firstLine, ...lang } = language;
+
   lang.extensions = lang.extensions || [];
   lang.filenames = lang.filenames || [];
   if (lang.filenamePatterns) {
     lang.filenamePatterns.forEach((ptn) => {
-      if (/^\*\.[^*\/\?]+$/.test(ptn)) {
+      if (/^\*\.[^*/?]+$/.test(ptn)) {
         lang.extensions.push(ptn.substring(1));
       }
-      if (/^[^*\/\?]+$/.test(ptn)) {
+      if (/^[^*/?]+$/.test(ptn)) {
         lang.filenames.push(ptn);
       }
     });
@@ -146,7 +146,7 @@ function processLanguageContribution(lang) {
     .map((ext) => ext.substring(1))
     .filter((ext) => !/\*|\/|\?/.test(ext));
   lang.filenames = lang.filenames.filter((name) => !/\*|\/|\?/.test(name));
-  index++;
+  index += 1;
   if (index === total) {
     console.log('[5/7] Mapping language contributions into file icon configuration.');
     index = 0;
@@ -162,55 +162,55 @@ const languageMap = {
 function mapLanguageContribution(lang) {
   lang.extensions.forEach((ext) => {
     let extIconName = lang.id;
-    if (remap.extensions.hasOwnProperty(extIconName)) {
-      let overrideIcon = remap.extensions[extIconName];
+    if (remap.extensions[extIconName]) {
+      const overrideIcon = remap.extensions[extIconName];
       if (typeof overrideIcon === 'object') {
-        for (const [ptn, override] in Object.entries(overrideIcon)) {
+        Object.entries(overrideIcon).forEach(([ptn, override]) => {
           if (ptn.startsWith('^') && ext.startsWith(ptn.substring(1))) {
             extIconName = override;
           }
           if (ptn.length && ext === ptn) {
             extIconName = override;
           }
-        }
+        });
       }
     } else {
       extIconName = iconMap.languageIds[extIconName] || extIconName;
     }
     if (
       !remap.deletions[`extensions:${extIconName}`] &&
-      !iconMap.fileExtensions.hasOwnProperty(extIconName) &&
-      iconMap.iconDefinitions.hasOwnProperty(extIconName)
+      !iconMap.fileExtensions[extIconName] &&
+      iconMap.iconDefinitions[extIconName]
     ) {
       languageMap.fileExtensions[ext] = extIconName;
     }
   });
   lang.filenames.forEach((name) => {
     let fileIconName = lang.id;
-    if (remap.filenames.hasOwnProperty(fileIconName)) {
-      let overrideIcon = remap.filenames[fileIconName];
+    if (remap.filenames[fileIconName]) {
+      const overrideIcon = remap.filenames[fileIconName];
       if (typeof overrideIcon === 'object') {
-        for (const [ptn, override] in Object.entries(overrideIcon)) {
+        Object.entries(overrideIcon).forEach(([ptn, override]) => {
           if (ptn.startsWith('^') && name.startsWith(ptn.substring(1))) {
             fileIconName = override;
           }
           if (ptn.length && name === ptn) {
             fileIconName = override;
           }
-        }
+        });
       }
     } else {
       fileIconName = iconMap.languageIds[fileIconName] || fileIconName;
     }
     if (
       !remap.deletions[`filenames:${fileIconName}`] &&
-      !iconMap.fileNames.hasOwnProperty(fileIconName) &&
-      iconMap.iconDefinitions.hasOwnProperty(fileIconName)
+      !iconMap.fileNames[fileIconName] &&
+      iconMap.iconDefinitions[fileIconName]
     ) {
       languageMap.fileNames[name] = fileIconName;
     }
   });
-  index++;
+  index += 1;
   if (index === total) {
     index = 0;
     generateLanguageMap();

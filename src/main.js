@@ -6,19 +6,16 @@ import { observe } from 'selector-observer';
 /**
  * Internal depedencies.
  */
-import iconsList from './icon-list';
-import iconMap from './icon-map';
-import languageMap from './language-map';
-
+import iconsList from './icon-list.json';
+import iconMap from './icon-map.json';
+import languageMap from './language-map.json';
 import providerConfig from './providers';
 
 // Expected configuration.
 iconMap.options = {
   ...iconMap.options,
-  ...{
-    activeIconPack: 'react_redux',
-    // activeIconPack: 'nest', // TODO: implement interface to choose pack
-  },
+  activeIconPack: 'react_redux',
+  // activeIconPack: 'nest', // TODO: implement interface to choose pack
 };
 
 // replacing all icons synchronously prevents visual "blinks" but can
@@ -32,7 +29,7 @@ const rushFirst = (rushBatch, callback) => {
   if (executions <= rushBatch) {
     callback(); // immediately run to prevent visual "blink"
     setTimeout(callback, 20); // run again later to catch any icons that are missed in large repositories
-    executions++;
+    executions += 1;
   } else {
     setTimeout(callback, 0); // run without blocking to prevent delayed rendering of large folders too much
     clearTimeout(timerID);
@@ -74,7 +71,7 @@ const gitProvider = getGitProvider();
 if (gitProvider) {
   observe(gitProvider.selectors.row, {
     add(row) {
-      const callback = () => replaceIcon(row, iconMap, languageMap, gitProvider);
+      const callback = () => replaceIcon(row, gitProvider);
 
       rushFirst(90, callback);
 
@@ -86,13 +83,11 @@ if (gitProvider) {
 /**
  * Replace file/folder icons.
  *
- * @param {String} itemRow Item Row.
- * @param {Object} iconMap Icon Map.
- * @param {Object} languageMap Language Map.
- * @param {Object} provider Git Provider specs.
- * @return {undefined}
+ * @param {HTMLElement} itemRow Item Row.
+ * @param {object} provider Git Provider specs.
+ * @returns {undefined}
  */
-function replaceIcon(itemRow, iconMap, languageMap, provider) {
+function replaceIcon(itemRow, provider) {
   const isLightTheme = provider.getIsLightTheme();
 
   // Get file/folder name.
@@ -119,18 +114,16 @@ function replaceIcon(itemRow, iconMap, languageMap, provider) {
     fileExtension,
     isDir,
     isSubmodule,
-    isSymlink,
-    iconMap,
-    languageMap
+    isSymlink
   ); // returns icon name if found or undefined.
   if (isLightTheme) {
-    iconName = lookForLightMatch(iconName, fileName, fileExtension, isDir, iconMap); // returns icon name if found for light mode or undefined.
+    iconName = lookForLightMatch(iconName, fileName, fileExtension, isDir); // returns icon name if found for light mode or undefined.
   }
 
   // Get folder icon from active icon pack.
 
   if (iconMap.options.activeIconPack) {
-    iconName = lookForIconPackMatch(lowerFileName, iconMap) ?? iconName;
+    iconName = lookForIconPackMatch(lowerFileName) ?? iconName;
   }
 
   if (!iconName) return;
@@ -145,26 +138,15 @@ function replaceIcon(itemRow, iconMap, languageMap, provider) {
  * Lookup for matched file/folder icon name.
  *
  * @since 1.0.0
- *
- * @param {String} fileName File name.
- * @param {String} lowerFileName Lowercase file name.
- * @param {String} fileExtension File extension.
- * @param {Boolean} isDir Check if directory type.
- * @param {Boolean} isSubmodule Check if submodule type.
- * @param {Boolean} isSymlink Check if symlink
- * @param {Object} iconMap Icon map.
- * @returns {String} The matched icon name.
+ * @param {string} fileName File name.
+ * @param {string} lowerFileName Lowercase file name.
+ * @param {string} fileExtension File extension.
+ * @param {boolean} isDir Check if directory type.
+ * @param {boolean} isSubmodule Check if submodule type.
+ * @param {boolean} isSymlink Check if symlink
+ * @returns {string} The matched icon name.
  */
-function lookForMatch(
-  fileName,
-  lowerFileName,
-  fileExtension,
-  isDir,
-  isSubmodule,
-  isSymlink,
-  iconMap,
-  languageMap
-) {
+function lookForMatch(fileName, lowerFileName, fileExtension, isDir, isSubmodule, isSymlink) {
   if (isSubmodule) return 'folder-git';
   if (isSymlink) return 'folder-symlink';
 
@@ -201,15 +183,13 @@ function lookForMatch(
  * Lookup for matched light file/folder icon name.
  *
  * @since 1.4.0
- *
- * @param {String} iconName Icon name.
- * @param {String} fileName File name.
- * @param {String} fileExtension File extension.
- * @param {Boolean} isDir Check if directory or file type.
- * @param {Object} iconMap Icon map.
- * @returns {String} The matched icon name.
+ * @param {string} iconName Icon name.
+ * @param {string} fileName File name.
+ * @param {string} fileExtension File extension.
+ * @param {boolean} isDir Check if directory or file type.
+ * @returns {string} The matched icon name.
  */
-function lookForLightMatch(iconName, fileName, fileExtension, isDir, iconMap) {
+function lookForLightMatch(iconName, fileName, fileExtension, isDir) {
   // First look in fileNames and folderNames.
   if (iconMap.light.fileNames[fileName] && !isDir) return iconMap.light.fileNames[fileName];
   if (iconMap.light.folderNames[fileName] && isDir) return iconMap.light.folderNames[fileName];
@@ -225,12 +205,10 @@ function lookForLightMatch(iconName, fileName, fileExtension, isDir, iconMap) {
  * Lookup for matched icon from active icon pack.
  *
  * @since 1.4.0
- *
- * @param {String} lowerFileName Lowercase file name.
- * @param {Object} iconMap Icon map.
- * @returns {String} The matched icon name.
+ * @param {string} lowerFileName Lowercase file name.
+ * @returns {string} The matched icon name.
  */
-function lookForIconPackMatch(lowerFileName, iconMap) {
+function lookForIconPackMatch(lowerFileName) {
   if (iconMap.options.activeIconPack) {
     switch (iconMap.options.activeIconPack) {
       case 'angular':
@@ -241,7 +219,8 @@ function lookForIconPackMatch(lowerFileName, iconMap) {
       case 'react_redux':
         if (iconsList[`folder-react-${lowerFileName}.svg`]) {
           return `folder-react-${lowerFileName}`;
-        } else if (iconsList[`folder-redux-${lowerFileName}.svg`]) {
+        }
+        if (iconsList[`folder-redux-${lowerFileName}.svg`]) {
           return `folder-redux-${lowerFileName}`;
         }
         break;
@@ -249,9 +228,11 @@ function lookForIconPackMatch(lowerFileName, iconMap) {
       case 'vue_vuex':
         if (iconsList[`folder-vuex-${lowerFileName}.svg`]) {
           return `folder-vuex-${lowerFileName}`;
-        } else if (iconsList[`folder-vue-${lowerFileName}.svg`]) {
+        }
+        if (iconsList[`folder-vue-${lowerFileName}.svg`]) {
           return `folder-vue-${lowerFileName}`;
-        } else if ('nuxt' === lowerFileName) {
+        }
+        if (lowerFileName === 'nuxt') {
           return `folder-nuxt`;
         }
         break;
@@ -277,7 +258,12 @@ function lookForIconPackMatch(lowerFileName, iconMap) {
             return 'nest-guard';
           case /\.resolver\.(t|j)s$/.test(lowerFileName):
             return 'nest-resolver';
+          default:
+            return null;
         }
+      default:
+        return null;
     }
   }
+  return null;
 }

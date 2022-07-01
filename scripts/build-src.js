@@ -1,14 +1,15 @@
 const path = require('path');
 const fs = require('fs-extra');
 const Parcel = require('parcel-bundler');
+
 const destSVGPath = path.resolve(__dirname, '..', 'svg');
 const distBasePath = path.resolve(__dirname, '..', 'dist');
 const srcPath = path.resolve(__dirname, '..', 'src');
 
 /** Create icons cache. */
-function consolidateSVGFiles() {
+async function consolidateSVGFiles() {
   console.log('[1/2] Generate icon cache for extension.');
-  return fs
+  await fs
     .copy(path.resolve(srcPath, 'custom'), destSVGPath)
     .then(() => fs.readdir(destSVGPath))
     .then((files) => Object.fromEntries(files.map((filename) => [filename, filename])))
@@ -49,7 +50,8 @@ function buildManifest(distPath, manifestName) {
 function buildDist(name, manifestName) {
   const distPath = path.resolve(distBasePath, name);
 
-  return fs.ensureDir(distPath)
+  return fs
+    .ensureDir(distPath)
     .then(consolidateSVGFiles)
     .then(() => src(distPath))
     .then(() => buildManifest(distPath, manifestName))

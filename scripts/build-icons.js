@@ -21,13 +21,11 @@ fs.ensureDir(iconsPath).then(generateIcons);
  * @since 1.4.0
  */
 function generateIcons() {
-  targetSizes.map((size) => {
+  targetSizes.forEach((size) => {
     sharp(svgPath)
       .png()
       .resize({ width: size, height: size })
       .toFile(`${iconsPath}/icon-${size}.png`)
-      .catch(function (err) {
-        console.log(err);
-      });
+      .catch(console.error);
   });
 }

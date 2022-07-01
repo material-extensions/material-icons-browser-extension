@@ -11,10 +11,10 @@ const manifestPath = path.resolve(__dirname, '..', 'src', 'manifests', 'base.jso
 const manifest = require(manifestPath);
 
 const updatedManifest = { ...manifest, version: package.version };
-const updatedManifestStr = JSON.stringify(updatedManifest, null, 2) + '\n';
+const updatedManifestStr = `${JSON.stringify(updatedManifest, null, 2)}\n`;
 
 fs.writeFile(manifestPath, updatedManifestStr)
   .then(() => {
     console.log(`Updated manifest.json version to ${package.version}`);
   })
-  .catch((err) => console.error(err));
+  .catch(console.error);
