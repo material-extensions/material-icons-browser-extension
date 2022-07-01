@@ -91,7 +91,10 @@ function replaceIcon(itemRow, provider) {
   const isLightTheme = provider.getIsLightTheme();
 
   // Get file/folder name.
-  const fileName = itemRow.querySelector(provider.selectors.filename)?.innerText.trim();
+  const fileName = itemRow
+    .querySelector(provider.selectors.filename)
+    ?.innerText.split('/')[0] // get first part of path for a proper icon lookup
+    .trim();
   if (!fileName) return; // fileName couldn't be found or we don't have a match for it.
 
   // Get file extension.
@@ -121,7 +124,6 @@ function replaceIcon(itemRow, provider) {
   }
 
   // Get folder icon from active icon pack.
-
   if (iconMap.options.activeIconPack) {
     iconName = lookForIconPackMatch(lowerFileName) ?? iconName;
   }
