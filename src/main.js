@@ -60,6 +60,15 @@ const getGitProvider = () => {
     case /dev\.azure\.com/.test(href):
       return providerConfig.azure;
 
+    case /gitlab\.com/.test(href):
+      return providerConfig.gitlab;
+
+    case /gitee\.com/.test(href):
+      return providerConfig.gitee;
+
+    case /sourceforge\.net/.test(href):
+      return providerConfig.sourceforge;
+
     default:
       return null;
   }
