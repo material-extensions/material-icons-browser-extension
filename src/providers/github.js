@@ -7,9 +7,9 @@ const githubConfig = {
     icon: '.octicon-file, .octicon-file-directory-fill, a.tree-browser-result > svg.octicon.octicon-file',
   },
   getIsLightTheme: () => document.querySelector('html').getAttribute('data-color-mode') === 'light',
-  getIsDirectory: (svgEl) => svgEl.getAttribute('aria-label') === 'Directory',
-  getIsSubmodule: (svgEl) => svgEl.getAttribute('aria-label') === 'Submodule',
-  getIsSymlink: (svgEl) => svgEl.getAttribute('aria-label') === 'Symlink Directory',
+  getIsDirectory: ({ icon }) => icon.getAttribute('aria-label') === 'Directory',
+  getIsSubmodule: ({ icon }) => icon.getAttribute('aria-label') === 'Submodule',
+  getIsSymlink: ({ icon }) => icon.getAttribute('aria-label') === 'Symlink Directory',
   replaceIcon: (svgEl, newSVG) => {
     svgEl
       .getAttributeNames()

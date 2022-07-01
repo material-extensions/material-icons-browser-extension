@@ -105,9 +105,9 @@ function replaceIcon(itemRow, provider) {
   if (!svgEl) return; // couldn't find svg element.
 
   // Get Directory or Submodule type.
-  const isDir = provider.getIsDirectory(svgEl);
-  const isSubmodule = provider.getIsSubmodule(svgEl);
-  const isSymlink = provider.getIsSymlink(svgEl);
+  const isDir = provider.getIsDirectory({ row: itemRow, icon: svgEl });
+  const isSubmodule = provider.getIsSubmodule({ row: itemRow, icon: svgEl });
+  const isSymlink = provider.getIsSymlink({ row: itemRow, icon: svgEl });
   const lowerFileName = fileName.toLowerCase();
 
   // Get icon name.
