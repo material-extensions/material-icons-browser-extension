@@ -5,10 +5,10 @@ const giteaConfig = {
     filename: 'td.name.four.wide > span.truncate > a',
     icon: 'td.name.four.wide > span.truncate > svg',
   },
-  getIsLightTheme: () => false, // TODO: needs further investigation
+  getIsLightTheme: () => false,
   getIsDirectory: (svgEl) => svgEl.classList.contains('octicon-file-directory-fill'),
-  getIsSubmodule: () => false, // TODO: needs further investigation
-  getIsSymlink: () => false, // TODO: needs further investigation
+  getIsSubmodule: (svgEl) => svgEl.classList.contains('octicon-file-submodule'),
+  getIsSymlink: (svgEl) => svgEl.classList.contains('octicon-file-symlink-file'),
   replaceIcon: (svgEl, newSVG) => {
     svgEl
       .getAttributeNames()
