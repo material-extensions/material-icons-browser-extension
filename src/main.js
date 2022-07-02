@@ -102,7 +102,7 @@ function replaceIcon(itemRow, provider) {
   // Get file/folder name.
   const fileName = itemRow
     .querySelector(provider.selectors.filename)
-    ?.innerText.split('/')[0] // get first part of path for a proper icon lookup
+    ?.innerText?.split('/')[0] // get first part of path for a proper icon lookup
     .trim();
   if (!fileName) return; // fileName couldn't be found or we don't have a match for it.
 
