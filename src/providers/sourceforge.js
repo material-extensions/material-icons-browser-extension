@@ -8,7 +8,7 @@ const sourceforgeConfig = {
     // The iconfont icon not including the delete button icon in the file view header
     icon: 'a:not(.icon), i.fa',
   },
-  getIsLightTheme: () => true, // There appears to be no dark theme available for gitee.
+  getIsLightTheme: () => true, // There appears to be no dark theme available for sourceforge.
   getIsDirectory: ({ row, icon }) => {
     if (icon.nodeName === 'I') {
       return icon.classList.contains('fa-folder');
