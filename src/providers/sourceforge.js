@@ -4,9 +4,9 @@ const sourceforgeConfig = {
     // File list row, README header, file view header
     row: 'table#files_list tr, #content_base tr td:first-child',
     // File name table cell, file view header
-    filename: 'th, a.icon',
+    filename: 'th[headers="files_name_h"], td:first-child > a.icon',
     // The iconfont icon not including the delete button icon in the file view header
-    icon: 'a:not(.icon), i.fa',
+    icon: 'th[headers="files_name_h"] > a, a.icon > i.fa',
   },
   getIsLightTheme: () => true, // There appears to be no dark theme available for sourceforge.
   getIsDirectory: ({ row, icon }) => {
