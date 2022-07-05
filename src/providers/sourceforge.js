@@ -35,7 +35,7 @@ const sourceforgeConfig = {
     }
     // For the files list, use the anchor element instead of the icon because in some cases there is no icon
     else {
-      if (iconOrAnchor.querySelector('img')) {
+      if (iconOrAnchor.querySelector('.material-icons-extension')) {
         // only replace/prepend the icon once
         return;
       }
