@@ -140,7 +140,6 @@ function replaceIcon(itemRow, provider) {
   if (!iconName) return;
 
   const newSVG = document.createElement('img');
-  newSVG.classList.add('material-icons-extension');
   newSVG.src = chrome.runtime.getURL(`${iconName}.svg`);
 
   provider.replaceIcon(svgEl, newSVG);

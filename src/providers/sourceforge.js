@@ -26,6 +26,7 @@ const sourceforgeConfig = {
   },
   replaceIcon: (iconOrAnchor, newSVG) => {
     newSVG.style.verticalAlign = 'text-bottom';
+    newSVG.classList.add('material-icons-extension');
 
     if (iconOrAnchor.nodeName === 'I') {
       newSVG.style.height = '14px';
