@@ -58,6 +58,7 @@ const getGitProvider = () => {
       return providerConfig.gitea;
 
     case /dev\.azure\.com/.test(href):
+    case /visualstudio\.com/.test(href):
       return providerConfig.azure;
 
     default:
