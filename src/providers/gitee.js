@@ -3,8 +3,8 @@ const giteeConfig = {
   selectors: {
     // File list row, README header, file view header
     row: '#git-project-content .tree-content .row.tree-item, .file_title, .blob-description',
-    // File name table cell, file view header
-    filename: '[class*="tree-item-"], span.file_name',
+    // File name table cell, Submodule name table cell, file view header
+    filename: '.tree-list-item > a, .tree-item-submodule-name a, span.file_name',
     // The iconfont icon not including the delete button icon in the file view header
     icon: 'i.iconfont:not(.icon-delete)',
   },
