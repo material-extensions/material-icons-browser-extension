@@ -76,12 +76,6 @@ const getGitProvider = () => {
 
 const gitProvider = getGitProvider();
 
-const ICON_SCALERS = {
-  sm: 0.875,
-  md: 1,
-  lg: 1.125,
-  xl: 1.25,
-};
 let iconSize = 'md';
 let hasAddedSizeRules = false;
 
@@ -91,19 +85,10 @@ const init = () => {
     observe(gitProvider.selectors.row, {
       add(row) {
         if (!hasAddedSizeRules) {
-          // Add CSS rules to change icon sizes
+          // Add the icon size attribute to the body
           // This needs to be done here because the DOM is not always ready immediately
           document.body.setAttribute(`data-material-icons-extension-size`, iconSize);
-
-          Object.entries(ICON_SCALERS).forEach(([size, scaler]) => {
-            document.styleSheets[0].insertRule(
-              `body[data-material-icons-extension-size="${size}"] img[data-material-icons-extension="icon"] {
-                transform: scale(${scaler});
-              }`,
-              0
-            );
-          });
-          // Only add these rules once
+          // Only add this once
           hasAddedSizeRules = true;
         }
 

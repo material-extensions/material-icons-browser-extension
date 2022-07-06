@@ -21,6 +21,7 @@
         "*://sourceforge.net/*"
       ],
       "js": ["./main.js"],
+      "css": ["./injected-styles.css"],
       "run_at": "document_start"
     }
   ],

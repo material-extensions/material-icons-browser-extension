@@ -1,0 +1,11 @@
+body[data-material-icons-extension-size='sm'] img[data-material-icons-extension='icon'] {
+  transform: scale(0.875);
+}
+
+body[data-material-icons-extension-size='lg'] img[data-material-icons-extension='icon'] {
+  transform: scale(1.125);
+}
+
+body[data-material-icons-extension-size='xl'] img[data-material-icons-extension='icon'] {
+  transform: scale(1.25);
+}
