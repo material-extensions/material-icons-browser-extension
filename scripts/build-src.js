@@ -31,9 +31,16 @@ function src(distPath) {
 
   const copyIcons = fs.copy(destSVGPath, distPath);
 
+  const copyPopup = ['html', 'js', 'css'].forEach((ext) => {
+    fs.copy(
+      path.resolve(srcPath, `settings-popup.${ext}`),
+      path.resolve(distPath, `settings-popup.${ext}`)
+    );
+  });
+
   const copyExtensionLogos = fs.copy(path.resolve(srcPath, 'icons'), distPath);
 
-  return Promise.all([copyExtensionLogos, bundleMainScript, copyIcons]);
+  return Promise.all([copyExtensionLogos, copyPopup, bundleMainScript, copyIcons]);
 }
 
 function buildManifest(distPath, manifestName) {

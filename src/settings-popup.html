@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="settings-popup.css" />
+  </head>
+
+  <body>
+    <div id="settings">
+      <div id="settings-header">
+        <img id="logo" src="/icon-128.png" />
+        <h1>Settings</h1>
+      </div>
+
+      <label for="iconSize">Icon Size</label>
+      <div class="select-wrapper">
+        <select name="icon-size" id="icon-size">
+          <option value="sm">Small</option>
+          <option value="md">Medium</option>
+          <option value="lg">Large</option>
+          <option value="xl">Extra Large</option>
+        </select>
+        <div class="select-icon-wrapper">
+          <svg
+            viewBox="0 0 24 24"
+            role="presentation"
+            class="select-icon"
+            focusable="false"
+            aria-hidden="true"
+          >
+            <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <script src="settings-popup.js"></script>
+  </body>
+</html>

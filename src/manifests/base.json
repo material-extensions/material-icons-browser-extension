@@ -23,5 +23,16 @@
       "js": ["./main.js"],
       "run_at": "document_start"
     }
-  ]
+  ],
+  "permissions": ["storage"],
+  "action": {
+    "default_title": "Material Icons Settings",
+    "default_popup": "settings-popup.html",
+    "default_icon": {
+      "16": "icon-16.png",
+      "32": "icon-32.png",
+      "48": "icon-48.png",
+      "128": "icon-128.png"
+    }
+  }
 }

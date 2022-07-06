@@ -76,18 +76,64 @@ const getGitProvider = () => {
 
 const gitProvider = getGitProvider();
 
-// Monitor DOM elements that match a CSS selector.
-if (gitProvider) {
-  observe(gitProvider.selectors.row, {
-    add(row) {
-      const callback = () => replaceIcon(row, gitProvider);
+const ICON_SCALERS = {
+  sm: 0.875,
+  md: 1,
+  lg: 1.125,
+  xl: 1.25,
+};
+let iconSize = 'md';
+let hasAddedSizeRules = false;
 
-      rushFirst(90, callback);
+const init = () => {
+  // Monitor DOM elements that match a CSS selector.
+  if (gitProvider) {
+    observe(gitProvider.selectors.row, {
+      add(row) {
+        if (!hasAddedSizeRules) {
+          // Add CSS rules to change icon sizes
+          // This needs to be done here because the DOM is not always ready immediately
+          document.body.setAttribute(`data-material-icons-extension-size`, iconSize);
 
-      gitProvider.onAdd(row, callback);
-    },
-  });
-}
+          Object.entries(ICON_SCALERS).forEach(([size, scaler]) => {
+            document.styleSheets[0].insertRule(
+              `body[data-material-icons-extension-size="${size}"] img[data-material-icons-extension="icon"] {
+                transform: scale(${scaler});
+              }`,
+              0
+            );
+          });
+          // Only add these rules once
+          hasAddedSizeRules = true;
+        }
+
+        const callback = () => replaceIcon(row, gitProvider);
+
+        rushFirst(90, callback);
+
+        gitProvider.onAdd(row, callback);
+      },
+    });
+  }
+};
+
+chrome.storage.sync.get(
+  {
+    iconSize: 'md',
+  },
+  (result) => {
+    iconSize = result.iconSize;
+    init();
+  }
+);
+
+chrome.storage.onChanged.addListener((changes) => {
+  const newIconSize = changes.iconSize?.newValue;
+  if (newIconSize) {
+    iconSize = newIconSize;
+    document.body.setAttribute(`data-material-icons-extension-size`, iconSize);
+  }
+});
 
 /**
  * Replace file/folder icons.
