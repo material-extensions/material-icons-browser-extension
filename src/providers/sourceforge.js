@@ -26,7 +26,6 @@ const sourceforgeConfig = {
   },
   replaceIcon: (iconOrAnchor, newSVG) => {
     newSVG.style.verticalAlign = 'text-bottom';
-    newSVG.classList.add('material-icons-extension');
 
     if (iconOrAnchor.nodeName === 'I') {
       newSVG.style.height = '14px';
@@ -36,7 +35,7 @@ const sourceforgeConfig = {
     }
     // For the files list, use the anchor element instead of the icon because in some cases there is no icon
     else {
-      if (iconOrAnchor.querySelector('.material-icons-extension')) {
+      if (iconOrAnchor.querySelector('img[data-material-icons-extension="icon"]')) {
         // only replace/prepend the icon once
         return;
       }
