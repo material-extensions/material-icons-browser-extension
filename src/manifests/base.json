@@ -15,7 +15,7 @@
         "*://*.github.com/*",
         "*://*.bitbucket.org/*",
         "*://dev.azure.com/*",
-        "*://visualstudio.com/*",
+        "*://*.visualstudio.com/*",
         "*://*.gitea.com/*"
       ],
       "js": ["./main.js"],
