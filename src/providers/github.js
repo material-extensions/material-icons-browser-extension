@@ -4,7 +4,7 @@ const githubConfig = {
     row: '.js-navigation-container[role=grid] > .js-navigation-item, file-tree .ActionList-content, a.tree-browser-result',
     filename:
       'div[role="rowheader"] > span, .ActionList-item-label, a.tree-browser-result > marked-text',
-    icon: '.octicon-file, .octicon-file-directory-fill, a.tree-browser-result > svg.octicon.octicon-file',
+    icon: '.octicon-file, .octicon-file-directory-fill, .octicon-file-submodule, a.tree-browser-result > svg.octicon.octicon-file',
   },
   getIsLightTheme: () => document.querySelector('html').getAttribute('data-color-mode') === 'light',
   getIsDirectory: ({ icon }) => icon.getAttribute('aria-label') === 'Directory',
