@@ -60,6 +60,15 @@ const getGitProvider = () => {
     case /dev\.azure\.com/.test(href):
       return providerConfig.azure;
 
+    case /gitlab\.com/.test(href):
+      return providerConfig.gitlab;
+
+    case /gitee\.com/.test(href):
+      return providerConfig.gitee;
+
+    case /sourceforge\.net/.test(href):
+      return providerConfig.sourceforge;
+
     default:
       return null;
   }
@@ -91,7 +100,10 @@ function replaceIcon(itemRow, provider) {
   const isLightTheme = provider.getIsLightTheme();
 
   // Get file/folder name.
-  const fileName = itemRow.querySelector(provider.selectors.filename)?.innerText.trim();
+  const fileName = itemRow
+    .querySelector(provider.selectors.filename)
+    ?.innerText?.split('/')[0] // get first part of path for a proper icon lookup
+    .trim();
   if (!fileName) return; // fileName couldn't be found or we don't have a match for it.
 
   // Get file extension.
@@ -102,9 +114,9 @@ function replaceIcon(itemRow, provider) {
   if (!svgEl) return; // couldn't find svg element.
 
   // Get Directory or Submodule type.
-  const isDir = provider.getIsDirectory(svgEl);
-  const isSubmodule = provider.getIsSubmodule(svgEl);
-  const isSymlink = provider.getIsSymlink(svgEl);
+  const isDir = provider.getIsDirectory({ row: itemRow, icon: svgEl });
+  const isSubmodule = provider.getIsSubmodule({ row: itemRow, icon: svgEl });
+  const isSymlink = provider.getIsSymlink({ row: itemRow, icon: svgEl });
   const lowerFileName = fileName.toLowerCase();
 
   // Get icon name.
@@ -121,7 +133,6 @@ function replaceIcon(itemRow, provider) {
   }
 
   // Get folder icon from active icon pack.
-
   if (iconMap.options.activeIconPack) {
     iconName = lookForIconPackMatch(lowerFileName) ?? iconName;
   }
@@ -129,6 +140,7 @@ function replaceIcon(itemRow, provider) {
   if (!iconName) return;
 
   const newSVG = document.createElement('img');
+  newSVG.setAttribute('data-material-icons-extension', 'icon');
   newSVG.src = chrome.runtime.getURL(`${iconName}.svg`);
 
   provider.replaceIcon(svgEl, newSVG);
