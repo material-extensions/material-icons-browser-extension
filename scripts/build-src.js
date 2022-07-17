@@ -34,7 +34,7 @@ function src(distPath) {
   const copyPopup = Promise.all(
     ['html', 'js', 'css'].map((ext) =>
       fs.copy(
-        path.resolve(srcPath, `settings-popup.${ext}`),
+        path.resolve(srcPath, 'ui', 'popup', `settings-popup.${ext}`),
         path.resolve(distPath, `settings-popup.${ext}`)
       )
     )
@@ -45,7 +45,7 @@ function src(distPath) {
     path.resolve(distPath, 'injected-styles.css')
   );
 
-  const copyExtensionLogos = fs.copy(path.resolve(srcPath, 'icons'), distPath);
+  const copyExtensionLogos = fs.copy(path.resolve(srcPath, 'extensionIcons'), distPath);
 
   return Promise.all([copyExtensionLogos, copyPopup, copyStyles, bundleMainScript, copyIcons]);
 }

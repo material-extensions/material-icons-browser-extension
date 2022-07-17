@@ -16,4 +16,38 @@ const providerConfig = {
   sourceforge: sourceforgeConfig,
 };
 
-export default providerConfig;
+/**
+ * Get all selectors and functions specific to the Git provider
+ *
+ * @returns {object} All of the values needed for the provider
+ */
+export const getGitProvider = () => {
+  const { href } = window.location;
+
+  switch (true) {
+    case /github\.com.*/.test(href):
+      return providerConfig.github;
+
+    case /bitbucket\.org/.test(href):
+      return providerConfig.bitbucket;
+
+    case /gitea\.com/.test(href):
+      return providerConfig.gitea;
+
+    case /dev\.azure\.com/.test(href):
+    case /visualstudio\.com/.test(href):
+      return providerConfig.azure;
+
+    case /gitlab\.com/.test(href):
+      return providerConfig.gitlab;
+
+    case /gitee\.com/.test(href):
+      return providerConfig.gitee;
+
+    case /sourceforge\.net/.test(href):
+      return providerConfig.sourceforge;
+
+    default:
+      return null;
+  }
+};

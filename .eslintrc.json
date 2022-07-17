@@ -14,7 +14,8 @@
   },
   "rules": {
     "no-use-before-define": ["error", { "functions": false }],
-    "jsdoc/require-jsdoc": "off"
+    "jsdoc/require-jsdoc": "off",
+    "import/prefer-default-export": "off"
   },
   "overrides": [
     {
