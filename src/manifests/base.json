@@ -16,7 +16,10 @@
         "*://*.bitbucket.org/*",
         "*://dev.azure.com/*",
         "*://*.visualstudio.com/*",
-        "*://*.gitea.com/*"
+        "*://*.gitea.com/*",
+        "*://gitlab.com/*",
+        "*://gitee.com/*",
+        "*://sourceforge.net/*"
       ],
       "js": ["./main.js"],
       "run_at": "document_start"
