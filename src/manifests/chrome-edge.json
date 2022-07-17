@@ -4,11 +4,11 @@
     {
       "resources": ["*.svg"],
       "matches": [
-        "*://*.github.com/*",
-        "*://*.bitbucket.org/*",
+        "*://github.com/*",
+        "*://bitbucket.org/*",
         "*://dev.azure.com/*",
         "*://*.visualstudio.com/*",
-        "*://*.gitea.com/*",
+        "*://gitea.com/*",
         "*://gitlab.com/*",
         "*://gitee.com/*",
         "*://sourceforge.net/*"
