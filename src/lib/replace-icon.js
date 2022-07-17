@@ -7,9 +7,10 @@ import languageMap from '../language-map.json';
  *
  * @param {HTMLElement} itemRow Item Row.
  * @param {object} provider Git Provider specs.
+ * @param {string | null} iconPack active icon pack. Selectable by user
  * @returns {undefined}
  */
-export function replaceIcon(itemRow, provider) {
+export function replaceIcon(itemRow, provider, iconPack) {
   const isLightTheme = provider.getIsLightTheme();
 
   // Get file/folder name.
@@ -46,8 +47,8 @@ export function replaceIcon(itemRow, provider) {
   }
 
   // Get folder icon from active icon pack.
-  if (iconMap.options.activeIconPack) {
-    iconName = lookForIconPackMatch(lowerFileName) ?? iconName;
+  if (iconPack) {
+    iconName = lookForIconPackMatch(iconPack, lowerFileName) ?? iconName;
   }
 
   if (!iconName) return;
@@ -130,65 +131,65 @@ function lookForLightMatch(iconName, fileName, fileExtension, isDir) {
  * Lookup for matched icon from active icon pack.
  *
  * @since 1.4.0
+ * @param {string | null} iconPack active icon pack. Selectable by user
  * @param {string} lowerFileName Lowercase file name.
  * @returns {string | null} The matched icon name.
  */
-function lookForIconPackMatch(lowerFileName) {
-  if (iconMap.options.activeIconPack) {
-    switch (iconMap.options.activeIconPack) {
-      case 'angular':
-      case 'angular_ngrx':
-        if (iconsList[`folder-react-${lowerFileName}.svg`]) return `folder-ngrx-${lowerFileName}`;
-        break;
-      case 'react':
-      case 'react_redux':
-        if (iconsList[`folder-react-${lowerFileName}.svg`]) {
-          return `folder-react-${lowerFileName}`;
-        }
-        if (iconsList[`folder-redux-${lowerFileName}.svg`]) {
-          return `folder-redux-${lowerFileName}`;
-        }
-        break;
-      case 'vue':
-      case 'vue_vuex':
-        if (iconsList[`folder-vuex-${lowerFileName}.svg`]) {
-          return `folder-vuex-${lowerFileName}`;
-        }
-        if (iconsList[`folder-vue-${lowerFileName}.svg`]) {
-          return `folder-vue-${lowerFileName}`;
-        }
-        if (lowerFileName === 'nuxt') {
-          return `folder-nuxt`;
-        }
-        break;
-      case 'nest':
-        switch (true) {
-          case /\.controller\.(t|j)s$/.test(lowerFileName):
-            return `nest-controller`;
-          case /\.middleware\.(t|j)s$/.test(lowerFileName):
-            return 'nest-middleware';
-          case /\.module\.(t|j)s$/.test(lowerFileName):
-            return 'nest-module';
-          case /\.service\.(t|j)s$/.test(lowerFileName):
-            return 'nest-service';
-          case /\.decorator\.(t|j)s$/.test(lowerFileName):
-            return 'nest-decorator';
-          case /\.pipe\.(t|j)s$/.test(lowerFileName):
-            return 'nest-pipe';
-          case /\.filter\.(t|j)s$/.test(lowerFileName):
-            return 'nest-filter';
-          case /\.gateway\.(t|j)s$/.test(lowerFileName):
-            return 'nest-gateway';
-          case /\.guard\.(t|j)s$/.test(lowerFileName):
-            return 'nest-guard';
-          case /\.resolver\.(t|j)s$/.test(lowerFileName):
-            return 'nest-resolver';
-          default:
-            return null;
-        }
-      default:
-        return null;
-    }
+function lookForIconPackMatch(iconPack, lowerFileName) {
+  if (!iconPack) return null;
+  switch (iconPack) {
+    case 'angular':
+    case 'angular_ngrx':
+      if (iconsList[`folder-react-${lowerFileName}.svg`]) return `folder-ngrx-${lowerFileName}`;
+      break;
+    case 'react':
+    case 'react_redux':
+      if (iconsList[`folder-react-${lowerFileName}.svg`]) {
+        return `folder-react-${lowerFileName}`;
+      }
+      if (iconsList[`folder-redux-${lowerFileName}.svg`]) {
+        return `folder-redux-${lowerFileName}`;
+      }
+      break;
+    case 'vue':
+    case 'vue_vuex':
+      if (iconsList[`folder-vuex-${lowerFileName}.svg`]) {
+        return `folder-vuex-${lowerFileName}`;
+      }
+      if (iconsList[`folder-vue-${lowerFileName}.svg`]) {
+        return `folder-vue-${lowerFileName}`;
+      }
+      if (lowerFileName === 'nuxt') {
+        return `folder-nuxt`;
+      }
+      break;
+    case 'nest':
+      switch (true) {
+        case /\.controller\.(t|j)s$/.test(lowerFileName):
+          return `nest-controller`;
+        case /\.middleware\.(t|j)s$/.test(lowerFileName):
+          return 'nest-middleware';
+        case /\.module\.(t|j)s$/.test(lowerFileName):
+          return 'nest-module';
+        case /\.service\.(t|j)s$/.test(lowerFileName):
+          return 'nest-service';
+        case /\.decorator\.(t|j)s$/.test(lowerFileName):
+          return 'nest-decorator';
+        case /\.pipe\.(t|j)s$/.test(lowerFileName):
+          return 'nest-pipe';
+        case /\.filter\.(t|j)s$/.test(lowerFileName):
+          return 'nest-filter';
+        case /\.gateway\.(t|j)s$/.test(lowerFileName):
+          return 'nest-gateway';
+        case /\.guard\.(t|j)s$/.test(lowerFileName):
+          return 'nest-guard';
+        case /\.resolver\.(t|j)s$/.test(lowerFileName):
+          return 'nest-resolver';
+        default:
+          return null;
+      }
+    default:
+      return null;
   }
   return null;
 }

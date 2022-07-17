@@ -44,6 +44,7 @@ label {
   position: relative;
   width: 100%;
   height: fit-content;
+  margin-bottom: 20px;
 }
 
 select {

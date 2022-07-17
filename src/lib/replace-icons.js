@@ -24,10 +24,10 @@ const rushFirst = (rushBatch, callback) => {
 };
 
 // Monitor DOM elements that match a CSS selector.
-export const observePage = (gitProvider) =>
+export const observePage = (gitProvider, iconPack) =>
   observe(gitProvider.selectors.row, {
     add(row) {
-      const callback = () => replaceIcon(row, gitProvider);
+      const callback = () => replaceIcon(row, gitProvider, iconPack);
       rushFirst(90, callback);
       gitProvider.onAdd(row, callback);
     },
