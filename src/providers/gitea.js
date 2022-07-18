@@ -12,7 +12,12 @@ const giteaConfig = {
   replaceIcon: (svgEl, newSVG) => {
     svgEl
       .getAttributeNames()
-      .forEach((attr) => newSVG.setAttribute(attr, svgEl.getAttribute(attr)));
+      .forEach(
+        (attr) =>
+          attr !== 'src' &&
+          !/^data-material-icons-extension/.test(attr) &&
+          newSVG.setAttribute(attr, svgEl.getAttribute(attr))
+      );
 
     svgEl.parentNode.replaceChild(newSVG, svgEl);
   },

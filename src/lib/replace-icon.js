@@ -8,11 +8,9 @@ import languageMap from '../language-map.json';
  * @param {HTMLElement} itemRow Item Row.
  * @param {object} provider Git Provider specs.
  * @param {string | null} iconPack active icon pack. Selectable by user
- * @returns {undefined}
+ * @returns {void}
  */
-export function replaceIcon(itemRow, provider, iconPack) {
-  const isLightTheme = provider.getIsLightTheme();
-
+export function replaceIconInRow(itemRow, provider, iconPack) {
   // Get file/folder name.
   const fileName = itemRow
     .querySelector(provider.selectors.filename)
@@ -20,18 +18,20 @@ export function replaceIcon(itemRow, provider, iconPack) {
     .trim();
   if (!fileName) return; // fileName couldn't be found or we don't have a match for it.
 
+  // SVG to be replaced.
+  const iconEl = itemRow.querySelector(provider.selectors.icon);
+  if (iconEl) replaceIcon(iconEl, fileName, itemRow, provider, iconPack);
+}
+
+function replaceIcon(iconEl, fileName, itemRow, provider, iconPack) {
+  // Get Directory or Submodule type.
+  const isDir = provider.getIsDirectory({ row: itemRow, icon: iconEl });
+  const isSubmodule = provider.getIsSubmodule({ row: itemRow, icon: iconEl });
+  const isSymlink = provider.getIsSymlink({ row: itemRow, icon: iconEl });
+  const lowerFileName = fileName.toLowerCase();
+
   // Get file extension.
   const fileExtension = fileName.match(/.*?[.](?<ext>xml.dist|xml.dist.sample|yml.dist|\w+)$/)?.[1];
-
-  // SVG to be replaced.
-  const svgEl = itemRow.querySelector(provider.selectors.icon);
-  if (!svgEl) return; // couldn't find svg element.
-
-  // Get Directory or Submodule type.
-  const isDir = provider.getIsDirectory({ row: itemRow, icon: svgEl });
-  const isSubmodule = provider.getIsSubmodule({ row: itemRow, icon: svgEl });
-  const isSymlink = provider.getIsSymlink({ row: itemRow, icon: svgEl });
-  const lowerFileName = fileName.toLowerCase();
 
   // Get icon name.
   let iconName = lookForMatch(
@@ -42,22 +42,28 @@ export function replaceIcon(itemRow, provider, iconPack) {
     isSubmodule,
     isSymlink
   ); // returns icon name if found or undefined.
+
+  const isLightTheme = provider.getIsLightTheme();
   if (isLightTheme) {
     iconName = lookForLightMatch(iconName, fileName, fileExtension, isDir); // returns icon name if found for light mode or undefined.
   }
 
-  // Get folder icon from active icon pack.
-  if (iconPack) {
-    iconName = lookForIconPackMatch(iconPack, lowerFileName) ?? iconName;
-  }
+  replaceElementWithIcon(iconEl, iconName, fileName, iconPack, provider);
+}
 
-  if (!iconName) return;
+export function replaceElementWithIcon(iconEl, iconName, fileName, iconPack, provider) {
+  // Get folder icon from active icon pack.
+  const svgFileName = lookForIconPackMatch(iconPack, fileName.toLowerCase()) ?? iconName;
+
+  if (!svgFileName) return;
 
   const newSVG = document.createElement('img');
   newSVG.setAttribute('data-material-icons-extension', 'icon');
-  newSVG.src = chrome.runtime.getURL(`${iconName}.svg`);
+  newSVG.setAttribute('data-material-icons-extension-iconname', iconName);
+  newSVG.setAttribute('data-material-icons-extension-filename', fileName);
+  newSVG.src = chrome.runtime.getURL(`${svgFileName}.svg`);
 
-  provider.replaceIcon(svgEl, newSVG);
+  provider.replaceIcon(iconEl, newSVG);
 }
 
 /**

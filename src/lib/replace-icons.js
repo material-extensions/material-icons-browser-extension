@@ -1,6 +1,6 @@
 import { observe } from 'selector-observer';
 
-import { replaceIcon } from './replace-icon';
+import { replaceIconInRow, replaceElementWithIcon } from './replace-icon';
 
 // replacing all icons synchronously prevents visual "blinks" but can
 // cause missing icons/rendering delay in very large folders
@@ -24,11 +24,19 @@ const rushFirst = (rushBatch, callback) => {
 };
 
 // Monitor DOM elements that match a CSS selector.
-export const observePage = (gitProvider, iconPack) =>
+export const observePage = (gitProvider, iconPack) => {
   observe(gitProvider.selectors.row, {
     add(row) {
-      const callback = () => replaceIcon(row, gitProvider, iconPack);
+      const callback = () => replaceIconInRow(row, gitProvider, iconPack);
       rushFirst(90, callback);
       gitProvider.onAdd(row, callback);
     },
+  });
+};
+
+export const replaceAllIcons = (provider, iconPack) =>
+  document.querySelectorAll('img[data-material-icons-extension-iconname]').forEach((iconEl) => {
+    const iconName = iconEl.getAttribute('data-material-icons-extension-iconname');
+    const fileName = iconEl.getAttribute('data-material-icons-extension-filename');
+    if (iconName) replaceElementWithIcon(iconEl, iconName, fileName, iconPack, provider);
   });

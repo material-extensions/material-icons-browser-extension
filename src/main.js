@@ -1,5 +1,5 @@
 import { getGitProvider } from './providers';
-import { observePage } from './lib/replace-icons';
+import { observePage, replaceAllIcons } from './lib/replace-icons';
 import { initIconSizes } from './lib/icon-sizes';
 
 initIconSizes();
@@ -12,3 +12,8 @@ chrome.storage.sync
   .then(({ iconPack }) => {
     if (gitProvider) observePage(gitProvider, iconPack);
   });
+
+chrome.storage.onChanged.addListener((changes) => {
+  const newIconPack = changes.iconPack?.newValue;
+  if (newIconPack) replaceAllIcons(gitProvider, newIconPack);
+});
