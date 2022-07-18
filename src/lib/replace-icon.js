@@ -20,6 +20,7 @@ export function replaceIconInRow(itemRow, provider, iconPack) {
 
   // SVG to be replaced.
   const iconEl = itemRow.querySelector(provider.selectors.icon);
+  if (iconEl?.getAttribute('data-material-icons-extension')) return;
   if (iconEl) replaceIcon(iconEl, fileName, itemRow, provider, iconPack);
 }
 
