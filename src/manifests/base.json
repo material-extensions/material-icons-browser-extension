@@ -26,7 +26,7 @@
       "run_at": "document_start"
     }
   ],
-  "permissions": ["storage"],
+  "permissions": ["storage", "activeTab"],
   "action": {
     "default_title": "Material Icons Settings",
     "default_popup": "settings-popup.html",

@@ -1,18 +1,26 @@
-const restoreOptions = () =>
-  chrome.storage.sync
-    .get({
-      iconSize: 'md',
-      iconPack: 'react',
-    })
-    .then(({ iconSize, iconPack }) => {
-      document.getElementById('icon-size').value = iconSize;
-      document.getElementById('icon-pack').value = iconPack;
+import { getConfig, setConfig } from '../../lib/userConfig';
+
+function getCurrentTabDomain() {
+  const queryOptions = { active: true, lastFocusedWindow: true };
+  // `tab` will either be a `tabs.Tab` instance or `undefined`.
+  return chrome.tabs.query(queryOptions).then(([tab]) => tab && new URL(tab.url).hostname);
+}
+
+getCurrentTabDomain().then((domain) => {
+  const restoreOptions = () => {
+    getConfig('iconSize', domain).then((size) => {
+      document.getElementById('icon-size').value = size;
     });
 
-document.addEventListener('DOMContentLoaded', restoreOptions);
+    getConfig('iconPack', domain).then((pack) => {
+      document.getElementById('icon-pack').value = pack;
+    });
+  };
+  document.addEventListener('DOMContentLoaded', restoreOptions);
 
-const updateIconSize = (event) => chrome.storage.sync.set({ iconSize: event.target.value });
-document?.getElementById('icon-size')?.addEventListener('change', updateIconSize);
+  const updateIconSize = (event) => setConfig('iconSize', event.target.value, domain);
+  document?.getElementById('icon-size')?.addEventListener('change', updateIconSize);
 
-const updateIconPack = (event) => chrome.storage.sync.set({ iconPack: event.target.value });
-document?.getElementById('icon-pack')?.addEventListener('change', updateIconPack);
+  const updateIconPack = (event) => setConfig('iconPack', event.target.value, domain);
+  document?.getElementById('icon-pack')?.addEventListener('change', updateIconPack);
+});

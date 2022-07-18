@@ -16,23 +16,29 @@ async function consolidateSVGFiles() {
     .then((iconsDict) => fs.writeJSON(path.resolve(srcPath, 'icon-list.json'), iconsDict));
 }
 
-function src(distPath) {
-  console.log('[2/2] Bundle extension manifest, images and main script.');
-
-  const entryFile = path.resolve(srcPath, 'main.js');
+function bundleJS(outDir, entryFile) {
   const parcelOptions = {
     watch: false,
     minify: true,
     sourceMaps: false,
-    outDir: distPath,
+    outDir,
   };
   const bundler = new Parcel(entryFile, parcelOptions);
-  const bundleMainScript = bundler.bundle();
+  return bundler.bundle();
+}
+
+function src(distPath) {
+  console.log('[2/2] Bundle extension manifest, images and main script.');
 
   const copyIcons = fs.copy(destSVGPath, distPath);
 
+  const bundleMainScript = () => bundleJS(distPath, path.resolve(srcPath, 'main.js'));
+  const bundlePopupScript = () =>
+    bundleJS(distPath, path.resolve(srcPath, 'ui', 'popup', 'settings-popup.js'));
+  const bundleAll = bundleMainScript().then(bundlePopupScript);
+
   const copyPopup = Promise.all(
-    ['html', 'js', 'css'].map((ext) =>
+    ['html', 'css'].map((ext) =>
       fs.copy(
         path.resolve(srcPath, 'ui', 'popup', `settings-popup.${ext}`),
         path.resolve(distPath, `settings-popup.${ext}`)
@@ -47,7 +53,7 @@ function src(distPath) {
 
   const copyExtensionLogos = fs.copy(path.resolve(srcPath, 'extensionIcons'), distPath);
 
-  return Promise.all([copyExtensionLogos, copyPopup, copyStyles, bundleMainScript, copyIcons]);
+  return Promise.all([copyExtensionLogos, copyPopup, copyStyles, copyIcons, bundleAll]);
 }
 
 function buildManifest(distPath, manifestName) {
