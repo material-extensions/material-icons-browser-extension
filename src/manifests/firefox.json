@@ -5,5 +5,15 @@
     }
   },
   "manifest_version": 2,
-  "web_accessible_resources": ["*.svg"]
+  "web_accessible_resources": ["*.svg"],
+  "browser_action": {
+    "default_title": "Material Icons Settings",
+    "default_popup": "settings-popup.html",
+    "default_icon": {
+      "16": "icon-16.png",
+      "32": "icon-32.png",
+      "48": "icon-48.png",
+      "128": "icon-128.png"
+    }
+  }
 }

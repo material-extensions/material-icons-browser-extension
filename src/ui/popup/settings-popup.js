@@ -5,8 +5,10 @@ const isPageSupported = (domain) => !!getGitProvider(domain);
 
 function getCurrentTabDomain() {
   const queryOptions = { active: true, lastFocusedWindow: true };
-  // `tab` will either be a `tabs.Tab` instance or `undefined`.
-  return chrome.tabs.query(queryOptions).then(([tab]) => tab && new URL(tab.url).hostname);
+  return new Promise((resolve) => {
+    // firefox only supports callback from chrome.tab.query, not Promise return
+    chrome.tabs.query(queryOptions, ([tab]) => resolve(tab && new URL(tab.url).hostname));
+  });
 }
 
 getCurrentTabDomain().then((domain) => {
