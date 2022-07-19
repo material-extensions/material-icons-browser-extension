@@ -5,53 +5,63 @@
   </head>
 
   <body>
-    <div id="settings">
-      <div id="settings-header">
-        <img id="logo" src="/icon-128.png" />
-        <h1>Settings</h1>
+    <div id="content">
+      <div id="not-supported">
+        <span id="unsupported-domain"></span> is not supported by this extension
       </div>
 
-      <label for="icon-size">Icon Size</label>
-      <div class="select-wrapper">
-        <select name="icon-size" id="icon-size">
-          <option value="sm">Small</option>
-          <option value="md">Medium</option>
-          <option value="lg">Large</option>
-          <option value="xl">Extra Large</option>
-        </select>
-        <!-- down arrow -->
-        <div class="select-icon-wrapper">
-          <svg
-            viewBox="0 0 24 24"
-            role="presentation"
-            class="select-icon"
-            focusable="false"
-            aria-hidden="true"
-          >
-            <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
-          </svg>
+      <div id="settings">
+        <div id="settings-header">
+          <img id="logo" src="/icon-128.png" />
+          <h1>Settings</h1>
         </div>
-      </div>
 
-      <label for="icon-pack">Icon Pack</label>
-      <div class="select-wrapper">
-        <select name="icon-pack" id="icon-pack">
-          <option value="angular">angular</option>
-          <option value="react">react</option>
-          <option value="vue">vue</option>
-          <option value="nest">nest</option>
-        </select>
-        <!-- down arrow -->
-        <div class="select-icon-wrapper">
-          <svg
-            viewBox="0 0 24 24"
-            role="presentation"
-            class="select-icon"
-            focusable="false"
-            aria-hidden="true"
-          >
-            <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
-          </svg>
+        <div id="domain">
+          <h2 id="domain-name"></h2>
+        </div>
+
+        <label for="icon-size">Icon Size</label>
+        <div class="select-wrapper">
+          <select name="icon-size" id="icon-size">
+            <option value="sm">Small</option>
+            <option value="md">Medium</option>
+            <option value="lg">Large</option>
+            <option value="xl">Extra Large</option>
+          </select>
+          <!-- down arrow -->
+          <div class="select-icon-wrapper">
+            <svg
+              viewBox="0 0 24 24"
+              role="presentation"
+              class="select-icon"
+              focusable="false"
+              aria-hidden="true"
+            >
+              <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+            </svg>
+          </div>
+        </div>
+
+        <label for="icon-pack">Icon Pack</label>
+        <div class="select-wrapper">
+          <select name="icon-pack" id="icon-pack">
+            <option value="angular">angular</option>
+            <option value="react">react</option>
+            <option value="vue">vue</option>
+            <option value="nest">nest</option>
+          </select>
+          <!-- down arrow -->
+          <div class="select-icon-wrapper">
+            <svg
+              viewBox="0 0 24 24"
+              role="presentation"
+              class="select-icon"
+              focusable="false"
+              aria-hidden="true"
+            >
+              <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+            </svg>
+          </div>
         </div>
       </div>
     </div>

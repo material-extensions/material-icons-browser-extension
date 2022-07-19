@@ -19,11 +19,10 @@ const providerConfig = {
 /**
  * Get all selectors and functions specific to the Git provider
  *
+ * @param {string} href Url of current tab
  * @returns {object} All of the values needed for the provider
  */
-export const getGitProvider = () => {
-  const { href } = window.location;
-
+export const getGitProvider = (href) => {
   switch (true) {
     case /github\.com.*/.test(href):
       return providerConfig.github;
