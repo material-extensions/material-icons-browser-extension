@@ -14,9 +14,8 @@ function getCurrentTabDomain() {
 getCurrentTabDomain().then((domain) => {
   if (!isPageSupported(domain)) return displayPageNotSupported(domain);
 
-  displayDomainName(domain);
-  displaySettings();
   registerControls(domain);
+  displaySettings(domain);
 });
 
 function registerControls(domain) {
@@ -38,11 +37,8 @@ function registerControls(domain) {
   document?.getElementById('icon-pack')?.addEventListener('change', updateIconPack);
 }
 
-function displayDomainName(domain) {
+function displaySettings(domain) {
   document.getElementById('domain-name').innerText = domain;
-}
-
-function displaySettings() {
   document.getElementById('settings').style.display = 'block';
 }
 

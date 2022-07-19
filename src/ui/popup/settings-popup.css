@@ -118,3 +118,9 @@ svg.select-icon {
   height: 1em;
   color: currentcolor;
 }
+
+#footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

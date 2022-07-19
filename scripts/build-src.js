@@ -38,11 +38,8 @@ function src(distPath) {
   const bundleAll = bundleMainScript().then(bundlePopupScript);
 
   const copyPopup = Promise.all(
-    ['html', 'css'].map((ext) =>
-      fs.copy(
-        path.resolve(srcPath, 'ui', 'popup', `settings-popup.${ext}`),
-        path.resolve(distPath, `settings-popup.${ext}`)
-      )
+    ['settings-popup.html', 'settings-popup.css', 'settings-popup.github-logo.svg'].map((file) =>
+      fs.copy(path.resolve(srcPath, 'ui', 'popup', file), path.resolve(distPath, file))
     )
   );
 
