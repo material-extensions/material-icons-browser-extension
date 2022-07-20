@@ -35,11 +35,19 @@ function src(distPath) {
   const bundleMainScript = () => bundleJS(distPath, path.resolve(srcPath, 'main.js'));
   const bundlePopupScript = () =>
     bundleJS(distPath, path.resolve(srcPath, 'ui', 'popup', 'settings-popup.js'));
-  const bundleAll = bundleMainScript().then(bundlePopupScript);
+  const bundleOptionsScript = () =>
+    bundleJS(distPath, path.resolve(srcPath, 'ui', 'options', 'options.js'));
+  const bundleAll = bundleMainScript().then(bundlePopupScript).then(bundleOptionsScript);
 
   const copyPopup = Promise.all(
     ['settings-popup.html', 'settings-popup.css', 'settings-popup.github-logo.svg'].map((file) =>
       fs.copy(path.resolve(srcPath, 'ui', 'popup', file), path.resolve(distPath, file))
+    )
+  );
+
+  const copyOptions = Promise.all(
+    ['options.html', 'options.css'].map((file) =>
+      fs.copy(path.resolve(srcPath, 'ui', 'options', file), path.resolve(distPath, file))
     )
   );
 
@@ -50,7 +58,7 @@ function src(distPath) {
 
   const copyExtensionLogos = fs.copy(path.resolve(srcPath, 'extensionIcons'), distPath);
 
-  return Promise.all([copyExtensionLogos, copyPopup, copyStyles, copyIcons, bundleAll]);
+  return Promise.all([copyExtensionLogos, copyOptions, copyPopup, copyStyles, copyIcons, bundleAll]);
 }
 
 function buildManifest(distPath, manifestName) {

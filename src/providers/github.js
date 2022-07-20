@@ -1,5 +1,5 @@
 const githubConfig = {
-  name: 'github',
+  domain: 'github.com',
   selectors: {
     row: '.js-navigation-container[role=grid] > .js-navigation-item, file-tree .ActionList-content, a.tree-browser-result',
     filename:

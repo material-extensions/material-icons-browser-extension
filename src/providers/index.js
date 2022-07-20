@@ -6,7 +6,7 @@ import gitlabConfig from './gitlab';
 import giteeConfig from './gitee';
 import sourceforgeConfig from './sourceforge';
 
-const providerConfig = {
+export const providerConfig = {
   github: githubConfig,
   bitbucket: bitbucketConfig,
   azure: azureConfig,

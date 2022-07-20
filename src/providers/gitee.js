@@ -1,5 +1,5 @@
 const giteeConfig = {
-  name: 'gitee',
+  domain: 'gitee.com',
   selectors: {
     // File list row, README header, file view header
     row: '#git-project-content .tree-content .row.tree-item, .file_title, .blob-description',

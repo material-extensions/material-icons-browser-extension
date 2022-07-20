@@ -3,7 +3,7 @@ const HIDE_PSEUDO_CLASS = 'hide-pseudo';
 let hasAddedAzureStyle = false;
 
 const azureConfig = {
-  name: 'azure',
+  domain: 'dev.azure.com',
   selectors: {
     row: 'table.bolt-table tbody > a',
     filename: 'table.bolt-table tbody > a > td[aria-colindex="1"] span.text-ellipsis',

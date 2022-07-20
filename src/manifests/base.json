@@ -26,5 +26,6 @@
       "run_at": "document_start"
     }
   ],
+  "options_page": "options.html",
   "permissions": ["storage", "activeTab"]
 }

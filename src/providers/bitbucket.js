@@ -1,5 +1,5 @@
 const bitbucketConfig = {
-  name: 'bitbucket',
+  domain: 'bitbucket.org',
   selectors: {
     // Don't replace the icon for the parent directory row
     row: 'table[data-qa="repository-directory"] td:first-child a:first-child:not([aria-label="Parent directory,"])',

@@ -1,5 +1,5 @@
 const giteaConfig = {
-  name: 'gitea',
+  domain: 'gitea.com',
   selectors: {
     row: 'tr.ready.entry',
     filename: 'td.name.four.wide > span.truncate > a',

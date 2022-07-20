@@ -1,0 +1,54 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="options.css" />
+  </head>
+
+  <body>
+    <div id="settings-header" class="centered">
+      <img id="logo" src="/icon-128.png" />
+      <h1>Settings</h1>
+    </div>
+
+    <div id="domains">
+      <h2>Domains</h2>
+
+      <template id="domain-row">
+      <div class="domain">
+        <!-- <input type="checkbox" class="domain-enabled"/> -->
+
+        <h3 class="domain-name"></h3>
+
+        <label class="domain-icon-size-label">Icon Size:</label>
+        <div class="select-wrapper">
+          <select class="domain-icon-size">
+            <option value="sm">Small</option>
+            <option value="md">Medium</option>
+            <option value="lg">Large</option>
+            <option value="xl">Extra Large</option>
+          </select>
+        </div>
+
+        <label class="domain-icon-pack-label">Icon Pack:</label>
+        <div class="select-wrapper">
+          <select class="domain-icon-pack">
+            <option value="angular">angular</option>
+            <option value="react">react</option>
+            <option value="vue">vue</option>
+            <option value="nest">nest</option>
+          </select>
+        </div>
+
+      </div>
+</template>
+
+    </div>
+
+    <div id="footer" class="centered">
+      <a href="https://github.com/Claudiohbsantos/github-material-icons-extension" target="_blank"
+        ><img src="settings-popup.github-logo.svg"
+      /></a>
+    </div>
+    <script src="options.js"></script>
+  </body>
+</html>

@@ -1,5 +1,5 @@
 const sourceforgeConfig = {
-  name: 'sourceforge',
+  domain: 'sourceforge.net',
   selectors: {
     // File list row, README header, file view header
     row: 'table#files_list tr, #content_base tr td:first-child',

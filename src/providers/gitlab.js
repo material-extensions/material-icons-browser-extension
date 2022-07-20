@@ -1,5 +1,5 @@
 const gitlabConfig = {
-  name: 'gitlab',
+  domain: 'gitlab.com',
   selectors: {
     // Row in file list, file view header
     row: 'table[data-qa-selector="file_tree_table"] tr, .file-header-content',
