@@ -8,8 +8,7 @@ export const getConfig = (config, domain = window.location.hostname) =>
     .get({
       [`${domain}:${config}`]: defaults[config],
     })
-    .then(({ [`${domain}:${config}`]: value }) => value)
-    .catch(() => console.error('fuck'))
+    .then(({ [`${domain}:${config}`]: value }) => value);
 
 export const setConfig = (config, value, domain = window.location.hostname) =>
   chrome.storage.sync.set({
