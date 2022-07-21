@@ -26,20 +26,22 @@ const fillRow = (row, domain) => {
   // checkbox.setAttribute('checked', true)
   // checkbox.setAttribute('disabled', true)
 
-  iconSizeSelect.addEventListener('change', ({target: {value}}) => setConfig('iconSize', value, domain))
-  iconPackSelect.addEventListener('change', ({target: {value}}) => setConfig('iconPack', value, domain))
+  iconSizeSelect.addEventListener('change', ({target: {value}}) => value && setConfig('iconSize', value, domain))
+  iconPackSelect.addEventListener('change', ({target: {value}}) => value && setConfig('iconPack', value, domain))
 
   onConfigChange('iconSize', size => {iconSizeSelect.value = size}, domain)
+  onConfigChange('iconSize', () => getConfig('iconSize', domain, false).then(size => {if (size) iconSizeSelect.value = size}), 'default')
   onConfigChange('iconPack', pack => {iconPackSelect.value = pack}, domain)
+  onConfigChange('iconPack', () => getConfig('iconPack', domain, false).then(pack => {if (pack) iconPackSelect.value = pack}), 'default')
 
   return Promise.all([
-    getConfig('iconSize', domain).then(size => {iconSizeSelect.value = size}),
-    getConfig('iconPack', domain).then(pack => {iconPackSelect.value = pack}),
+    getConfig('iconSize', domain, false).then(size => {if (size) iconSizeSelect.value = size}),
+    getConfig('iconPack', domain, false).then(pack => {if (pack) iconPackSelect.value = pack}),
   ]).then(() => row)
 }
 
 const domainsDiv = document.getElementById('domains');
-const domains = Object.values(providerConfig).map(p => p.domain)
+const domains = ['default', ...Object.values(providerConfig).map(p => p.domain)]
 Promise.all(domains.map(d => fillRow(newDomainRow(), d)))
 .then(rows => rows.forEach(r => domainsDiv.appendChild(r)))
 

@@ -8,7 +8,6 @@ export const initIconSizes = () => {
 
   document.addEventListener('DOMContentLoaded', setIconSize, false);
 
-  onConfigChange('iconSize', (newSize) =>
-    document.body.setAttribute(`data-material-icons-extension-size`, newSize)
-  );
+  onConfigChange('iconSize', setSizeAttribute);
+  onConfigChange('iconSize', setIconSize, 'default');
 };
