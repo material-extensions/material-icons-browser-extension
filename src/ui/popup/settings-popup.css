@@ -26,19 +26,32 @@ body {
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
 }
 
 #logo {
-  height: 2.25rem;
-  width: 2.25rem;
+  margin-right:auto;
+  height: 24px;
+  width: 24px;
 }
 
 #settings-header h1 {
   margin: 0;
-  margin-left: 0.75rem;
   font-size: 1.4rem;
   font-weight: bold;
   color: #01579b;
+}
+
+#options-btn {
+  margin-left:auto;
+  width:24;
+  height:24;
+  filter:grayscale(1);
+}
+
+#options-btn:hover {
+  cursor: pointer;
+  filter:brightness(0.8);
 }
 
 #domain {

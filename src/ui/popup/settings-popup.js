@@ -35,6 +35,8 @@ function registerControls(domain) {
 
   const updateIconPack = (event) => setConfig('iconPack', event.target.value, domain);
   document?.getElementById('icon-pack')?.addEventListener('change', updateIconPack);
+
+  document.getElementById('options-btn')?.addEventListener('click', () => chrome.runtime.openOptionsPage())
 }
 
 function displaySettings(domain) {
