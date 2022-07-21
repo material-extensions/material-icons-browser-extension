@@ -18,6 +18,7 @@ body {
 }
 
 #settings-header {
+  margin-top: 32px;
   gap: 20px;
 }
 
@@ -39,8 +40,30 @@ body {
   max-width: 800px;
 }
 
-#domains h2 {
-  align-self: flex-start;
+#domains-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#reset {
+  color:#5c6068;
+  padding:0.3rem 1rem;
+  outline: transparent solid 2px;
+  outline-offset: 2px;
+  transition: 200ms all;
+  font-size: 1rem;
+  border-radius: 0.375rem;
+  border-width: 1px;
+  border-color: transparent;
+  background-color: transparent;
+}
+
+#reset:hover {
+  border-color: red;
+  color: red;
+  cursor: pointer;
 }
 
 .domain {
@@ -84,6 +107,7 @@ select {
   color: #2d3748;
   border-color: transparent;
   background-color: transparent;
+  min-width:100px;
 }
 
 select:hover {

@@ -1,6 +1,7 @@
 import { getConfig, setConfig, clearConfig, onConfigChange } from '../../lib/userConfig';
 import { providerConfig } from '../../providers';
 
+const resetButton = document.getElementById('reset')
 
 const newDomainRow = () => {
   const template = document.getElementById('domain-row');
@@ -18,6 +19,7 @@ const newDomainRow = () => {
  */
 const fillRow = (row, domain) => {
   row.id = `row-${domain}`
+
   const title = row.getElementsByClassName('domain-name').item(0)
   title.appendChild(document.createTextNode(domain))
 
@@ -32,19 +34,22 @@ const fillRow = (row, domain) => {
   const wireConfig = (config) => {
     const select = row.getElementsByClassName(config).item(0)
 
-    const updateSelect = val => {if (val) select.value = val}
+    const updateSelect = val => {select.value = val ?? 'default'}
     const updateConfig = ({target: {value}}) => (!value || value === '(default)') ? clearConfig(config, domain) : setConfig(config, value, domain)
+
+    const populateSelect = () => getConfig(config, domain, false).then(updateSelect)
 
     select.addEventListener('change', updateConfig);
     onConfigChange(config, updateSelect, domain);
     onConfigChange(config, () => getConfig(config, domain, false).then(updateSelect), 'default');
+    resetButton.addEventListener('click', () => clearConfig(config, domain).then(populateSelect));
 
     [...select.getElementsByClassName('default-option')].forEach(opt => {
       select.addEventListener('focus', () => opt.text = '(default)')
       select.addEventListener('blur', () => opt.text = '')
     })
 
-    return getConfig(config, domain, false).then(updateSelect)
+    return populateSelect()
   }
 
   return Promise.all([wireConfig('iconSize'), wireConfig('iconPack') ]).then(() => row)
