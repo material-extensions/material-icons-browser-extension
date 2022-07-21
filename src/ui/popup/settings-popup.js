@@ -19,16 +19,13 @@ getCurrentTabDomain().then((domain) => {
 });
 
 function registerControls(domain) {
-  const restoreOptions = () => {
-    getConfig('iconSize', domain).then((size) => {
-      document.getElementById('icon-size').value = size;
-    });
+  getConfig('iconSize', domain).then((size) => {
+    document.getElementById('icon-size').value = size;
+  });
 
-    getConfig('iconPack', domain).then((pack) => {
-      document.getElementById('icon-pack').value = pack;
-    });
-  };
-  document.addEventListener('DOMContentLoaded', restoreOptions);
+  getConfig('iconPack', domain).then((pack) => {
+    document.getElementById('icon-pack').value = pack;
+  });
 
   const updateIconSize = (event) => setConfig('iconSize', event.target.value, domain);
   document?.getElementById('icon-size')?.addEventListener('change', updateIconSize);
@@ -36,7 +33,9 @@ function registerControls(domain) {
   const updateIconPack = (event) => setConfig('iconPack', event.target.value, domain);
   document?.getElementById('icon-pack')?.addEventListener('change', updateIconPack);
 
-  document.getElementById('options-btn')?.addEventListener('click', () => chrome.runtime.openOptionsPage())
+  document
+    .getElementById('options-btn')
+    ?.addEventListener('click', () => chrome.runtime.openOptionsPage());
 }
 
 function displaySettings(domain) {

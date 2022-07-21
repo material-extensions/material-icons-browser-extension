@@ -1,4 +1,4 @@
-import { getConfig, setConfig } from '../../lib/userConfig';
+import { getConfig, setConfig, onConfigChange } from '../../lib/userConfig';
 import { providerConfig } from '../../providers';
 
 
@@ -29,6 +29,9 @@ const fillRow = (row, domain) => {
   iconSizeSelect.addEventListener('change', ({target: {value}}) => setConfig('iconSize', value, domain))
   iconPackSelect.addEventListener('change', ({target: {value}}) => setConfig('iconPack', value, domain))
 
+  onConfigChange('iconSize', size => {iconSizeSelect.value = size}, domain)
+  onConfigChange('iconPack', pack => {iconPackSelect.value = pack}, domain)
+
   return Promise.all([
     getConfig('iconSize', domain).then(size => {iconSizeSelect.value = size}),
     getConfig('iconPack', domain).then(pack => {iconPackSelect.value = pack}),
@@ -46,5 +49,4 @@ Promise.all(domains.map(d => fillRow(newDomainRow(), d)))
  * todo:
  * selectors to set all domains
  * enable/disable checkbox
- * listen to config changes.
  */
