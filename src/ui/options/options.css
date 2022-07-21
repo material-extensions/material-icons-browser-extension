@@ -61,6 +61,10 @@ body {
   margin-right:auto;
 }
 
+#row-default {
+  background-color:#cad9f7;
+}
+
 
 label {
   color:#5c6068;

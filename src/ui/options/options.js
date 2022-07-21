@@ -1,4 +1,4 @@
-import { getConfig, setConfig, onConfigChange } from '../../lib/userConfig';
+import { getConfig, setConfig, clearConfig, onConfigChange } from '../../lib/userConfig';
 import { providerConfig } from '../../providers';
 
 
@@ -17,27 +17,37 @@ const newDomainRow = () => {
  * @param {string} domain
  */
 const fillRow = (row, domain) => {
-  // const checkbox = row.getElementsByClassName('domain-enabled').item(0)
+  row.id = `row-${domain}`
   const title = row.getElementsByClassName('domain-name').item(0)
-  const iconSizeSelect = row.getElementsByClassName('domain-icon-size').item(0)
-  const iconPackSelect = row.getElementsByClassName('domain-icon-pack').item(0)
-
   title.appendChild(document.createTextNode(domain))
+
+  // const checkbox = row.getElementsByClassName('domain-enabled').item(0)
   // checkbox.setAttribute('checked', true)
   // checkbox.setAttribute('disabled', true)
 
-  iconSizeSelect.addEventListener('change', ({target: {value}}) => value && setConfig('iconSize', value, domain))
-  iconPackSelect.addEventListener('change', ({target: {value}}) => value && setConfig('iconPack', value, domain))
+  if (domain === 'default') {
+    [...row.getElementsByClassName('default-option')].forEach(opt => opt.remove())
+  }
 
-  onConfigChange('iconSize', size => {iconSizeSelect.value = size}, domain)
-  onConfigChange('iconSize', () => getConfig('iconSize', domain, false).then(size => {if (size) iconSizeSelect.value = size}), 'default')
-  onConfigChange('iconPack', pack => {iconPackSelect.value = pack}, domain)
-  onConfigChange('iconPack', () => getConfig('iconPack', domain, false).then(pack => {if (pack) iconPackSelect.value = pack}), 'default')
+  const wireConfig = (config) => {
+    const select = row.getElementsByClassName(config).item(0)
 
-  return Promise.all([
-    getConfig('iconSize', domain, false).then(size => {if (size) iconSizeSelect.value = size}),
-    getConfig('iconPack', domain, false).then(pack => {if (pack) iconPackSelect.value = pack}),
-  ]).then(() => row)
+    const updateSelect = val => {if (val) select.value = val}
+    const updateConfig = ({target: {value}}) => (!value || value === '(default)') ? clearConfig(config, domain) : setConfig(config, value, domain)
+
+    select.addEventListener('change', updateConfig);
+    onConfigChange(config, updateSelect, domain);
+    onConfigChange(config, () => getConfig(config, domain, false).then(updateSelect), 'default');
+
+    [...select.getElementsByClassName('default-option')].forEach(opt => {
+      select.addEventListener('focus', () => opt.text = '(default)')
+      select.addEventListener('blur', () => opt.text = '')
+    })
+
+    return getConfig(config, domain, false).then(updateSelect)
+  }
+
+  return Promise.all([wireConfig('iconSize'), wireConfig('iconPack') ]).then(() => row)
 }
 
 const domainsDiv = document.getElementById('domains');

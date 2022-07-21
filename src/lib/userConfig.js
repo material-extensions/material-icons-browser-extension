@@ -20,6 +20,9 @@ export const setConfig = (config, value, domain = window.location.hostname) =>
     [`${domain}:${config}`]: value,
   });
 
+export const clearConfig = (config, domain = window.location.hostname) =>
+  chrome.storage.sync.remove( `${domain}:${config}`);
+
 export const onConfigChange = (config, handler, domain = window.location.hostname) =>
   chrome.storage.onChanged.addListener((changes) => {
     const newValue = changes[`${domain}:${config}`]?.newValue;
