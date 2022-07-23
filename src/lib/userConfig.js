@@ -1,6 +1,7 @@
 const hardDefaults = {
   iconPack: 'react',
   iconSize: 'md',
+  extEnabled: true
 };
 
 export const getConfig = (config, domain = window.location.hostname, useDefault = true) =>
@@ -25,6 +26,5 @@ export const clearConfig = (config, domain = window.location.hostname) =>
 
 export const onConfigChange = (config, handler, domain = window.location.hostname) =>
   chrome.storage.onChanged.addListener((changes) => {
-    const newValue = changes[`${domain}:${config}`]?.newValue;
-    if (newValue) handler(newValue);
+    changes[`${domain}:${config}`]?.newValue !== undefined && handler(changes[`${domain}:${config}`]?.newValue);
   });

@@ -13,7 +13,28 @@ const newDomainRow = () => {
 };
 
 /**
- *
+ * @param {HTMLElement} row
+ */
+const domainToggles = (row, domain) => {
+  if (row.id === 'row-default') return
+
+  const toggleRow = (allEnabled) => {
+      const checkbox = row.querySelectorAll('.extEnabled').item(0)
+      if (checkbox instanceof HTMLInputElement) {
+        checkbox.disabled = !allEnabled
+        checkbox.indeterminate = !allEnabled
+      }
+      if (allEnabled) row.classList.remove('disabled')
+      else row.classList.add('disabled')
+  }
+
+  // TODO: disable row based on its own value as well
+
+  getConfig('extEnabled', 'default').then(toggleRow)
+  onConfigChange('extEnabled', toggleRow, 'default')
+}
+
+/**
  * @param {HTMLElement} row
  * @param {string} domain
  */
@@ -23,37 +44,39 @@ const fillRow = (row, domain) => {
   const title = row.getElementsByClassName('domain-name').item(0)
   title.appendChild(document.createTextNode(domain))
 
-  // const checkbox = row.getElementsByClassName('domain-enabled').item(0)
-  // checkbox.setAttribute('checked', true)
-  // checkbox.setAttribute('disabled', true)
-
   if (domain === 'default') {
     [...row.getElementsByClassName('default-option')].forEach(opt => opt.remove())
   }
 
-  const wireConfig = (config) => {
-    const select = row.getElementsByClassName(config).item(0)
+  const wireConfig = (config, updateInput, updateConfig) => {
+    const input = row.getElementsByClassName(config).item(0)
 
-    const updateSelect = val => {select.value = val ?? 'default'}
-    const updateConfig = ({target: {value}}) => (!value || value === '(default)') ? clearConfig(config, domain) : setConfig(config, value, domain)
+    const populateInput = () => getConfig(config, domain, false).then(updateInput(input))
 
-    const populateSelect = () => getConfig(config, domain, false).then(updateSelect)
+    input.addEventListener('change', updateConfig(config));
+    onConfigChange(config, updateInput(input), domain);
+    onConfigChange(config, () => getConfig(config, domain, false).then(updateInput(input)), 'default');
+    resetButton.addEventListener('click', () => clearConfig(config, domain).then(populateInput));
 
-    select.addEventListener('change', updateConfig);
-    onConfigChange(config, updateSelect, domain);
-    onConfigChange(config, () => getConfig(config, domain, false).then(updateSelect), 'default');
-    resetButton.addEventListener('click', () => clearConfig(config, domain).then(populateSelect));
-
-    [...select.getElementsByClassName('default-option')].forEach(opt => {
-      select.addEventListener('focus', () => opt.text = '(default)')
-      select.addEventListener('blur', () => opt.text = '')
+    [...input.getElementsByClassName('default-option')].forEach(opt => {
+      input.addEventListener('focus', () => opt.text = '(default)')
+      input.addEventListener('blur', () => opt.text = '')
     })
 
-    return populateSelect()
+    return populateInput()
   }
 
-  return Promise.all([wireConfig('iconSize'), wireConfig('iconPack') ]).then(() => row)
+  const updateSelect = (input) => val => {input.value = val ?? 'default'}
+  const updateConfigFromSelect = config => ({target: {value}}) => (!value || value === '(default)') ? clearConfig(config, domain) : setConfig(config, value, domain)
+  const wireSelect = (config) => wireConfig(config, updateSelect, updateConfigFromSelect)
+
+  const updateCheck = (input) => val => {input.checked = val ?? true}
+  const updateConfigFromCheck = config => ({target: {checked}}) => setConfig(config, checked, domain)
+  const wireCheck = (config) => wireConfig(config, updateCheck, updateConfigFromCheck)
+
+  return Promise.all([wireSelect('iconSize'), wireSelect('iconPack'), wireCheck('extEnabled') ]).then(() => domainToggles(row, domain)).then(() => row)
 }
+
 
 const domainsDiv = document.getElementById('domains');
 const domains = ['default', ...Object.values(providerConfig).map(p => p.domain)]
@@ -64,6 +87,5 @@ Promise.all(domains.map(d => fillRow(newDomainRow(), d)))
 
 /**
  * todo:
- * selectors to set all domains
  * enable/disable checkbox
  */

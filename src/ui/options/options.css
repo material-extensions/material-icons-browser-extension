@@ -76,6 +76,11 @@ body {
   border-top:1px solid #cbd5e0;
 }
 
+.domain.disabled {
+  background-color:rgb(177, 177, 177);
+  color:rgb(78, 78, 78)
+}
+
 .domain:hover {
   background-color:rgb(232, 239, 250);
 }
@@ -108,6 +113,7 @@ select {
   border-color: transparent;
   background-color: transparent;
   min-width:100px;
+  text-align: end;
 }
 
 select:hover {
