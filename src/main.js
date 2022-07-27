@@ -7,8 +7,14 @@ initIconSizes();
 const { href } = window.location;
 const gitProvider = getGitProvider(href);
 
-getConfig('iconPack').then((iconPack) => {
-  if (gitProvider) observePage(gitProvider, iconPack);
-});
+Promise.all([
+getConfig('iconPack'),
+getConfig('extEnabled'),
+getConfig('extEnabled', 'default'),
+]).then(([iconPack, extEnabled, globalExtEnabled]) => {
+  if (!globalExtEnabled || !extEnabled || !gitProvider) return
+  observePage(gitProvider, iconPack);
+  onConfigChange('iconPack', (newIconPack) => replaceAllIcons(gitProvider, newIconPack));
+})
 
-onConfigChange('iconPack', (newIconPack) => replaceAllIcons(gitProvider, newIconPack));
+

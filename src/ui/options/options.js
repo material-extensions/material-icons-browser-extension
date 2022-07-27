@@ -15,7 +15,7 @@ const newDomainRow = () => {
 /**
  * @param {HTMLElement} row
  */
-const domainToggles = (row, domain) => {
+const domainToggles = (row) => {
   if (row.id === 'row-default') return
 
   const toggleRow = (allEnabled) => {
@@ -27,8 +27,6 @@ const domainToggles = (row, domain) => {
       if (allEnabled) row.classList.remove('disabled')
       else row.classList.add('disabled')
   }
-
-  // TODO: disable row based on its own value as well
 
   getConfig('extEnabled', 'default').then(toggleRow)
   onConfigChange('extEnabled', toggleRow, 'default')
@@ -74,7 +72,7 @@ const fillRow = (row, domain) => {
   const updateConfigFromCheck = config => ({target: {checked}}) => setConfig(config, checked, domain)
   const wireCheck = (config) => wireConfig(config, updateCheck, updateConfigFromCheck)
 
-  return Promise.all([wireSelect('iconSize'), wireSelect('iconPack'), wireCheck('extEnabled') ]).then(() => domainToggles(row, domain)).then(() => row)
+  return Promise.all([wireSelect('iconSize'), wireSelect('iconPack'), wireCheck('extEnabled') ]).then(() => domainToggles(row)).then(() => row)
 }
 
 
@@ -82,10 +80,3 @@ const domainsDiv = document.getElementById('domains');
 const domains = ['default', ...Object.values(providerConfig).map(p => p.domain)]
 Promise.all(domains.map(d => fillRow(newDomainRow(), d)))
 .then(rows => rows.forEach(r => domainsDiv.appendChild(r)))
-
-
-
-/**
- * todo:
- * enable/disable checkbox
- */

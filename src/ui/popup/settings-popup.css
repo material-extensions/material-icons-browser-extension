@@ -68,11 +68,32 @@ body {
   font-weight: normal;
 }
 
+#default-disabled-note {
+  color: maroon;
+  margin: 2rem 0;
+  display: none;
+  flex:1;
+}
+
+#options-link {
+  color: #01579b;
+  cursor: pointer;
+}
+
+#options-link:hover {
+  filter:brightness(1.2)
+}
+
 label {
   display: block;
   font-weight: 500;
   margin: 0 0.75rem 0.5rem 0;
   line-height: 1.5;
+}
+
+.checkbox-wrapper {
+  display: flex;
+  justify-content: space-between;
 }
 
 .select-wrapper {

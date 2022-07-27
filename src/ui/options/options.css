@@ -85,6 +85,11 @@ body {
   background-color:rgb(232, 239, 250);
 }
 
+.domain.disabled, .domain.disabled:hover {
+  background-color:rgb(177, 177, 177);
+  color:rgb(78, 78, 78)
+}
+
 .domain h3 {
   margin-right:auto;
 }
