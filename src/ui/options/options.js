@@ -46,6 +46,14 @@ const fillRow = (row, domain) => {
     [...row.getElementsByClassName('default-option')].forEach(opt => opt.remove())
   }
 
+  resetButton.addEventListener('click', () => {
+    row.classList.add('brightDomain')
+    setTimeout(() => row.classList.add('animated'), 0)
+    setTimeout(() => row.classList.remove('brightDomain'), 0)
+    setTimeout(() => row.classList.remove('animated'), 800)
+
+  });
+
   const wireConfig = (config, updateInput, updateConfig) => {
     const input = row.getElementsByClassName(config).item(0)
 

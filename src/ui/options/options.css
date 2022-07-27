@@ -94,6 +94,19 @@ body {
   margin-right:auto;
 }
 
+.domain:last-child {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.animated {
+  transition: all 0.8s ease;
+}
+
+.brightDomain {
+  color: red;
+}
+
 #row-default {
   background-color:#cad9f7;
 }
