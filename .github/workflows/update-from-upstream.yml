@@ -60,6 +60,17 @@ jobs:
           client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
           refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
 
+      - name: Upload to edge store
+        if: steps.upstream.outputs.release_tag != steps.upstream.outputs.current_tag
+        continue-on-error: true
+        uses: wdzeng/edge-addon@v1
+        with:
+          product-id: d7692295-d84f-4bf5-9447-3cbb6ae29517
+          zip-path: github-material-icons-edge-extension.zip
+          client-id: ${{ secrets.EDGE_CLIENT_ID }}
+          client-secret: ${{ secrets.EDGE_CLIENT_SECRET }}
+          access-token-url: ${{ secrets.EDGE_ACCESS_TOKEN_URL }}
+
       - name: Upload to firefox store
         if: steps.upstream.outputs.release_tag != steps.upstream.outputs.current_tag
         continue-on-error: true
