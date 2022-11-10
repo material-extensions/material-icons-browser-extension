@@ -63,6 +63,7 @@
     "nqp": "perl",
     "p6": "perl",
     "pac": "javascript",
+    "pacscript": "console",
     "php": "php",
     "php4": "php",
     "php5": "php",
