@@ -5,18 +5,13 @@
       "^npm": "npm",
       "editorconfig": "editorconfig",
       "": "settings"
-    },
-    "python": "python-misc",
-    "tablegen": "fsharp",
-    "vb": "visualstudio"
+    }
   },
   "filenames": {
     "properties": "git",
     "python": "python-misc"
   },
   "deletions": {
-    "extensions:hlsl": true,
-    "extensions:ignore": true,
-    "extensions:log": true
+    "extensions:ignore": true
   }
 }

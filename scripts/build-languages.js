@@ -28,12 +28,7 @@ const octokit = new api.Octokit();
 const query = {
   page: 0,
   per_page: resultsPerPage,
-  q: [
-    'contributes languages',
-    'filename:package.json',
-    'org:microsoft',
-    '-repo:microsoft/azuredatastudio',
-  ].join(' '),
+  q: 'contributes languages filename:package.json repo:microsoft/vscode'
 };
 const GITHUB_RATELIMIT = 6000;
 
@@ -66,7 +61,7 @@ const GITHUB_RATELIMIT = 6000;
 
 function fetchLanguageContribution(item) {
   const urlPath = item.html_url.replace(/\/blob\//, '/raw/');
-  const resPath = item.path.replace(/package\.json$/, 'extension.json');
+  const resPath = item.path.replace(/[^/]+$/, 'extension.json');
   const extPath = path.join(item.repository.name, resPath);
   const extDir = path.dirname(extPath);
   if (/sample|template/.test(extDir)) {
@@ -103,7 +98,7 @@ function fetchLanguageContribution(item) {
 
 function loadLanguageContribution(filePath) {
   try {
-    const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    const data = JSON.parse(fs.readFileSync(filePath, 'utf-8').replace(/#\w+_\w+#/g, '0'));
     data.contributes = data.contributes || {};
     data.contributes.languages = data.contributes.languages || [];
     languages.push(...data.contributes.languages);
@@ -121,7 +116,6 @@ function loadLanguageContribution(filePath) {
 
 function processLanguageContribution(language) {
   const { aliases, configuration, firstLine, ...lang } = language;
-
   lang.extensions = lang.extensions || [];
   lang.filenames = lang.filenames || [];
   if (lang.filenamePatterns) {
@@ -136,16 +130,10 @@ function processLanguageContribution(language) {
     delete lang.filenamePatterns;
   }
   lang.extensions = lang.extensions
-    .filter((ext) => {
-      const isExt = ext.startsWith('.');
-      if (!isExt) {
-        lang.filenames.push(ext);
-      }
-      return isExt;
-    })
-    .map((ext) => ext.substring(1))
+    .map((ext) => ext.charAt(0) === '.' ? ext.substring(1) : ext)
     .filter((ext) => !/\*|\/|\?/.test(ext));
   lang.filenames = lang.filenames.filter((name) => !/\*|\/|\?/.test(name));
+  languages[index] = lang;
   index += 1;
   if (index === total) {
     console.log('[5/7] Mapping language contributions into file icon configuration.');
@@ -154,60 +142,29 @@ function processLanguageContribution(language) {
   }
 }
 
-const languageMap = {
-  fileExtensions: {},
-  fileNames: {},
-};
+const languageMap = {};
+languageMap.fileExtensions = {};
+languageMap.fileNames = {};
 
 function mapLanguageContribution(lang) {
   lang.extensions.forEach((ext) => {
-    let extIconName = lang.id;
-    if (remap.extensions[extIconName]) {
-      const overrideIcon = remap.extensions[extIconName];
-      if (typeof overrideIcon === 'object') {
-        Object.entries(overrideIcon).forEach(([ptn, override]) => {
-          if (ptn.startsWith('^') && ext.startsWith(ptn.substring(1))) {
-            extIconName = override;
-          }
-          if (ptn.length && ext === ptn) {
-            extIconName = override;
-          }
-        });
-      }
-    } else {
-      extIconName = iconMap.languageIds[extIconName] || extIconName;
-    }
+    const iconName = handleIconRemapping(lang.id, 'extensions', 'fileExtensions', ext);
     if (
-      !remap.deletions[`extensions:${extIconName}`] &&
-      !iconMap.fileExtensions[extIconName] &&
-      iconMap.iconDefinitions[extIconName]
+      !remap.deletions[`extensions:${lang.id}`] &&
+      !iconMap.fileExtensions[ext] &&
+      iconMap.iconDefinitions[iconName]
     ) {
-      languageMap.fileExtensions[ext] = extIconName;
+      languageMap.fileExtensions[ext] = iconName;
     }
   });
   lang.filenames.forEach((name) => {
-    let fileIconName = lang.id;
-    if (remap.filenames[fileIconName]) {
-      const overrideIcon = remap.filenames[fileIconName];
-      if (typeof overrideIcon === 'object') {
-        Object.entries(overrideIcon).forEach(([ptn, override]) => {
-          if (ptn.startsWith('^') && name.startsWith(ptn.substring(1))) {
-            fileIconName = override;
-          }
-          if (ptn.length && name === ptn) {
-            fileIconName = override;
-          }
-        });
-      }
-    } else {
-      fileIconName = iconMap.languageIds[fileIconName] || fileIconName;
-    }
+    const iconName = handleIconRemapping(lang.id, 'filenames', 'fileNames', name);
     if (
-      !remap.deletions[`filenames:${fileIconName}`] &&
-      !iconMap.fileNames[fileIconName] &&
-      iconMap.iconDefinitions[fileIconName]
+      !remap.deletions[`filenames:${lang.id}`] &&
+      !iconMap.fileNames[name] &&
+      iconMap.iconDefinitions[iconName]
     ) {
-      languageMap.fileNames[name] = fileIconName;
+      languageMap.fileNames[name] = iconName;
     }
   });
   index += 1;
@@ -225,4 +182,24 @@ function generateLanguageMap() {
   );
   console.log('[7/7] Deleting language contribution cache.');
   rimraf.sync(vsDataPath);
+}
+
+function handleIconRemapping(language, remapType, iconMapType, value) {
+  const override = remap[remapType][language];
+  if (typeof override === 'object') {
+    if (override[value]) {
+      return override[value];
+    }
+    const matchedPattern = Object.keys(override)
+      .filter(p => p.charAt(0) === '^')
+      .find(p => value.startsWith(p.substring(1)));
+    if (matchedPattern) {
+      return override[matchedPattern];
+    }
+    return override[''];
+  }
+  if (typeof override === 'string') {
+    return override;
+  }
+  return iconMap[iconMapType][value] || iconMap.languageIds[language];
 }
