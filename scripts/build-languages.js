@@ -5,7 +5,7 @@ const fs = require('fs-extra');
 const fr = require('follow-redirects');
 const glob = require('glob');
 const stringify = require('json-stable-stringify');
-const remap = require('./remap.json');
+const overrideMap = require('./language-overrides.json');
 const iconMap = require('../src/icon-map.json');
 
 const vsDataPath = path.resolve(__dirname, '..', 'data');
@@ -151,9 +151,9 @@ function mapLanguageContribution(lang) {
   lang.extensions.forEach((ext) => {
     const iconName = handleIconRemapping(lang.id, 'extensions', 'fileExtensions', ext);
     if (
-      !remap.deletions[`extensions:${lang.id}`] &&
+      !overrideMap.deletions[`extensions:${lang.id}`] &&
       !iconMap.fileExtensions[ext] &&
-      iconMap.iconDefinitions[iconName]
+      iconName && iconMap.iconDefinitions[iconName]
     ) {
       languageMap.fileExtensions[ext] = iconName;
     }
@@ -161,9 +161,9 @@ function mapLanguageContribution(lang) {
   lang.filenames.forEach((name) => {
     const iconName = handleIconRemapping(lang.id, 'filenames', 'fileNames', name);
     if (
-      !remap.deletions[`filenames:${lang.id}`] &&
+      !overrideMap.deletions[`filenames:${lang.id}`] &&
       !iconMap.fileNames[name] &&
-      iconMap.iconDefinitions[iconName]
+      iconName && iconMap.iconDefinitions[iconName]
     ) {
       languageMap.fileNames[name] = iconName;
     }
@@ -185,8 +185,8 @@ function generateLanguageMap() {
   rimraf.sync(vsDataPath);
 }
 
-function handleIconRemapping(language, remapType, iconMapType, value) {
-  const override = remap[remapType][language];
+function handleIconRemapping(language, overrideType, contributionType, value) {
+  const override = overrideMap[overrideType][language];
   if (typeof override === 'object') {
     if (override[value]) {
       return override[value];
@@ -201,5 +201,5 @@ function handleIconRemapping(language, remapType, iconMapType, value) {
   if (typeof override === 'string') {
     return override;
   }
-  return iconMap[iconMapType][value] || iconMap.languageIds[language];
+  return iconMap[contributionType][value] || iconMap.languageIds[language];
 }
