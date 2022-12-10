@@ -192,10 +192,10 @@
   },
   "fileNames": {
     ".devcontainer.json": "json",
-    ".env": "git",
+    ".env": "tune",
     ".envrc": "console",
     ".hushlogin": "console",
-    ".vscodeignore": "git",
+    ".vscodeignore": "vscode",
     "APKBUILD": "console",
     "COMMIT_EDITMSG": "git",
     "Containerfile": "docker",

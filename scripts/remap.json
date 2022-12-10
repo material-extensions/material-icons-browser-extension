@@ -3,12 +3,18 @@
     "properties": {
       "^git": "git",
       "^npm": "npm",
-      "editorconfig": "editorconfig",
-      "": "settings"
+      "editorconfig": "editorconfig"
     }
   },
   "filenames": {
-    "properties": "git",
+    "properties": {
+      "^git": "git",
+      ".env": "tune"
+    },
+    "ignore": {
+      "^npm": "npm",
+      ".vscodeignore": "vscode"
+    },
     "python": "python-misc"
   },
   "deletions": {

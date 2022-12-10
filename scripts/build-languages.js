@@ -22,8 +22,6 @@ let total;
 let items = [];
 const languages = [];
 
-console.log('[1/7] Querying Github API for official VSC language contributions.');
-
 const octokit = new api.Octokit();
 const query = {
   page: 0,
@@ -32,7 +30,10 @@ const query = {
 };
 const GITHUB_RATELIMIT = 6000;
 
-(function queryLanguageContributions() {
+console.log('[1/7] Querying Github API for official VSC language contributions.');
+queryLanguageContributions()
+
+function queryLanguageContributions() {
   try {
     octokit.request('GET /search/code', query).then(
       (res) => {
@@ -57,7 +58,7 @@ const GITHUB_RATELIMIT = 6000;
   } catch (reason) {
     throw new Error(reason);
   }
-})();
+}
 
 function fetchLanguageContribution(item) {
   const urlPath = item.html_url.replace(/\/blob\//, '/raw/');
@@ -196,7 +197,6 @@ function handleIconRemapping(language, remapType, iconMapType, value) {
     if (matchedPattern) {
       return override[matchedPattern];
     }
-    return override[''];
   }
   if (typeof override === 'string') {
     return override;
