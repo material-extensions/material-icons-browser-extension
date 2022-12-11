@@ -98,20 +98,21 @@ function fetchLanguageContribution(item) {
 }
 
 function loadLanguageContribution(filePath) {
+  let data;
   try {
-    const data = JSON.parse(fs.readFileSync(filePath, 'utf-8').replace(/#\w+_\w+#/g, '0'));
-    data.contributes = data.contributes || {};
-    data.contributes.languages = data.contributes.languages || [];
-    languages.push(...data.contributes.languages);
-    index += 1;
-    if (index === total) {
-      console.log('[4/7] Processing language contributions for VSC File Icon API compatibility.');
-      index = 0;
-      total = languages.length;
-      languages.forEach(processLanguageContribution);
-    }
+    data = JSON.parse(fs.readFileSync(filePath, 'utf-8').replace(/#\w+_\w+#/g, '0'));
   } catch (error) {
     throw new Error(`${error} (${filePath})`);
+  }
+  data.contributes = data.contributes || {};
+  data.contributes.languages = data.contributes.languages || [];
+  languages.push(...data.contributes.languages);
+  index += 1;
+  if (index === total) {
+    console.log('[4/7] Processing language contributions for VSC File Icon API compatibility.');
+    index = 0;
+    total = languages.length;
+    languages.forEach(processLanguageContribution);
   }
 }
 
