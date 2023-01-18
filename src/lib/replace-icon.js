@@ -33,8 +33,13 @@ function replaceIcon(iconEl, fileName, itemRow, provider, iconPack) {
 
   // Get file extensions.
   const fileExtensions = [];
-  for (let i = 0; i < fileName.length; i += 1) {
-    if (fileName[i] === '.') fileExtensions.push(fileName.slice(i + 1));
+  // Avoid doing an explosive combination of extensions for very long filenames
+  // (most file systems do not allow files > 255 length) with lots of `.` characters
+  // https://github.com/microsoft/vscode/issues/116199
+  if (fileName.length <= 255) {
+    for (let i = 0; i < fileName.length; i += 1) {
+      if (fileName[i] === '.') fileExtensions.push(fileName.slice(i + 1));
+    }
   }
 
   // Get icon name.
