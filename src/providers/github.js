@@ -26,10 +26,14 @@ const githubConfig = {
   getIsSubmodule: ({ icon }) => icon.getAttribute('aria-label') === 'Submodule',
   getIsSymlink: ({ icon }) => icon.getAttribute('aria-label') === 'Symlink Directory',
   replaceIcon: (svgEl, newSVG) => {
-    newSVG.style.height = '1rem';
-    newSVG.style.width = '1rem';
-    newSVG.style.verticalAlign = 'text-bottom';
-    newSVG.style.userSelect = 'none';
+    svgEl
+      .getAttributeNames()
+      .forEach(
+        (attr) =>
+          attr !== 'src' &&
+          !/^data-material-icons-extension/.test(attr) &&
+          newSVG.setAttribute(attr, svgEl.getAttribute(attr))
+      );
 
     // Instead of replacing the icon, add the new icon as a previous sibling,
     // otherwise the GitHub code view crashes when you navigate through the
