@@ -13,3 +13,13 @@ body[data-material-icons-extension-size='xl'] img[data-material-icons-extension=
 .github-material-icons-exension-hide-pseudo::before {
   display: none !important;
 }
+
+.github-material-icons-exension-hide {
+  display: none !important;
+}
+
+/* Hide the directory icons in GitHub's new code view in case they don't get
+hidden automatically (happens when a folder is expanded or collapsed) */
+.PRIVATE_TreeView-directory-icon svg {
+  display: none !important;
+}
