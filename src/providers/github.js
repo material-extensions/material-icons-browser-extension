@@ -1,5 +1,3 @@
-const HIDE_ELEMENT_CLASS = 'github-material-icons-exension-hide';
-
 const githubConfig = {
   domain: 'github.com',
   selectors: {
@@ -32,10 +30,6 @@ const githubConfig = {
     newSVG.style.width = '1rem';
     newSVG.style.verticalAlign = 'text-bottom';
     newSVG.style.userSelect = 'none';
-
-    if (!svgEl.classList.contains(HIDE_ELEMENT_CLASS)) {
-      svgEl.classList.add(HIDE_ELEMENT_CLASS);
-    }
 
     // Instead of replacing the icon, add the new icon as a previous sibling,
     // otherwise the GitHub code view crashes when you navigate through the
