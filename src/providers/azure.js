@@ -1,5 +1,5 @@
 /** The name of the class used to hide the pseudo element `:before` on Azure */
-const HIDE_PSEUDO_CLASS = 'github-material-icons-exension-hide-pseudo';
+const HIDE_PSEUDO_CLASS = 'material-icons-exension-hide-pseudo';
 
 const azureConfig = {
   domain: 'dev.azure.com',

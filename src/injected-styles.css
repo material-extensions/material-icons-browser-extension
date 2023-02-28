@@ -10,7 +10,7 @@ body[data-material-icons-extension-size='xl'] img[data-material-icons-extension=
   transform: scale(1.25);
 }
 
-.github-material-icons-exension-hide-pseudo::before {
+.material-icons-exension-hide-pseudo::before {
   display: none !important;
 }
 
