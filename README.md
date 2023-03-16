@@ -14,7 +14,7 @@
 
 ---
 
-<a href="https://github.com/PKief/vscode-material-icon-theme"><img src="https://img.shields.io/badge/last_built_with_vscode_theme-v4.24.0-blue" /></a>
+<a href="https://github.com/PKief/vscode-material-icon-theme"><img src="https://img.shields.io/badge/last_built_with_vscode_theme-v4.25.0-blue" /></a>
 
 ### About
 
