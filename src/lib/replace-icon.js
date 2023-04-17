@@ -83,33 +83,33 @@ function lookForMatch(fileName, lowerFileName, fileExtension, isDir, isSubmodule
   if (isSubmodule) return 'folder-git';
   if (isSymlink) return 'folder-symlink';
 
-  // First look in fileNames and folderNames.
-  if (iconMap.fileNames[fileName] && !isDir && !isSubmodule) return iconMap.fileNames[fileName];
-  if (iconMap.folderNames[fileName] && isDir && !isSubmodule) return iconMap.folderNames[fileName];
+  // If it's a file.
+  if (!isDir) {
+    // First look in fileNames
+    if (iconMap.fileNames[fileName]) return iconMap.fileNames[fileName];
+
+    // Then check all lowercase
+    if (iconMap.fileNames[lowerFileName]) return iconMap.fileNames[lowerFileName];
+
+    // Look for extension in fileExtensions and languageIds.
+    if (iconMap.fileExtensions[fileExtension]) return iconMap.fileExtensions[fileExtension];
+
+    // Look for filename and extension in VSCode language map.
+    if (iconMap.languageIds[fileExtension]) return iconMap.languageIds[fileExtension];
+
+    // Fallback into default file if no matches.
+    return 'file';
+  }
+
+  // Otherwise, it's a folder.
+  // First look in folderNames.
+  if (iconMap.folderNames[fileName]) return iconMap.folderNames[fileName];
 
   // Then check all lowercase.
-  if (iconMap.fileNames[lowerFileName] && !isDir && !isSubmodule)
-    return iconMap.fileNames[lowerFileName];
-  if (iconMap.folderNames[lowerFileName] && isDir && !isSubmodule)
-    return iconMap.folderNames[lowerFileName];
+  if (iconMap.folderNames[lowerFileName]) return iconMap.folderNames[lowerFileName];
 
-  // Look for extension in fileExtensions and languageIds.
-  if (iconMap.fileExtensions[fileExtension] && !isDir && !isSubmodule)
-    return iconMap.fileExtensions[fileExtension];
-  if (iconMap.languageIds[fileExtension] && !isDir && !isSubmodule)
-    return iconMap.languageIds[fileExtension];
-
-  // Look for filename and extension in VSCode language map.
-  if (languageMap.fileNames[fileName] && !isDir && !isSubmodule)
-    return languageMap.fileNames[fileName];
-  if (languageMap.fileNames[lowerFileName] && !isDir && !isSubmodule)
-    return languageMap.fileNames[lowerFileName];
-  if (languageMap.fileExtensions[fileExtension] && !isDir)
-    return languageMap.fileExtensions[fileExtension];
-
-  // Fallback into default file or folder if no matches.
-  if (isDir) return 'folder';
-  return 'file';
+  // Fallback into default folder if no matches.
+  return 'folder';
 }
 
 /**
