@@ -101,20 +101,15 @@ function lookForMatch(fileName, lowerFileName, fileExtensions, isDir, isSubmodul
 
     // Look for extension in fileExtensions and languageIds.
     for (const ext of fileExtensions) {
-      if (iconMap.fileExtensions[ext])
-        return iconMap.fileExtensions[ext];
-      if (iconMap.languageIds[ext])
-        return iconMap.languageIds[ext];
+      if (iconMap.fileExtensions[ext]) return iconMap.fileExtensions[ext];
+      if (iconMap.languageIds[ext]) return iconMap.languageIds[ext];
     }
 
     // Look for filename and extension in VSCode language map.
-    if (languageMap.fileNames[fileName] &&)
-      return languageMap.fileNames[fileName];
-    if (languageMap.fileNames[lowerFileName])
-      return languageMap.fileNames[lowerFileName];
+    if (languageMap.fileNames[fileName]) return languageMap.fileNames[fileName];
+    if (languageMap.fileNames[lowerFileName]) return languageMap.fileNames[lowerFileName];
     for (const ext of fileExtensions) {
-      if (languageMap.fileExtensions[ext])
-        return languageMap.fileExtensions[ext];
+      if (languageMap.fileExtensions[ext]) return languageMap.fileExtensions[ext];
     }
 
     // Fallback into default file if no matches.
@@ -127,7 +122,6 @@ function lookForMatch(fileName, lowerFileName, fileExtensions, isDir, isSubmodul
 
   // Then check all lowercase.
   if (iconMap.folderNames[lowerFileName]) return iconMap.folderNames[lowerFileName];
-
 
   // Fallback into default folder if no matches.
   return 'folder';
@@ -150,8 +144,7 @@ function lookForLightMatch(iconName, fileName, fileExtensions, isDir) {
 
   // Look for extension in fileExtensions and languageIds.
   for (const ext of fileExtensions) {
-    if (iconMap.light.fileExtensions[ext] && !isDir)
-      return iconMap.light.fileExtensions[ext];
+    if (iconMap.light.fileExtensions[ext] && !isDir) return iconMap.light.fileExtensions[ext];
   }
 
   return iconName;
