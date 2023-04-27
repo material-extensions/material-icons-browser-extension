@@ -162,8 +162,13 @@ function lookForIconPackMatch(iconPack, lowerFileName) {
   if (!iconPack) return null;
   switch (iconPack) {
     case 'angular':
+      if (iconsList[`folder-angular-${lowerFileName}.svg`])
+        return `folder-angular-${lowerFileName}`;
+      break;
     case 'angular_ngrx':
-      if (iconsList[`folder-react-${lowerFileName}.svg`]) return `folder-ngrx-${lowerFileName}`;
+      if (iconsList[`folder-ngrx-${lowerFileName}.svg`]) return `folder-ngrx-${lowerFileName}`;
+      if (iconsList[`folder-angular-${lowerFileName}.svg`])
+        return `folder-angular-${lowerFileName}`;
       break;
     case 'react':
     case 'react_redux':
