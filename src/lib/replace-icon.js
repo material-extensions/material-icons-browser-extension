@@ -31,14 +31,22 @@ function replaceIcon(iconEl, fileName, itemRow, provider, iconPack) {
   const isSymlink = provider.getIsSymlink({ row: itemRow, icon: iconEl });
   const lowerFileName = fileName.toLowerCase();
 
-  // Get file extension.
-  const fileExtension = fileName.match(/.*?[.](?<ext>xml.dist|xml.dist.sample|yml.dist|\w+)$/)?.[1];
+  // Get file extensions.
+  const fileExtensions = [];
+  // Avoid doing an explosive combination of extensions for very long filenames
+  // (most file systems do not allow files > 255 length) with lots of `.` characters
+  // https://github.com/microsoft/vscode/issues/116199
+  if (fileName.length <= 255) {
+    for (let i = 0; i < fileName.length; i += 1) {
+      if (fileName[i] === '.') fileExtensions.push(fileName.slice(i + 1));
+    }
+  }
 
   // Get icon name.
   let iconName = lookForMatch(
     fileName,
     lowerFileName,
-    fileExtension,
+    fileExtensions,
     isDir,
     isSubmodule,
     isSymlink
@@ -46,7 +54,7 @@ function replaceIcon(iconEl, fileName, itemRow, provider, iconPack) {
 
   const isLightTheme = provider.getIsLightTheme();
   if (isLightTheme) {
-    iconName = lookForLightMatch(iconName, fileName, fileExtension, isDir); // returns icon name if found for light mode or undefined.
+    iconName = lookForLightMatch(iconName, fileName, fileExtensions, isDir); // returns icon name if found for light mode or undefined.
   }
 
   replaceElementWithIcon(iconEl, iconName, fileName, iconPack, provider);
@@ -73,13 +81,13 @@ export function replaceElementWithIcon(iconEl, iconName, fileName, iconPack, pro
  * @since 1.0.0
  * @param {string} fileName File name.
  * @param {string} lowerFileName Lowercase file name.
- * @param {string} fileExtension File extension.
+ * @param {string[]} fileExtensions File extensions.
  * @param {boolean} isDir Check if directory type.
  * @param {boolean} isSubmodule Check if submodule type.
  * @param {boolean} isSymlink Check if symlink
  * @returns {string} The matched icon name.
  */
-function lookForMatch(fileName, lowerFileName, fileExtension, isDir, isSubmodule, isSymlink) {
+function lookForMatch(fileName, lowerFileName, fileExtensions, isDir, isSubmodule, isSymlink) {
   if (isSubmodule) return 'folder-git';
   if (isSymlink) return 'folder-symlink';
 
@@ -92,10 +100,22 @@ function lookForMatch(fileName, lowerFileName, fileExtension, isDir, isSubmodule
     if (iconMap.fileNames[lowerFileName]) return iconMap.fileNames[lowerFileName];
 
     // Look for extension in fileExtensions and languageIds.
-    if (iconMap.fileExtensions[fileExtension]) return iconMap.fileExtensions[fileExtension];
+    for (const ext of fileExtensions) {
+      if (iconMap.fileExtensions[ext])
+        return iconMap.fileExtensions[ext];
+      if (iconMap.languageIds[ext])
+        return iconMap.languageIds[ext];
+    }
 
     // Look for filename and extension in VSCode language map.
-    if (iconMap.languageIds[fileExtension]) return iconMap.languageIds[fileExtension];
+    if (languageMap.fileNames[fileName] &&)
+      return languageMap.fileNames[fileName];
+    if (languageMap.fileNames[lowerFileName])
+      return languageMap.fileNames[lowerFileName];
+    for (const ext of fileExtensions) {
+      if (languageMap.fileExtensions[ext])
+        return languageMap.fileExtensions[ext];
+    }
 
     // Fallback into default file if no matches.
     return 'file';
@@ -108,6 +128,7 @@ function lookForMatch(fileName, lowerFileName, fileExtension, isDir, isSubmodule
   // Then check all lowercase.
   if (iconMap.folderNames[lowerFileName]) return iconMap.folderNames[lowerFileName];
 
+
   // Fallback into default folder if no matches.
   return 'folder';
 }
@@ -118,18 +139,20 @@ function lookForMatch(fileName, lowerFileName, fileExtension, isDir, isSubmodule
  * @since 1.4.0
  * @param {string} iconName Icon name.
  * @param {string} fileName File name.
- * @param {string} fileExtension File extension.
+ * @param {string[]} fileExtensions File extension.
  * @param {boolean} isDir Check if directory or file type.
  * @returns {string} The matched icon name.
  */
-function lookForLightMatch(iconName, fileName, fileExtension, isDir) {
+function lookForLightMatch(iconName, fileName, fileExtensions, isDir) {
   // First look in fileNames and folderNames.
   if (iconMap.light.fileNames[fileName] && !isDir) return iconMap.light.fileNames[fileName];
   if (iconMap.light.folderNames[fileName] && isDir) return iconMap.light.folderNames[fileName];
 
   // Look for extension in fileExtensions and languageIds.
-  if (iconMap.light.fileExtensions[fileExtension] && !isDir)
-    return iconMap.light.fileExtensions[fileExtension];
+  for (const ext of fileExtensions) {
+    if (iconMap.light.fileExtensions[ext] && !isDir)
+      return iconMap.light.fileExtensions[ext];
+  }
 
   return iconName;
 }

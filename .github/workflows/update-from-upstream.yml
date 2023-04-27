@@ -24,6 +24,8 @@ jobs:
 
       - name: Attempt update
         if: steps.upstream.outputs.release_tag != steps.upstream.outputs.current_tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm ci && npm run update
 
       - name: Get package version

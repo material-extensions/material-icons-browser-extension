@@ -3,7 +3,6 @@
  */
 const path = require('path');
 const fs = require('fs-extra');
-const rimraf = require('rimraf');
 const simpleGit = require('simple-git');
 const { execSync } = require('child_process');
 
@@ -25,8 +24,8 @@ const distIconsExecOptions = {
 };
 
 async function main() {
-  rimraf.sync(vsExtPath);
-  rimraf.sync(destSVGPath);
+  await fs.remove(vsExtPath);
+  await fs.remove(destSVGPath);
   await fs.ensureDir(destSVGPath);
 
   console.log('[1/7] Cloning PKief/vscode-material-icon-theme into temporary cache.');
@@ -42,7 +41,7 @@ async function main() {
   await upstreamGit.checkout(commit, ['--force']);
 
   console.log('[2/7] Terminate Git repository in temporary cache.');
-  rimraf.sync(path.resolve(vsExtPath, '.git'));
+  await fs.remove(path.resolve(vsExtPath, '.git'));
 
   console.log('[3/7] Install NPM dependencies for VSC extension.');
   execSync(`npm install --ignore-scripts`, vsExtExecOptions);
@@ -62,7 +61,7 @@ async function main() {
     path.resolve(srcPath, 'icon-map.json')
   );
 
-  rimraf.sync(vsExtPath);
+  await fs.remove(vsExtPath);
 }
 
 main();
