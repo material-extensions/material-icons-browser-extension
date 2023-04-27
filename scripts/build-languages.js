@@ -15,11 +15,13 @@ const contributions = [];
 const languages = [];
 
 const resultsPerPage = 100; // max 100
-const octokit = new api.Octokit();
+const octokit = new api.Octokit({
+  auth: process.env.GITHUB_TOKEN,
+});
 const query = {
   page: 0,
   per_page: resultsPerPage,
-  q: 'contributes languages filename:package.json repo:microsoft/vscode'
+  q: 'contributes languages filename:package.json repo:microsoft/vscode',
 };
 const GITHUB_RATELIMIT = 6000;
 
@@ -29,7 +31,7 @@ async function main() {
   await fs.remove(path.resolve(srcPath, 'language-map.json'));
 
   console.log('[1/7] Querying Github API for official VSC language contributions.');
-  queryLanguageContributions()
+  queryLanguageContributions();
 }
 
 main();
@@ -114,14 +116,14 @@ function processLanguageContribution(contribution) {
     });
   }
   extensions = extensions
-    .map((ext) => ext.charAt(0) === '.' ? ext.substring(1) : ext)
+    .map((ext) => (ext.charAt(0) === '.' ? ext.substring(1) : ext))
     .filter((ext) => !/\*|\/|\?/.test(ext));
   filenames = filenames.filter((name) => !/\*|\/|\?/.test(name));
   if (!filenames.length && !extensions.length) {
     total -= 1;
     return;
   }
-  const language = languages.find(lang => lang.id === id);
+  const language = languages.find((lang) => lang.id === id);
   if (language) {
     language.filenames.push(...filenames);
     language.extensions.push(...extensions);
@@ -145,10 +147,7 @@ function mapLanguageContribution(lang) {
   const langIcon = iconMap.languageIds[lang.id];
   lang.extensions.forEach((ext) => {
     const iconName = iconMap.fileExtensions[ext] || langIcon;
-    if (
-      !iconMap.fileExtensions[ext] &&
-      iconName && iconMap.iconDefinitions[iconName]
-    ) {
+    if (!iconMap.fileExtensions[ext] && iconName && iconMap.iconDefinitions[iconName]) {
       languageMap.fileExtensions[ext] = iconName;
     }
   });
@@ -157,7 +156,8 @@ function mapLanguageContribution(lang) {
     if (
       !iconMap.fileNames[name] &&
       !(name.startsWith('.') && iconMap.fileExtensions[name.substring(1)]) &&
-      iconName && iconMap.iconDefinitions[iconName]
+      iconName &&
+      iconMap.iconDefinitions[iconName]
     ) {
       languageMap.fileNames[name] = iconName;
     }
