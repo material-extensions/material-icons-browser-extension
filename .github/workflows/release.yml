@@ -33,6 +33,8 @@ jobs:
 
       - name: Attempt update
         if: ${{ github.event.inputs.onlyUpload == 'not' || github.event.inputs.onlyUpload == 'none' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run release ${{ github.event.inputs.type }}
 
       - name: Get package version
