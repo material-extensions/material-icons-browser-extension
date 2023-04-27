@@ -1,6 +1,5 @@
 /** The name of the class used to hide the pseudo element `:before` on Azure */
-const HIDE_PSEUDO_CLASS = 'hide-pseudo';
-let hasAddedAzureStyle = false;
+const HIDE_PSEUDO_CLASS = 'material-icons-exension-hide-pseudo';
 
 const azureConfig = {
   domain: 'dev.azure.com',
@@ -52,16 +51,6 @@ const azureConfig = {
 
     const observer = new MutationObserver(mutationCallback);
     observer.observe(row, { attributes: true, childList: true, subtree: true });
-
-    if (!hasAddedAzureStyle) {
-      // Azure requires the icon element to be left on the page so add a style rule to hide its icon
-      document.styleSheets[0].insertRule(
-        `.${HIDE_PSEUDO_CLASS}::before { display: none !important }`,
-        0
-      );
-      // but only add the style once
-      hasAddedAzureStyle = true;
-    }
   },
 };
 

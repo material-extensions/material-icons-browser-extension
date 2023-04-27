@@ -9,3 +9,12 @@ body[data-material-icons-extension-size='lg'] img[data-material-icons-extension=
 body[data-material-icons-extension-size='xl'] img[data-material-icons-extension='icon'] {
   transform: scale(1.25);
 }
+
+.material-icons-exension-hide-pseudo::before {
+  display: none !important;
+}
+
+/* Hide any svg following a custom icon from this extension */
+img[data-material-icons-extension='icon'] + svg {
+  display: none !important;
+}
