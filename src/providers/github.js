@@ -41,7 +41,13 @@ const githubConfig = {
     const prevEl = svgEl.previousElementSibling;
     if (prevEl?.getAttribute('data-material-icons-extension') === 'icon') {
       svgEl.parentNode.replaceChild(newSVG, prevEl);
-    } else {
+    }
+    // If the icon to replace is an icon from this extension, replace it with the new icon
+    else if (svgEl.getAttribute('data-material-icons-extension') === 'icon') {
+      svgEl.parentNode.replaceChild(newSVG, svgEl);
+    }
+    // If neither of the above, prepend the new icon in front of the original icon
+    else {
       svgEl.parentNode.insertBefore(newSVG, svgEl);
     }
   },
