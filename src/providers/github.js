@@ -35,20 +35,21 @@ const githubConfig = {
           newSVG.setAttribute(attr, svgEl.getAttribute(attr))
       );
 
-    // Instead of replacing the icon, add the new icon as a previous sibling,
-    // otherwise the GitHub code view crashes when you navigate through the
-    // tree view
     const prevEl = svgEl.previousElementSibling;
     if (prevEl?.getAttribute('data-material-icons-extension') === 'icon') {
-      svgEl.parentNode.replaceChild(newSVG, prevEl);
+      newSVG.replaceWith(prevEl);
     }
     // If the icon to replace is an icon from this extension, replace it with the new icon
     else if (svgEl.getAttribute('data-material-icons-extension') === 'icon') {
-      svgEl.parentNode.replaceChild(newSVG, svgEl);
+      newSVG.replaceWith(svgEl);
     }
-    // If neither of the above, prepend the new icon in front of the original icon
+    // If neither of the above, prepend the new icon in front of the original icon.
+    // If we remove the icon, GitHub code view crashes when you navigate through the
+    // tree view. Instead, we just hide it via `style` attribute (not CSS class)
+    // https://github.com/Claudiohbsantos/github-material-icons-extension/pull/66
     else {
-      svgEl.parentNode.insertBefore(newSVG, svgEl);
+      svgEl.style.display = 'none';
+      svgEl.before(newSVG);
     }
   },
   onAdd: () => {},

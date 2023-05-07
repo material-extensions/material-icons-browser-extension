@@ -13,8 +13,3 @@ body[data-material-icons-extension-size='xl'] img[data-material-icons-extension=
 .material-icons-exension-hide-pseudo::before {
   display: none !important;
 }
-
-/* Hide any svg following a custom icon from this extension */
-img[data-material-icons-extension='icon'] + svg {
-  display: none !important;
-}
