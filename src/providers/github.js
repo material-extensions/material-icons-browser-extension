@@ -41,7 +41,7 @@ const githubConfig = {
     }
     // If the icon to replace is an icon from this extension, replace it with the new icon
     else if (svgEl.getAttribute('data-material-icons-extension') === 'icon') {
-      newSVG.replaceWith(svgEl);
+      svgEl.replaceWith(newSVG);
     }
     // If neither of the above, prepend the new icon in front of the original icon.
     // If we remove the icon, GitHub code view crashes when you navigate through the
