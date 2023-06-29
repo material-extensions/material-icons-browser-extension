@@ -30,7 +30,7 @@ body {
 }
 
 #logo {
-  margin-right:auto;
+  margin-right: auto;
   height: 24px;
   width: 24px;
 }
@@ -43,15 +43,15 @@ body {
 }
 
 #options-btn {
-  margin-left:auto;
-  width:24;
-  height:24;
-  filter:grayscale(1);
+  margin-left: auto;
+  width: 24;
+  height: 24;
+  filter: grayscale(1);
 }
 
 #options-btn:hover {
   cursor: pointer;
-  filter:brightness(0.8);
+  filter: brightness(0.8);
 }
 
 #domain {
@@ -72,7 +72,7 @@ body {
   color: maroon;
   margin: 2rem 0;
   display: none;
-  flex:1;
+  flex: 1;
 }
 
 #options-link {
@@ -81,7 +81,7 @@ body {
 }
 
 #options-link:hover {
-  filter:brightness(1.2)
+  filter: brightness(1.2);
 }
 
 label {
