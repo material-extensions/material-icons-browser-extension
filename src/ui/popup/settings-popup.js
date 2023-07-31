@@ -55,9 +55,9 @@ function displayPageNotSupported(domain) {
 
 function displayAllDisabledNote() {
   getConfig('extEnabled', 'default').then((enabled) => {
-    if (enabled) return
-    document.getElementById('default-disabled-note').style.display = 'block'
-    document.getElementById('domain-settings').style.display = 'none'
+    if (enabled) return;
+    document.getElementById('default-disabled-note').style.display = 'block';
+    document.getElementById('domain-settings').style.display = 'none';
     document
       .getElementById('options-link')
       ?.addEventListener('click', () => chrome.runtime.openOptionsPage());

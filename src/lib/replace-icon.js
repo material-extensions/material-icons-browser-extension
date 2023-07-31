@@ -3,6 +3,18 @@ import iconMap from '../icon-map.json';
 import languageMap from '../language-map.json';
 
 /**
+ * A helper function to check if an object has a key value, without including prooerties from the prototype chain.
+ *
+ * @see https://eslint.org/docs/latest/rules/no-prototype-builtins
+ * @param {object} obj An object to check for a key.
+ * @param {string} key A string represeing a key to find in the object.
+ * @returns {boolean} Whether the object contains the key or not.
+ */
+function objectHas(obj, key) {
+  return Object.prototype.hasOwnProperty.call(obj, key);
+}
+
+/**
  * Replace file/folder icons.
  *
  * @param {HTMLElement} itemRow Item Row.
@@ -94,22 +106,23 @@ function lookForMatch(fileName, lowerFileName, fileExtensions, isDir, isSubmodul
   // If it's a file.
   if (!isDir) {
     // First look in fileNames
-    if (iconMap.fileNames[fileName]) return iconMap.fileNames[fileName];
+    if (objectHas(iconMap.fileNames, fileName)) return iconMap.fileNames[fileName];
 
     // Then check all lowercase
-    if (iconMap.fileNames[lowerFileName]) return iconMap.fileNames[lowerFileName];
+    if (objectHas(iconMap.fileNames, lowerFileName)) return iconMap.fileNames[lowerFileName];
 
     // Look for extension in fileExtensions and languageIds.
     for (const ext of fileExtensions) {
-      if (iconMap.fileExtensions[ext]) return iconMap.fileExtensions[ext];
-      if (iconMap.languageIds[ext]) return iconMap.languageIds[ext];
+      if (objectHas(iconMap.fileExtensions, ext)) return iconMap.fileExtensions[ext];
+      if (objectHas(iconMap.languageIds, ext)) return iconMap.languageIds[ext];
     }
 
     // Look for filename and extension in VSCode language map.
-    if (languageMap.fileNames[fileName]) return languageMap.fileNames[fileName];
-    if (languageMap.fileNames[lowerFileName]) return languageMap.fileNames[lowerFileName];
+    if (objectHas(languageMap.fileNames, fileName)) return languageMap.fileNames[fileName];
+    if (objectHas(languageMap.fileNames, lowerFileName))
+      return languageMap.fileNames[lowerFileName];
     for (const ext of fileExtensions) {
-      if (languageMap.fileExtensions[ext]) return languageMap.fileExtensions[ext];
+      if (objectHas(languageMap.fileExtensions, ext)) return languageMap.fileExtensions[ext];
     }
 
     // Fallback into default file if no matches.
@@ -118,10 +131,10 @@ function lookForMatch(fileName, lowerFileName, fileExtensions, isDir, isSubmodul
 
   // Otherwise, it's a folder.
   // First look in folderNames.
-  if (iconMap.folderNames[fileName]) return iconMap.folderNames[fileName];
+  if (objectHas(iconMap.folderNames, fileName)) return iconMap.folderNames[fileName];
 
   // Then check all lowercase.
-  if (iconMap.folderNames[lowerFileName]) return iconMap.folderNames[lowerFileName];
+  if (objectHas(iconMap.folderNames, lowerFileName)) return iconMap.folderNames[lowerFileName];
 
   // Fallback into default folder if no matches.
   return 'folder';
@@ -162,29 +175,30 @@ function lookForIconPackMatch(iconPack, lowerFileName) {
   if (!iconPack) return null;
   switch (iconPack) {
     case 'angular':
-      if (iconsList[`folder-angular-${lowerFileName}.svg`])
+      if (objectHas(iconsList, `folder-angular-${lowerFileName}.svg`))
         return `folder-angular-${lowerFileName}`;
       break;
     case 'angular_ngrx':
-      if (iconsList[`folder-ngrx-${lowerFileName}.svg`]) return `folder-ngrx-${lowerFileName}`;
-      if (iconsList[`folder-angular-${lowerFileName}.svg`])
+      if (objectHas(iconsList, `folder-ngrx-${lowerFileName}.svg`))
+        return `folder-ngrx-${lowerFileName}`;
+      if (objectHas(iconsList, `folder-angular-${lowerFileName}.svg`))
         return `folder-angular-${lowerFileName}`;
       break;
     case 'react':
     case 'react_redux':
-      if (iconsList[`folder-react-${lowerFileName}.svg`]) {
+      if (objectHas(iconsList, `folder-react-${lowerFileName}.svg`)) {
         return `folder-react-${lowerFileName}`;
       }
-      if (iconsList[`folder-redux-${lowerFileName}.svg`]) {
+      if (objectHas(iconsList, `folder-redux-${lowerFileName}.svg`)) {
         return `folder-redux-${lowerFileName}`;
       }
       break;
     case 'vue':
     case 'vue_vuex':
-      if (iconsList[`folder-vuex-${lowerFileName}.svg`]) {
+      if (objectHas(iconsList, `folder-vuex-${lowerFileName}.svg`)) {
         return `folder-vuex-${lowerFileName}`;
       }
-      if (iconsList[`folder-vue-${lowerFileName}.svg`]) {
+      if (objectHas(iconsList, `folder-vue-${lowerFileName}.svg`)) {
         return `folder-vue-${lowerFileName}`;
       }
       if (lowerFileName === 'nuxt') {

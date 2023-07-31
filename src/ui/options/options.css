@@ -35,7 +35,7 @@ body {
   padding: 0 1rem;
   box-sizing: border-box;
   border-radius: 10px;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   margin: 2rem;
   max-width: 800px;
 }
@@ -48,8 +48,8 @@ body {
 }
 
 #reset {
-  color:#5c6068;
-  padding:0.3rem 1rem;
+  color: #5c6068;
+  padding: 0.3rem 1rem;
   outline: transparent solid 2px;
   outline-offset: 2px;
   transition: 200ms all;
@@ -70,28 +70,29 @@ body {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap:0.5rem;
+  gap: 0.5rem;
   width: 100%;
   padding: 0 1rem;
-  border-top:1px solid #cbd5e0;
+  border-top: 1px solid #cbd5e0;
 }
 
 .domain.disabled {
-  background-color:rgb(177, 177, 177);
-  color:rgb(78, 78, 78)
+  background-color: rgb(177, 177, 177);
+  color: rgb(78, 78, 78);
 }
 
 .domain:hover {
-  background-color:rgb(232, 239, 250);
+  background-color: rgb(232, 239, 250);
 }
 
-.domain.disabled, .domain.disabled:hover {
-  background-color:rgb(177, 177, 177);
-  color:rgb(78, 78, 78)
+.domain.disabled,
+.domain.disabled:hover {
+  background-color: rgb(177, 177, 177);
+  color: rgb(78, 78, 78);
 }
 
 .domain h3 {
-  margin-right:auto;
+  margin-right: auto;
 }
 
 .domain:last-child {
@@ -108,18 +109,16 @@ body {
 }
 
 #row-default {
-  background-color:#cad9f7;
+  background-color: #cad9f7;
 }
 
-
 label {
-  color:#5c6068;
+  color: #5c6068;
   font-size: 0.9rem;
 }
 
-
 select {
-  padding:0.3rem 1rem;
+  padding: 0.3rem 1rem;
   outline: transparent solid 2px;
   outline-offset: 2px;
   appearance: none;
@@ -130,7 +129,7 @@ select {
   color: #2d3748;
   border-color: transparent;
   background-color: transparent;
-  min-width:100px;
+  min-width: 100px;
   text-align: end;
 }
 

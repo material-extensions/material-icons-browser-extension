@@ -58,7 +58,14 @@ function src(distPath) {
 
   const copyExtensionLogos = fs.copy(path.resolve(srcPath, 'extensionIcons'), distPath);
 
-  return Promise.all([copyExtensionLogos, copyOptions, copyPopup, copyStyles, copyIcons, bundleAll]);
+  return Promise.all([
+    copyExtensionLogos,
+    copyOptions,
+    copyPopup,
+    copyStyles,
+    copyIcons,
+    bundleAll,
+  ]);
 }
 
 function buildManifest(distPath, manifestName) {
