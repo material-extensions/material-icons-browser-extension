@@ -1,6 +1,6 @@
 {
   "name": "github-material-icons-extension",
-  "version": "1.8.9",
+  "version": "1.8.10",
   "description": "Browser Extension that enhances the GitHub file browser with material icons.",
   "main": "src/main.js",
   "author": "Claudio Santos",
