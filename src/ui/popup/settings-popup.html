@@ -27,54 +27,83 @@
         </div>
 
         <div id="domain-settings">
-          <div class="checkbox-wrapper">
-            <label for="enabled">Enable icons</label>
-            <input type="checkbox" id="enabled" />
-          </div>
-
-          <label for="icon-size">Icon Size</label>
-          <div class="select-wrapper">
-            <select name="icon-size" id="icon-size">
-              <option value="sm">Small</option>
-              <option value="md">Medium</option>
-              <option value="lg">Large</option>
-              <option value="xl">Extra Large</option>
-            </select>
-            <!-- down arrow -->
-            <div class="select-icon-wrapper">
-              <svg
-                viewBox="0 0 24 24"
-                role="presentation"
-                class="select-icon"
-                focusable="false"
-                aria-hidden="true"
-              >
-                <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
-              </svg>
+          <div id="enable-wrapper">
+            <div class="checkbox-wrapper">
+              <label for="enabled">Enable icons</label>
+              <input type="checkbox" id="enabled" />
             </div>
           </div>
 
-          <label for="icon-pack">Icon Pack</label>
-          <div class="select-wrapper">
-            <select name="icon-pack" id="icon-pack">
-              <option value="angular">angular</option>
-              <option value="react">react</option>
-              <option value="vue">vue</option>
-              <option value="nest">nest</option>
-            </select>
-            <!-- down arrow -->
-            <div class="select-icon-wrapper">
-              <svg
-                viewBox="0 0 24 24"
-                role="presentation"
-                class="select-icon"
-                focusable="false"
-                aria-hidden="true"
-              >
-                <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
-              </svg>
+          <div id="icon-size-wrapper">
+            <label for="icon-size">Icon Size</label>
+            <div class="select-wrapper">
+              <select name="icon-size" id="icon-size">
+                <option value="sm">Small</option>
+                <option value="md">Medium</option>
+                <option value="lg">Large</option>
+                <option value="xl">Extra Large</option>
+              </select>
+              <!-- down arrow -->
+              <div class="select-icon-wrapper">
+                <svg
+                  viewBox="0 0 24 24"
+                  role="presentation"
+                  class="select-icon"
+                  focusable="false"
+                  aria-hidden="true"
+                >
+                  <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+                </svg>
+              </div>
             </div>
           </div>
+
+          <div id="icon-pack-wrapper">
+            <label for="icon-pack">Icon Pack</label>
+            <div class="select-wrapper">
+              <select name="icon-pack" id="icon-pack">
+                <option value="angular">angular</option>
+                <option value="react">react</option>
+                <option value="vue">vue</option>
+                <option value="nest">nest</option>
+              </select>
+              <!-- down arrow -->
+              <div class="select-icon-wrapper">
+                <svg
+                  viewBox="0 0 24 24"
+                  role="presentation"
+                  class="select-icon"
+                  focusable="false"
+                  aria-hidden="true"
+                >
+                  <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div id="provider-wrapper">
+            <label for="provider">Provider Configuration</label>
+            <div class="select-wrapper">
+              <select name="provider" id="provider"></select>
+              <!-- down arrow -->
+              <div class="select-icon-wrapper">
+                <svg
+                  viewBox="0 0 24 24"
+                  role="presentation"
+                  class="select-icon"
+                  focusable="false"
+                  aria-hidden="true"
+                >
+                  <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" id="add-provider">
+            <span>Add custom provider</span>
+          </button>
         </div>
 
         <div id="footer">

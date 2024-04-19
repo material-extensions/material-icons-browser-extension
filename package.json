@@ -18,7 +18,8 @@
     "npm": "^8.0.0"
   },
   "dependencies": {
-    "selector-observer": "2.1.6"
+    "selector-observer": "2.1.6",
+    "webextension-polyfill": "0.11.0"
   },
   "devDependencies": {
     "@octokit/core": "3.5.1",
