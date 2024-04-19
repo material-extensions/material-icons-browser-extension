@@ -56,4 +56,5 @@ export const addGitProvider = (name, handler) => {
   handler = typeof handler === 'string' ? providers[handler] : handler;
 
   providerConfig[name] = handler();
+  providerConfig[name].isCustom = true;
 };
