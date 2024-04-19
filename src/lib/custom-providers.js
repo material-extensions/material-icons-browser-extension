@@ -1,8 +1,7 @@
 export const getCustomProviders = () => chrome.storage.sync.get('customProviders');
-export const addCustomProvider = async (name, handler) => {
-  const customProviders = await getCustomProviders();
+export const addCustomProvider = (name, handler) =>
+  getCustomProviders().then((customProviders) => {
+    customProviders[name] = handler;
 
-  customProviders[name] = handler;
-
-  await chrome.storage.sync.set({ customProviders });
-};
+    return chrome.storage.sync.set({ customProviders });
+  });
