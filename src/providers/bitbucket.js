@@ -12,6 +12,8 @@ export default function bitbucket() {
       row: 'table[data-qa="repository-directory"] td:first-child a:first-child:not([aria-label="Parent directory,"])',
       filename: 'span',
       icon: 'svg',
+      // Element by which to detect if the tested domain is bitbucket.
+      detect: 'body[data-aui-version] > #root',
     },
     canSelfHost: true,
     getIsLightTheme: () => true, // No dark mode available for bitbucket currently

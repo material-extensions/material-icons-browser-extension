@@ -18,6 +18,8 @@ export default function azure() {
       row: 'table.bolt-table tbody > a',
       filename: 'table.bolt-table tbody > a > td[aria-colindex="1"] span.text-ellipsis',
       icon: 'td[aria-colindex="1"] span.icon-margin',
+      // Element by which to detect if the tested domain is azure.
+      detect: 'body > input[type=hidden][name=__RequestVerificationToken]',
     },
     canSelfHost: false,
     getIsLightTheme: () =>

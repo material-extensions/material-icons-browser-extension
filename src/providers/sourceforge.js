@@ -14,6 +14,8 @@ export default function sourceforge() {
       filename: 'th[headers="files_name_h"], td:first-child > a.icon',
       // The iconfont icon not including the delete button icon in the file view header
       icon: 'th[headers="files_name_h"] > a, a.icon > i.fa',
+      // Element by which to detect if the tested domain is sourceforge.
+      detect: null,
     },
     canSelfHost: false,
     getIsLightTheme: () => true, // There appears to be no dark theme available for sourceforge.

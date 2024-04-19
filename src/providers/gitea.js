@@ -11,6 +11,8 @@ export default function gitea() {
       row: 'tr.ready.entry',
       filename: 'td.name.four.wide > span.truncate > a',
       icon: 'td.name.four.wide > span.truncate > svg',
+      // Element by which to detect if the tested domain is gitea.
+      detect: 'body > .full.height > .page-content[role=main]',
     },
     canSelfHost: true,
     getIsLightTheme: () => false,

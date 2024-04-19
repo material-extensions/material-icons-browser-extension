@@ -23,6 +23,8 @@ export default function github() {
         .octicon-file-directory-open-fill,
         .octicon-file-submodule,
         .react-directory-filename-column > svg`,
+      // Element by which to detect if the tested domain is github.
+      detect: 'body > div[data-turbo-body]',
     },
     canSelfHost: true,
     getIsLightTheme: () =>

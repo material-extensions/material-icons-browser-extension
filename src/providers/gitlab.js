@@ -15,6 +15,8 @@ export default function gitlab() {
         'td.tree-item-file-name, .file-header-content .file-title-name, .file-header-content .gl-link',
       // Any icon not contained in a button
       icon: '.tree-item svg, .file-header-content svg:not(.gl-button-icon)',
+      // Element by which to detect if the tested domain is gitlab.
+      detect: 'body.page-initialized[data-page]',
     },
     canSelfHost: true,
     getIsLightTheme: () => !document.querySelector('body').classList.contains('gl-dark'),

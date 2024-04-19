@@ -14,6 +14,8 @@ export default function gitee() {
       filename: '.tree-list-item > a, .tree-item-submodule-name a, span.file_name',
       // The iconfont icon not including the delete button icon in the file view header
       icon: 'i.iconfont:not(.icon-delete)',
+      // Element by which to detect if the tested domain is gitee.
+      detect: null,
     },
     canSelfHost: false,
     getIsLightTheme: () => true, // There appears to be no dark theme available for gitee.
