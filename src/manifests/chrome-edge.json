@@ -11,7 +11,8 @@
         "*://gitea.com/*",
         "*://gitlab.com/*",
         "*://gitee.com/*",
-        "*://sourceforge.net/*"
+        "*://sourceforge.net/*",
+        "*://*/*"
       ]
     }
   ],
