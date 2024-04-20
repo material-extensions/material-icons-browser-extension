@@ -22,6 +22,7 @@ export default function azure() {
       detect: 'body > input[type=hidden][name=__RequestVerificationToken]',
     },
     canSelfHost: false,
+    isCustom: false,
     getIsLightTheme: () =>
       document.defaultView.getComputedStyle(document.body).getPropertyValue('color') ===
       'rgba(0, 0, 0, 0.9)', // TODO: There is probably a better way to determine whether Azure is in light mode

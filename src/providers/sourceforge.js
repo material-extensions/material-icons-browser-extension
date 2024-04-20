@@ -18,6 +18,7 @@ export default function sourceforge() {
       detect: null,
     },
     canSelfHost: false,
+    isCustom: false,
     getIsLightTheme: () => true, // There appears to be no dark theme available for sourceforge.
     getIsDirectory: ({ row, icon }) => {
       if (icon.nodeName === 'I') {

@@ -18,6 +18,7 @@ export default function gitee() {
       detect: null,
     },
     canSelfHost: false,
+    isCustom: false,
     getIsLightTheme: () => true, // There appears to be no dark theme available for gitee.
     getIsDirectory: ({ icon }) => icon.classList.contains('icon-folders'),
     getIsSubmodule: ({ icon }) => icon.classList.contains('icon-submodule'),

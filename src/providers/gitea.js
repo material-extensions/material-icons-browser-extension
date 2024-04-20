@@ -15,6 +15,7 @@ export default function gitea() {
       detect: 'body > .full.height > .page-content[role=main]',
     },
     canSelfHost: true,
+    isCustom: false,
     getIsLightTheme: () => false,
     getIsDirectory: ({ icon }) => icon.classList.contains('octicon-file-directory-fill'),
     getIsSubmodule: ({ icon }) => icon.classList.contains('octicon-file-submodule'),

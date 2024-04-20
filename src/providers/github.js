@@ -27,6 +27,7 @@ export default function github() {
       detect: 'body > div[data-turbo-body]',
     },
     canSelfHost: true,
+    isCustom: false,
     getIsLightTheme: () =>
       document.querySelector('html').getAttribute('data-color-mode') === 'light',
     getIsDirectory: ({ icon }) =>

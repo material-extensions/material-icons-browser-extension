@@ -19,6 +19,7 @@ export default function gitlab() {
       detect: 'body.page-initialized[data-page]',
     },
     canSelfHost: true,
+    isCustom: false,
     getIsLightTheme: () => !document.querySelector('body').classList.contains('gl-dark'),
     getIsDirectory: ({ icon }) => icon.getAttribute('data-testid') === 'folder-icon',
     getIsSubmodule: ({ row }) =>

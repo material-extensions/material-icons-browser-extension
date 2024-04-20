@@ -16,6 +16,7 @@ export default function bitbucket() {
       detect: 'body[data-aui-version] > #root',
     },
     canSelfHost: true,
+    isCustom: false,
     getIsLightTheme: () => true, // No dark mode available for bitbucket currently
     getIsDirectory: ({ icon }) => icon.parentNode?.getAttribute('aria-label') === 'Directory,',
     getIsSubmodule: ({ icon }) => icon.parentNode?.getAttribute('aria-label') === 'Submodule,',
