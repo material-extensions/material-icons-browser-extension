@@ -15,9 +15,9 @@ export default function azure() {
       },
     ],
     selectors: {
-      row: 'table.bolt-table tbody > a',
-      filename: 'table.bolt-table tbody > a > td[aria-colindex="1"] span.text-ellipsis',
-      icon: 'td[aria-colindex="1"] span.icon-margin',
+      row: 'table.bolt-table tbody tr.bolt-table-row',
+      filename: 'td.bolt-table-cell[data-column-index="0"] .bolt-table-link .text-ellipsis',
+      icon: 'td.bolt-table-cell[data-column-index="0"] span.icon-margin',
       // Element by which to detect if the tested domain is azure.
       detect: 'body > input[type=hidden][name=__RequestVerificationToken]',
     },
