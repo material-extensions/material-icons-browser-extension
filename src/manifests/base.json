@@ -19,8 +19,7 @@
         "*://gitea.com/*",
         "*://gitlab.com/*",
         "*://gitee.com/*",
-        "*://sourceforge.net/*",
-        "*://*/*"
+        "*://sourceforge.net/*"
       ],
       "js": ["./main.js"],
       "css": ["./injected-styles.css"],
@@ -31,5 +30,5 @@
     "page": "options.html",
     "open_in_tab": true
   },
-  "permissions": ["storage", "activeTab"]
+  "permissions": ["storage", "activeTab", "scripting"]
 }

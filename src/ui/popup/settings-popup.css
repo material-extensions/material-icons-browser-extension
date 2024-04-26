@@ -14,11 +14,11 @@ body {
   padding: 1.5rem;
 }
 
-#settings {
+#not-supported {
   display: none;
 }
 
-#not-supported {
+#domain-settings {
   display: none;
 }
 
@@ -165,6 +165,13 @@ svg.select-icon {
 
 #add-provider {
   display: none;
+}
+
+#request {
+  display: none;
+}
+
+.btn {
   color: #5c6068;
   padding: 0.3rem 1rem;
   outline: transparent solid 2px;
@@ -178,7 +185,7 @@ svg.select-icon {
   margin-bottom: 1rem;
 }
 
-#add-provider:hover {
+.btn:hover {
   border-color: red;
   color: red;
   cursor: pointer;

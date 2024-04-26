@@ -15,5 +15,23 @@
       "48": "icon-48.png",
       "128": "icon-128.png"
     }
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://github.com/*",
+        "*://bitbucket.org/*",
+        "*://dev.azure.com/*",
+        "*://*.visualstudio.com/*",
+        "*://gitea.com/*",
+        "*://gitlab.com/*",
+        "*://gitee.com/*",
+        "*://sourceforge.net/*",
+        "*://*/*"
+      ],
+      "js": ["./main.js"],
+      "css": ["./injected-styles.css"],
+      "run_at": "document_start"
+    }
+  ]
 }

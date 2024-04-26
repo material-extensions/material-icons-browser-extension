@@ -3,6 +3,9 @@ import { addCustomProvider } from '../../lib/custom-providers';
 import { getConfig, setConfig } from '../../lib/userConfig';
 import { addGitProvider, getGitProvider, providerConfig } from '../../providers';
 
+const HOST_IS_NEW = 1;
+const HOST_NO_MATCH = 2;
+
 const isPageSupported = (domain) => getGitProvider(domain);
 
 function getCurrentTab() {
@@ -35,14 +38,26 @@ function registerControls(domain) {
     ?.addEventListener('click', () => Browser.runtime.openOptionsPage());
 }
 
-function displaySettings(domain) {
+function setDomain(domain) {
   document.getElementById('domain-name').innerText = domain;
-  document.getElementById('settings').style.display = 'block';
+}
+
+function displayDomainSettings() {
+  document.getElementById('domain-settings').style.display = 'block';
 }
 
 function displayPageNotSupported(domain) {
   document.getElementById('unsupported-domain').innerText = domain;
   document.getElementById('not-supported').style.display = 'block';
+}
+
+function askDomainAccess(tab) {
+  document.getElementById('request').style.display = 'block';
+  const clicked = () => {
+    requestAccess(tab);
+    // window.close();
+  };
+  document.getElementById('request-access').addEventListener('click', clicked);
 }
 
 function displayCustomDomain(tab, domain, suggestedProvider) {
@@ -110,11 +125,66 @@ function guessProvider(tab) {
     args: [possibilities],
   };
 
-  return Browser.tabs.sendMessage(tab.id, cmd);
+  return Browser.tabs.sendMessage(tab.id, cmd).then((match) => {
+    if (match === null) {
+      return HOST_NO_MATCH;
+    }
+
+    return match;
+  });
+}
+
+function checkAccess(tab) {
+  const { host } = new URL(tab.url);
+
+  const perm = {
+    permissions: ['activeTab'],
+    origins: [`*://${host}/*`],
+  };
+
+  return Browser.permissions.contains(perm).then((r) => {
+    if (r) {
+      return tab;
+    }
+
+    return HOST_IS_NEW;
+  });
+}
+
+function requestAccess(tab) {
+  const { host } = new URL(tab.url);
+
+  return Browser.runtime.sendMessage({
+    event: 'request-access',
+    data: {
+      tabId: tab.id,
+      url: tab.url,
+      host,
+    },
+  });
+}
+
+function doGuessProvider(tab, domain) {
+  return guessProvider(tab).then((match) => {
+    if (match !== HOST_NO_MATCH) {
+      registerControls(domain);
+      displayDomainSettings();
+
+      return displayCustomDomain(tab, domain, match);
+    }
+
+    return displayPageNotSupported(domain);
+  });
+}
+
+function isFirefox() {
+  return typeof browser !== 'undefined' && typeof chrome !== 'undefined';
 }
 
 function init(tab) {
   const domain = new URL(tab.url).host;
+
+  setDomain(domain);
 
   isPageSupported(domain).then((supported) => {
     if (!supported) {
@@ -123,20 +193,24 @@ function init(tab) {
         return displayPageNotSupported(domain);
       }
 
-      return guessProvider(tab).then((match) => {
-        if (match) {
-          registerControls(domain);
-          displaySettings(domain);
+      // overwrite for firefox browser, currently does not support
+      // asking for permissions from background, so it will run
+      // on all pages.
+      if (isFirefox()) {
+        return doGuessProvider(tab, domain);
+      }
 
-          return displayCustomDomain(tab, domain, match);
+      return checkAccess(tab).then((access) => {
+        if (access === HOST_IS_NEW) {
+          return askDomainAccess(tab);
         }
 
-        return displayPageNotSupported(domain);
+        return doGuessProvider(tab, domain);
       });
     }
 
     registerControls(domain);
-    displaySettings(domain);
+    displayDomainSettings();
     displayAllDisabledNote();
   });
 }

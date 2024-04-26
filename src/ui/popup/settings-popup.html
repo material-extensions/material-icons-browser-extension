@@ -6,10 +6,6 @@
 
   <body>
     <div id="content">
-      <div id="not-supported">
-        <span id="unsupported-domain"></span> is not supported by this extension
-      </div>
-
       <div id="settings">
         <div id="settings-header">
           <img id="logo" src="/icon-128.png" />
@@ -19,6 +15,20 @@
 
         <div id="domain">
           <h2 id="domain-name"></h2>
+        </div>
+
+        <div id="request">
+          We need access to the website to show the icons. If you click the button bellow the
+          browser will ask you for permision in another popup, this one will close. If you allow the
+          permission you will have to come back to finish the setup.
+
+          <button type="button" id="request-access" class="btn">
+            <span>Allow access to website</span>
+          </button>
+        </div>
+
+        <div id="not-supported">
+          <span id="unsupported-domain"></span> is not supported by this extension
         </div>
 
         <div id="default-disabled-note">
@@ -101,7 +111,7 @@
             </div>
           </div>
 
-          <button type="button" id="add-provider">
+          <button type="button" id="add-provider" class="btn">
             <span>Add custom provider</span>
           </button>
         </div>
