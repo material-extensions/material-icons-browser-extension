@@ -14,7 +14,7 @@
 
 ---
 
-<a href="https://github.com/PKief/vscode-material-icon-theme"><img src="https://img.shields.io/badge/last_built_with_vscode_theme-v5.1.0-blue" /></a>
+<a href="https://github.com/PKief/vscode-material-icon-theme"><img src="https://img.shields.io/badge/last_built_with_vscode_theme-v5.2.0-blue" /></a>
 
 <img valign="middle" src="https://img.shields.io/chrome-web-store/v/bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc?label=Version%20Available%20in%20Chrome%20Store">
 
