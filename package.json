@@ -1,17 +1,21 @@
 {
-  "name": "github-material-icons-extension",
-  "version": "1.8.14",
-  "description": "Browser Extension that enhances the GitHub file browser with material icons.",
+  "name": "material-icons-browser-addon",
+  "version": "1.8.15",
+  "description": "Browser Addon that enhances file browsers of version controls with material icons.",
   "main": "src/main.js",
-  "author": "Claudio Santos",
+  "author": {
+    "name": "Philipp Kief",
+    "email": "philipp.kief@gmx.de",
+    "url": "https://pkief.com"
+  },
   "license": "MIT",
-  "homepage": "https://github.com/Claudiohbsantos/github-material-icons-extension#readme",
+  "homepage": "https://github.com/material-extensions/material-icons-browser-addon#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Claudiohbsantos/github-material-icons-extension.git"
+    "url": "git+https://github.com/material-extensions/material-icons-browser-addon.git"
   },
   "bugs": {
-    "url": "https://github.com/Claudiohbsantos/github-material-icons-extension/issues"
+    "url": "https://github.com/material-extensions/material-icons-browser-addon/issues"
   },
   "engines": {
     "node": "^16.0.0",

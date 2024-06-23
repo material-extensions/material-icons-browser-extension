@@ -1,4 +1,4 @@
-<h1 align="center">Material Icons for GitHub</h1>
+<h1 align="center">Material Icons Browser Addon</h1>
 
 <div align="center">
 
@@ -6,8 +6,8 @@
 ![Light GitHub example](/assets/example-light.png)
 
 <p align="center">
-  <a href="https://chrome.google.com/webstore/detail/material-icons-for-github/bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc"><img src="https://github.com/Claudiohbsantos/github-material-icons-extension/raw/master/assets/chrome-web-store.png"></a>
-  <a href="https://addons.mozilla.org/en-US/firefox/addon/material-icons-for-github/"><img src="https://github.com/Claudiohbsantos/github-material-icons-extension/raw/master/assets/firefox-addons.png"></a>
+  <a href="https://chrome.google.com/webstore/detail/material-icons-for-github/bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc"><img src="https://github.com/material-extensions/material-icons-browser-addon/raw/main/assets/chrome-web-store.png"></a>
+  <a href="https://addons.mozilla.org/en-US/firefox/addon/material-icons-for-github/"><img src="https://github.com/material-extensions/material-icons-browser-addon/raw/main/assets/firefox-addons.png"></a>
 </p>
 
 <b>Install directly from the <a href="https://chrome.google.com/webstore/detail/material-icons-for-github/bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc">Chrome Web Store</a> | <a href="https://microsoftedge.microsoft.com/addons/detail/material-icons-for-github/khckkdgomkcjjnpgjmdmbceiddlmiolb">Microsoft Edge Addons Store</a> | <a href="https://addons.mozilla.org/en-US/firefox/addon/material-icons-for-github/">Firefox Addons</a></b></div>
