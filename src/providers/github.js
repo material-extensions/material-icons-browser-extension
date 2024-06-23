@@ -10,7 +10,7 @@ const githubConfig = {
       .ActionList-item-label,
       a.tree-browser-result > marked-text,
       .PRIVATE_TreeView-item-content > .PRIVATE_TreeView-item-content-text,
-      .react-directory-filename-column h3`,
+      .react-directory-filename-column a`,
     icon: `.octicon-file,
       .octicon-file-directory-fill,
       .octicon-file-directory-open-fill,
