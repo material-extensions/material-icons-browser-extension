@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { getConfig, setConfig, clearConfig, onConfigChange } from '../../lib/userConfig';
-import { providerConfig } from '../../providers';
+import { getGitProviders } from '../../providers';
 
 const resetButton = document.getElementById('reset');
 
@@ -105,8 +105,19 @@ const fillRow = (row, domain) => {
     .then(() => row);
 };
 
+function getDomains() {
+  return getGitProviders().then((providers) => [
+    'default',
+    ...Object.values(providers)
+      .map((p) => p.domains.map((d) => d.host))
+      .flat(),
+  ]);
+}
+
 const domainsDiv = document.getElementById('domains');
-const domains = ['default', ...Object.values(providerConfig).map((p) => p.domain)];
-Promise.all(domains.map((d) => fillRow(newDomainRow(), d))).then((rows) =>
-  rows.forEach((r) => domainsDiv.appendChild(r))
-);
+
+getDomains().then((domains) => {
+  Promise.all(domains.map((d) => fillRow(newDomainRow(), d))).then((rows) =>
+    rows.forEach((r) => domainsDiv.appendChild(r))
+  );
+});

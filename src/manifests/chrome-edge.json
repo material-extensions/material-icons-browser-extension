@@ -11,7 +11,8 @@
         "*://gitea.com/*",
         "*://gitlab.com/*",
         "*://gitee.com/*",
-        "*://sourceforge.net/*"
+        "*://sourceforge.net/*",
+        "*://*/*"
       ]
     }
   ],
@@ -24,5 +25,9 @@
       "48": "icon-48.png",
       "128": "icon-128.png"
     }
-  }
+  },
+  "background": {
+    "service_worker": "./background.js"
+  },
+  "optional_host_permissions": ["*://*/*"]
 }

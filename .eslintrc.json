@@ -32,7 +32,7 @@
       }
     },
     {
-      "files": ["src/providers/*.js"],
+      "files": ["src/providers/*.js", "src/lib/*.js"],
       "rules": {
         "no-param-reassign": "off"
       }

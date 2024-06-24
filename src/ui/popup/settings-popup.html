@@ -6,10 +6,6 @@
 
   <body>
     <div id="content">
-      <div id="not-supported">
-        <span id="unsupported-domain"></span> is not supported by this extension
-      </div>
-
       <div id="settings">
         <div id="settings-header">
           <img id="logo" src="/icon-128.png" />
@@ -21,60 +17,103 @@
           <h2 id="domain-name"></h2>
         </div>
 
+        <div id="request">
+          We need access to the website to show the icons. If you click the button bellow the
+          browser will ask you for permision in another popup, this one will close. If you allow the
+          permission you will have to come back to finish the setup.
+
+          <button type="button" id="request-access" class="btn">
+            <span>Allow access to website</span>
+          </button>
+        </div>
+
+        <div id="not-supported">
+          <span id="unsupported-domain"></span> is not supported by this extension
+        </div>
+
         <div id="default-disabled-note">
           All icon replacements are disabled for all domains. To change this setting, go to the
           <a id="options-link">options page</a>
         </div>
 
         <div id="domain-settings">
-          <div class="checkbox-wrapper">
-            <label for="enabled">Enable icons</label>
-            <input type="checkbox" id="enabled" />
-          </div>
-
-          <label for="icon-size">Icon Size</label>
-          <div class="select-wrapper">
-            <select name="icon-size" id="icon-size">
-              <option value="sm">Small</option>
-              <option value="md">Medium</option>
-              <option value="lg">Large</option>
-              <option value="xl">Extra Large</option>
-            </select>
-            <!-- down arrow -->
-            <div class="select-icon-wrapper">
-              <svg
-                viewBox="0 0 24 24"
-                role="presentation"
-                class="select-icon"
-                focusable="false"
-                aria-hidden="true"
-              >
-                <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
-              </svg>
+          <div id="enable-wrapper">
+            <div class="checkbox-wrapper">
+              <label for="enabled">Enable icons</label>
+              <input type="checkbox" id="enabled" />
             </div>
           </div>
 
-          <label for="icon-pack">Icon Pack</label>
-          <div class="select-wrapper">
-            <select name="icon-pack" id="icon-pack">
-              <option value="angular">angular</option>
-              <option value="react">react</option>
-              <option value="vue">vue</option>
-              <option value="nest">nest</option>
-            </select>
-            <!-- down arrow -->
-            <div class="select-icon-wrapper">
-              <svg
-                viewBox="0 0 24 24"
-                role="presentation"
-                class="select-icon"
-                focusable="false"
-                aria-hidden="true"
-              >
-                <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
-              </svg>
+          <div id="icon-size-wrapper">
+            <label for="icon-size">Icon Size</label>
+            <div class="select-wrapper">
+              <select name="icon-size" id="icon-size">
+                <option value="sm">Small</option>
+                <option value="md">Medium</option>
+                <option value="lg">Large</option>
+                <option value="xl">Extra Large</option>
+              </select>
+              <!-- down arrow -->
+              <div class="select-icon-wrapper">
+                <svg
+                  viewBox="0 0 24 24"
+                  role="presentation"
+                  class="select-icon"
+                  focusable="false"
+                  aria-hidden="true"
+                >
+                  <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+                </svg>
+              </div>
             </div>
           </div>
+
+          <div id="icon-pack-wrapper">
+            <label for="icon-pack">Icon Pack</label>
+            <div class="select-wrapper">
+              <select name="icon-pack" id="icon-pack">
+                <option value="angular">angular</option>
+                <option value="react">react</option>
+                <option value="vue">vue</option>
+                <option value="nest">nest</option>
+              </select>
+              <!-- down arrow -->
+              <div class="select-icon-wrapper">
+                <svg
+                  viewBox="0 0 24 24"
+                  role="presentation"
+                  class="select-icon"
+                  focusable="false"
+                  aria-hidden="true"
+                >
+                  <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div id="provider-wrapper">
+            <label for="provider">Provider Configuration</label>
+            <div class="select-wrapper">
+              <select name="provider" id="provider"></select>
+              <!-- down arrow -->
+              <div class="select-icon-wrapper">
+                <svg
+                  viewBox="0 0 24 24"
+                  role="presentation"
+                  class="select-icon"
+                  focusable="false"
+                  aria-hidden="true"
+                >
+                  <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" id="add-provider" class="btn">
+            <span>Add custom provider</span>
+          </button>
         </div>
 
         <div id="footer">

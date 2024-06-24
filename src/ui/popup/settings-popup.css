@@ -14,11 +14,11 @@ body {
   padding: 1.5rem;
 }
 
-#settings {
+#not-supported {
   display: none;
 }
 
-#not-supported {
+#domain-settings {
   display: none;
 }
 
@@ -157,4 +157,36 @@ svg.select-icon {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+#provider-wrapper {
+  display: none;
+}
+
+#add-provider {
+  display: none;
+}
+
+#request {
+  display: none;
+}
+
+.btn {
+  color: #5c6068;
+  padding: 0.3rem 1rem;
+  outline: transparent solid 2px;
+  outline-offset: 2px;
+  transition: 200ms all;
+  font-size: 1rem;
+  border-radius: 0.375rem;
+  border-width: 1px;
+  border-color: transparent;
+  background-color: transparent;
+  margin-bottom: 1rem;
+}
+
+.btn:hover {
+  border-color: red;
+  color: red;
+  cursor: pointer;
 }

@@ -37,7 +37,12 @@ function src(distPath) {
     bundleJS(distPath, path.resolve(srcPath, 'ui', 'popup', 'settings-popup.js'));
   const bundleOptionsScript = () =>
     bundleJS(distPath, path.resolve(srcPath, 'ui', 'options', 'options.js'));
-  const bundleAll = bundleMainScript().then(bundlePopupScript).then(bundleOptionsScript);
+  const bundleBackgroundScript = () =>
+    bundleJS(distPath, path.resolve(srcPath, 'background', 'background.js'));
+  const bundleAll = bundleMainScript()
+    .then(bundlePopupScript)
+    .then(bundleOptionsScript)
+    .then(bundleBackgroundScript);
 
   const copyPopup = Promise.all(
     ['settings-popup.html', 'settings-popup.css', 'settings-popup.github-logo.svg'].map((file) =>
