@@ -1,13 +1,21 @@
 import Browser from 'webextension-polyfill';
 
-Browser.runtime.onMessage.addListener((message) => {
+type Message = {
+  event: string;
+  data: {
+    host: string;
+    tabId: number;
+  };
+};
+
+Browser.runtime.onMessage.addListener((message: Message) => {
   if (message.event === 'request-access') {
-    const perm = {
+    const perm: Browser.Permissions.Permissions = {
       permissions: ['activeTab'],
       origins: [`*://${message.data.host}/*`],
     };
 
-    Browser.permissions.request(perm).then((granted) => {
+    Browser.permissions.request(perm).then((granted: boolean) => {
       if (!granted) {
         return;
       }

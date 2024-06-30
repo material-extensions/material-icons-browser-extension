@@ -1,13 +1,14 @@
-import github from './github';
-import bitbucket from './bitbucket';
-import azure from './azure';
-import gitea from './gitea';
-import gitlab from './gitlab';
-import gitee from './gitee';
-import sourceforge from './sourceforge';
 import { getCustomProviders } from '../lib/custom-providers';
+import { Provider } from '../models';
+import azure from './azure';
+import bitbucket from './bitbucket';
+import gitea from './gitea';
+import gitee from './gitee';
+import github from './github';
+import gitlab from './gitlab';
+import sourceforge from './sourceforge';
 
-export const providers = {
+export const providers: Record<string, () => Provider> = {
   azure,
   bitbucket,
   gitea,
@@ -17,7 +18,7 @@ export const providers = {
   sourceforge,
 };
 
-export const providerConfig = {};
+export const providerConfig: Record<string, Provider> = {};
 
 for (const provider of Object.values(providers)) {
   const cfg = provider();
@@ -25,17 +26,17 @@ for (const provider of Object.values(providers)) {
   providerConfig[cfg.name] = cfg;
 }
 
-function regExpEscape(str) {
-  return str.replace(/[-[\]{}()*+!<=:?./\\^$|#\s,]/g, '\\$&');
+function regExpEscape(value: string) {
+  return value.replace(/[-[\]{}()*+!<=:?./\\^$|#\s,]/g, '\\$&');
 }
 
 /**
  * Add custom git provider
- *
- * @param {string} name
- * @param {string|CallableFunction} handler
  */
-export const addGitProvider = (name, handler) => {
+export const addGitProvider = (
+  name: string,
+  handler: (() => Provider) | string
+) => {
   handler = typeof handler === 'string' ? providers[handler] : handler;
 
   const provider = handler();
@@ -64,12 +65,8 @@ export const getGitProviders = () =>
 
 /**
  * Get all selectors and functions specific to the Git provider
- *
- * @param {string} href Url of current tab
- * @param domain
- * @returns {object} All of the values needed for the provider
  */
-export const getGitProvider = (domain) => {
+export const getGitProvider = (domain: string) => {
   if (!domain.startsWith('http')) {
     domain = new URL(`http://${domain}`).host;
   } else {

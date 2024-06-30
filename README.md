@@ -1,4 +1,4 @@
-<h1 align="center">Material Icons Browser Addon</h1>
+<h1 align="center">Material Icons for Web</h1>
 
 <div align="center">
 
@@ -10,7 +10,7 @@
   <a href="https://addons.mozilla.org/de/firefox/addon/material-icons-for-web"><img src="https://github.com/material-extensions/material-icons-browser-addon/raw/main/assets/firefox-addons.png"></a>
 </p>
 
-<b>Install directly from the <a href="https://chromewebstore.google.com/detail/material-icons-for-web/hopghfcljkdgmajlhdfpgpcemcfhbili">Chrome Web Store</a> | <a href="https://microsoftedge.microsoft.com/addons/detail/material-icons-for-github/khckkdgomkcjjnpgjmdmbceiddlmiolb">Microsoft Edge Addons Store</a> | <a href="https://addons.mozilla.org/de/firefox/addon/material-icons-for-web">Firefox Addons</a></b></div>
+<b>Install directly from the <a href="https://chromewebstore.google.com/detail/material-icons-for-web/hopghfcljkdgmajlhdfpgpcemcfhbili">Chrome Web Store</a> | <a href="https://microsoftedge.microsoft.com/addons/detail/fmnacigfpppckhpaafbjdhljbjjclkkj">Microsoft Edge Addons Store</a> | <a href="https://addons.mozilla.org/de/firefox/addon/material-icons-for-web">Firefox Addons</a></b></div>
 
 ---
 
@@ -56,8 +56,3 @@ Update language-map.json with latest language contributions.
 npm run build-languages
 ```
 
----
-
-_Special thanks to [@shivapoudel](https://github.com/shivapoudel) for creating and maintaining the Microsoft Edge version of the extension_
-
-_Original extension developed with [Richard Lam](https://github.com/rlam108)_

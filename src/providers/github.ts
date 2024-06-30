@@ -1,4 +1,6 @@
-export default function github() {
+import { Provider } from '../models';
+
+export default function github(): Provider {
   return {
     name: 'github',
     domains: [
@@ -29,14 +31,17 @@ export default function github() {
     canSelfHost: true,
     isCustom: false,
     getIsLightTheme: () =>
-      document.querySelector('html').getAttribute('data-color-mode') === 'light',
+      document.querySelector('html')?.getAttribute('data-color-mode') ===
+      'light',
     getIsDirectory: ({ icon }) =>
       icon.getAttribute('aria-label') === 'Directory' ||
       icon.classList.contains('octicon-file-directory-fill') ||
       icon.classList.contains('octicon-file-directory-open-fill') ||
       icon.classList.contains('icon-directory'),
-    getIsSubmodule: ({ icon }) => icon.getAttribute('aria-label') === 'Submodule',
-    getIsSymlink: ({ icon }) => icon.getAttribute('aria-label') === 'Symlink Directory',
+    getIsSubmodule: ({ icon }) =>
+      icon.getAttribute('aria-label') === 'Submodule',
+    getIsSymlink: ({ icon }) =>
+      icon.getAttribute('aria-label') === 'Symlink Directory',
     replaceIcon: (svgEl, newSVG) => {
       svgEl
         .getAttributeNames()
@@ -44,7 +49,7 @@ export default function github() {
           (attr) =>
             attr !== 'src' &&
             !/^data-material-icons-extension/.test(attr) &&
-            newSVG.setAttribute(attr, svgEl.getAttribute(attr))
+            newSVG.setAttribute(attr, svgEl.getAttribute(attr) ?? '')
         );
 
       const prevEl = svgEl.previousElementSibling;

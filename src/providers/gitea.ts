@@ -1,4 +1,6 @@
-export default function gitea() {
+import { Provider } from '../models';
+
+export default function gitea(): Provider {
   return {
     name: 'gitea',
     domains: [
@@ -17,9 +19,12 @@ export default function gitea() {
     canSelfHost: true,
     isCustom: false,
     getIsLightTheme: () => false,
-    getIsDirectory: ({ icon }) => icon.classList.contains('octicon-file-directory-fill'),
-    getIsSubmodule: ({ icon }) => icon.classList.contains('octicon-file-submodule'),
-    getIsSymlink: ({ icon }) => icon.classList.contains('octicon-file-symlink-file'),
+    getIsDirectory: ({ icon }) =>
+      icon.classList.contains('octicon-file-directory-fill'),
+    getIsSubmodule: ({ icon }) =>
+      icon.classList.contains('octicon-file-submodule'),
+    getIsSymlink: ({ icon }) =>
+      icon.classList.contains('octicon-file-symlink-file'),
     replaceIcon: (svgEl, newSVG) => {
       svgEl
         .getAttributeNames()
@@ -27,10 +32,10 @@ export default function gitea() {
           (attr) =>
             attr !== 'src' &&
             !/^data-material-icons-extension/.test(attr) &&
-            newSVG.setAttribute(attr, svgEl.getAttribute(attr))
+            newSVG.setAttribute(attr, svgEl.getAttribute(attr) ?? '')
         );
 
-      svgEl.parentNode.replaceChild(newSVG, svgEl);
+      svgEl.parentNode?.replaceChild(newSVG, svgEl);
     },
     onAdd: () => {},
   };

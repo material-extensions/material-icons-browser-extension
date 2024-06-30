@@ -1,11 +1,8 @@
 dist/
-temp/
-.vscode/
+out/
 github-material-icons-chrome-extension.zip
 github-material-icons-firefox-extension.zip
 github-material-icons-edge-extension.zip
-src/icon-cache.js
-src/icon-map.json
 src/icon-list.json
 src/language-map.json
 svg/
@@ -15,8 +12,6 @@ data/
 node_modules
 *.log
 .idea
-.cache/
-.vscode/
 .DS_Store
 .eslintcache
 Thumbs.db

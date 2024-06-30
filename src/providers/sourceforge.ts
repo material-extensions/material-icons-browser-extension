@@ -1,4 +1,6 @@
-export default function sourceforge() {
+import { Provider } from '../models';
+
+export default function sourceforge(): Provider {
   return {
     name: 'sourceforge',
     domains: [
@@ -42,11 +44,15 @@ export default function sourceforge() {
         newSVG.style.height = '14px';
         newSVG.style.width = '14px';
 
-        iconOrAnchor.parentNode.replaceChild(newSVG, iconOrAnchor);
+        iconOrAnchor.parentNode?.replaceChild(newSVG, iconOrAnchor);
       }
       // For the files list, use the anchor element instead of the icon because in some cases there is no icon
       else {
-        if (iconOrAnchor.querySelector('img[data-material-icons-extension="icon"]')) {
+        if (
+          iconOrAnchor.querySelector(
+            'img[data-material-icons-extension="icon"]'
+          )
+        ) {
           // only replace/prepend the icon once
           return;
         }
@@ -57,7 +63,7 @@ export default function sourceforge() {
         const svgEl = iconOrAnchor.querySelector('svg');
 
         if (svgEl) {
-          svgEl.parentNode.replaceChild(newSVG, svgEl);
+          svgEl.parentNode?.replaceChild(newSVG, svgEl);
         } else {
           iconOrAnchor.prepend(newSVG);
         }

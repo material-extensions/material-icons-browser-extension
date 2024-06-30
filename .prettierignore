@@ -1,4 +1,0 @@
-.cache
-dist
-src/*.json
-!src/manifest.json

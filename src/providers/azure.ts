@@ -1,7 +1,9 @@
+import { Provider } from '../models';
+
 /** The name of the class used to hide the pseudo element `:before` on Azure */
 const HIDE_PSEUDO_CLASS = 'material-icons-exension-hide-pseudo';
 
-export default function azure() {
+export default function azure(): Provider {
   return {
     name: 'azure',
     domains: [
@@ -25,11 +27,13 @@ export default function azure() {
     canSelfHost: false,
     isCustom: false,
     getIsLightTheme: () =>
-      document.defaultView.getComputedStyle(document.body).getPropertyValue('color') ===
-      'rgba(0, 0, 0, 0.9)', // TODO: There is probably a better way to determine whether Azure is in light mode
+      document.defaultView
+        ?.getComputedStyle(document.body)
+        .getPropertyValue('color') === 'rgba(0, 0, 0, 0.9)', // TODO: There is probably a better way to determine whether Azure is in light mode
     getIsDirectory: ({ icon }) => icon.classList.contains('repos-folder-icon'),
     getIsSubmodule: () => false, // There appears to be no way to tell if a folder is a submodule
-    getIsSymlink: ({ icon }) => icon.classList.contains('ms-Icon--PageArrowRight'),
+    getIsSymlink: ({ icon }) =>
+      icon.classList.contains('ms-Icon--PageArrowRight'),
     replaceIcon: (svgEl, newSVG) => {
       newSVG.style.display = 'inline-flex';
       newSVG.style.height = '1rem';
@@ -41,7 +45,7 @@ export default function azure() {
 
       // Instead of replacing the child icon, add the new icon as a child,
       // otherwise Azure DevOps crashes when you navigate through the repository
-      if (svgEl.hasChildNodes()) {
+      if (svgEl.hasChildNodes() && svgEl.firstChild !== null) {
         svgEl.replaceChild(newSVG, svgEl.firstChild);
       } else {
         svgEl.appendChild(newSVG);
@@ -51,11 +55,13 @@ export default function azure() {
       // Mutation observer is required for azure to work properly because the rows are not removed
       // from the page when navigating through the repository.  Without this the page will render
       // fine initially but any subsequent changes will reult in inaccurate icons.
-      const mutationCallback = (mutationsList) => {
+      const mutationCallback = (mutationsList: MutationRecord[]) => {
         // Check whether the mutation was made by this extension
         // this is determined by whether there is an image node added to the dom
         const isExtensionMutation = mutationsList.some((mutation) =>
-          Array.from(mutation.addedNodes).some((node) => node.nodeName === 'IMG')
+          Array.from(mutation.addedNodes).some(
+            (node) => node.nodeName === 'IMG'
+          )
         );
 
         // If the mutation was not caused by the extension, run the icon replacement
@@ -66,7 +72,11 @@ export default function azure() {
       };
 
       const observer = new MutationObserver(mutationCallback);
-      observer.observe(row, { attributes: true, childList: true, subtree: true });
+      observer.observe(row, {
+        attributes: true,
+        childList: true,
+        subtree: true,
+      });
     },
   };
 }

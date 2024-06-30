@@ -1,58 +1,68 @@
 name: Auto Update when upstream releases
 on:
   schedule:
-    - cron: '0 3 * * *'
+    - cron: "0 3 * * *"
   workflow_dispatch:
+
+permissions:
+  contents: read
+
 jobs:
   get-version:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      id-token: write
+
     steps:
       - uses: actions/checkout@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: '16.13.0'
+          node-version: "20"
 
       - name: Fetch release version
         id: upstream
         run: |
-          echo ::set-output name=release_tag::$(curl "https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/main/package.json" \
-          | jq -r .version)
-          echo ::set-output name=current_tag::$(<upstream.version)
+          release_tag=$(npm view material-icon-theme version)
+          current_tag=$(npm list material-icon-theme --depth=0 | grep 'material-icon-theme@' | cut -d '@' -f 2)
+          echo "release_tag=$release_tag" >> $GITHUB_ENV
+          echo "current_tag=$current_tag" >> $GITHUB_ENV
 
       - name: Attempt update
-        if: steps.upstream.outputs.release_tag != steps.upstream.outputs.current_tag
+        if: env.release_tag != env.current_tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm ci && npm run update
 
       - name: Get package version
-        id: package-version
-        if: steps.upstream.outputs.release_tag != steps.upstream.outputs.current_tag
-        run: echo ::set-output name=package_version::v$(jq -r .version package.json)
+        if: env.release_tag != env.current_tag
+        run: |
+          echo "package_version=v$(jq -r .version package.json)" >> $GITHUB_ENV
 
       - name: Commit updated files
-        if: steps.upstream.outputs.release_tag != steps.upstream.outputs.current_tag
-        uses: EndBug/add-and-commit@v7
+        if: env.release_tag != env.current_tag
+        uses: EndBug/add-and-commit@v9
         with:
-          add: '.'
-          message: '[auto] update to upstream ${{steps.upstream.outputs.release_tag}}'
-          tag: '${{steps.package-version.outputs.package_version}}'
+          add: "."
+          message: "[auto] update to upstream ${{env.release_tag}}"
+          tag: "${{env.package_version}}"
 
       - name: Release
-        if: steps.upstream.outputs.release_tag != steps.upstream.outputs.current_tag
+        if: env.release_tag != env.current_tag
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: '${{steps.package-version.outputs.package_version}}'
-          body: Built with icons from VSCode Material Icon Theme ${{steps.upstream.outputs.release_tag}}
-          files: '*.zip'
+          tag_name: "${{env.package_version}}"
+          body: Built with icons from VSCode Material Icon Theme ${{env.release_tag}}
+          files: "*.zip"
 
       - name: Upload to chrome store
-        if: steps.upstream.outputs.release_tag != steps.upstream.outputs.current_tag
+        if: env.release_tag != env.current_tag
         continue-on-error: true
         uses: trmcnvn/chrome-addon@v2
         with:
@@ -63,7 +73,7 @@ jobs:
           refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
 
       - name: Upload to edge store
-        if: steps.upstream.outputs.release_tag != steps.upstream.outputs.current_tag
+        if: env.release_tag != env.current_tag
         continue-on-error: true
         uses: wdzeng/edge-addon@v1
         with:
@@ -74,6 +84,6 @@ jobs:
           access-token-url: ${{ secrets.EDGE_ACCESS_TOKEN_URL }}
 
       - name: Upload to firefox store
-        if: steps.upstream.outputs.release_tag != steps.upstream.outputs.current_tag
+        if: env.release_tag != env.current_tag
         continue-on-error: true
         run: npx web-ext sign -s ./dist/firefox/ --channel=listed --api-key=${{ secrets.FIREFOX_API_JWT_ISSUER }} --api-secret=${{ secrets.FIREFOX_API_JWT_SECRET }}

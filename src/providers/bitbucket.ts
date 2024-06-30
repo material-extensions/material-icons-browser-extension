@@ -1,4 +1,6 @@
-export default function bitbucket() {
+import { Provider } from '../models';
+
+export default function bitbucket(): Provider {
   return {
     name: 'bitbucket',
     domains: [
@@ -18,8 +20,12 @@ export default function bitbucket() {
     canSelfHost: true,
     isCustom: false,
     getIsLightTheme: () => true, // No dark mode available for bitbucket currently
-    getIsDirectory: ({ icon }) => icon.parentNode?.getAttribute('aria-label') === 'Directory,',
-    getIsSubmodule: ({ icon }) => icon.parentNode?.getAttribute('aria-label') === 'Submodule,',
+    getIsDirectory: ({ icon }) =>
+      (icon.parentNode as HTMLElement)?.getAttribute('aria-label') ===
+      'Directory,',
+    getIsSubmodule: ({ icon }) =>
+      (icon.parentNode as HTMLElement)?.getAttribute('aria-label') ===
+      'Submodule,',
     getIsSymlink: () => false, // There appears to be no way to determine this for bitbucket
     replaceIcon: (svgEl, newSVG) => {
       newSVG.style.overflow = 'hidden';
@@ -34,10 +40,10 @@ export default function bitbucket() {
           (attr) =>
             attr !== 'src' &&
             !/^data-material-icons-extension/.test(attr) &&
-            newSVG.setAttribute(attr, svgEl.getAttribute(attr))
+            newSVG.setAttribute(attr, svgEl.getAttribute(attr) ?? '')
         );
 
-      svgEl.parentNode.replaceChild(newSVG, svgEl);
+      svgEl.parentNode?.replaceChild(newSVG, svgEl);
     },
     onAdd: () => {},
   };

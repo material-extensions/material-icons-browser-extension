@@ -1,6 +1,8 @@
-import { getConfig, onConfigChange } from './userConfig';
+import { getConfig, onConfigChange } from './user-config';
 
-const setSizeAttribute = (iconSize) =>
+export type IconSize = 'sm' | 'md' | 'lg' | 'xl';
+
+const setSizeAttribute = (iconSize: IconSize) =>
   document.body.setAttribute(`data-material-icons-extension-size`, iconSize);
 
 export const initIconSizes = () => {

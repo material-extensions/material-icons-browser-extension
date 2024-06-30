@@ -2,11 +2,10 @@
   "name": "material-icons-browser-addon",
   "version": "1.8.15",
   "description": "Browser Addon that enhances file browsers of version controls with material icons.",
-  "main": "src/main.js",
+  "main": "src/main.ts",
   "author": {
-    "name": "Philipp Kief",
-    "email": "philipp.kief@gmx.de",
-    "url": "https://pkief.com"
+    "name": "Material Extensions",
+    "url": "https://github.com/material-extensions"
   },
   "license": "MIT",
   "homepage": "https://github.com/material-extensions/material-icons-browser-addon#readme",
@@ -17,62 +16,49 @@
   "bugs": {
     "url": "https://github.com/material-extensions/material-icons-browser-addon/issues"
   },
-  "engines": {
-    "node": "^16.0.0",
-    "npm": "^8.0.0"
-  },
   "dependencies": {
+    "material-icon-theme": "latest",
     "selector-observer": "2.1.6",
-    "webextension-polyfill": "0.11.0"
+    "webextension-polyfill": "0.12.0"
   },
   "devDependencies": {
     "@octokit/core": "3.5.1",
-    "compare-versions": "3.6.0",
-    "eslint": "8.18.0",
-    "eslint-config-airbnb-base": "15.0.0",
-    "eslint-config-prettier": "8.5.0",
-    "eslint-plugin-import": "2.26.0",
-    "eslint-plugin-jsdoc": "39.3.3",
-    "fs-extra": "10.0.0",
-    "husky": "8.0.1",
-    "json-stable-stringify": "1.0.1",
-    "lint-staged": "13.0.3",
-    "node-fetch": "2.6.7",
+    "@types/fs-extra": "11.0.4",
+    "@types/json-stable-stringify": "1.0.36",
+    "@types/webextension-polyfill": "0.10.7",
+    "esbuild": "0.21.5",
+    "fs-extra": "11.2.0",
+    "husky": "9.0.11",
+    "json-stable-stringify": "1.1.1",
+    "lint-staged": "15.2.7",
     "npm-run-all": "4.1.5",
-    "parcel-bundler": "1.12.5",
-    "prettier": "2.7.1",
-    "rimraf": "3.0.2",
-    "sharp": "0.28.3",
-    "simple-git": "2.40.0",
-    "svgo": "2.3.1",
-    "web-ext": "7.1.0"
+    "rimraf": "5.0.7",
+    "sharp": "0.33.4",
+    "ts-node": "10.9.2",
+    "typescript": "5.5.2",
+    "web-ext": "8.2.0"
   },
   "scripts": {
     "prebuild": "rimraf *.zip ./dist",
-    "build": "run-s build-ext-dependencies build-languages build-src bundle",
-    "build-ext-dependencies": "node ./scripts/build-dependencies.js",
-    "build-languages": "node ./scripts/build-languages.js",
-    "build-src": "node ./scripts/build-src.js",
-    "rebuild-logos": "node ./scripts/build-icons.js",
+    "build": "run-s build-languages build-src bundle",
+    "build-languages": "ts-node ./scripts/build-languages.ts",
+    "build-src": "ts-node ./scripts/build-src.ts",
+    "rebuild-logos": "ts-node ./scripts/build-icons.ts",
     "bundle": "run-p bundle-edge bundle-chrome bundle-firefox",
     "bundle-edge": "zip -r -j github-material-icons-edge-extension.zip dist/chrome-edge",
     "bundle-chrome": "zip -r -j github-material-icons-chrome-extension.zip dist/chrome-edge",
     "bundle-firefox": "web-ext -s ./dist/firefox/ -n github-material-icons-firefox-extension.zip -a . build --overwrite-dest",
-    "parcel": "parcel build ./src/main.js",
-    "parcel-watch": "parcel watch ./src/main.js",
-    "clean": "rimraf *.zip ./dist ./svg ./.cache ./src/icon-list.json ./src/icon-map.json",
-    "update-manifest-version": "node ./scripts/update-manifest-version.js",
-    "update-upstream-version": "node ./scripts/update-upstream-version",
+    "update-manifest-version": "ts-node ./scripts/update-manifest-version.ts",
+    "update-upstream-version": "ts-node ./scripts/update-upstream-version.ts",
     "update-package-version": "npm version --no-git-tag-version",
     "update": "run-s update-upstream-version \"update-package-version patch\" update-manifest-version build",
     "release": "run-s \"update-package-version {1}\" update-manifest-version build --",
-    "lint": "eslint .",
-    "lint-fix": "eslint --fix .",
-    "format": "prettier --write --ignore-unknown .",
-    "prepare": "husky install"
+    "lint": "npx @biomejs/biome check --write ./src",
+    "format": "npx @biomejs/biome format --write ./src",
+    "prepare": "husky"
   },
   "lint-staged": {
-    "*.js": "eslint --fix",
-    "*": "prettier --write --ignore-unknown"
+    "*.ts": "npm run lint",
+    "*": "npm run format"
   }
 }

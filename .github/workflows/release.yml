@@ -2,25 +2,39 @@ name: Release new version
 on:
   workflow_dispatch:
     inputs:
-      type:
-        description: major|minor|patch - defaults to patch
+      versionChange:
+        type: choice
+        description: Select the version change
         required: true
-        default: patch
+        default: 'patch'
+        options:
+          - major
+          - minor
+          - patch
       onlyUpload:
         description: chrome|firefox|both|not|none  - Only upload to store(s) without bumping version or releasing
         required: true
         default: not
+
+permissions:
+  contents: read
+
 jobs:
   get-version:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      id-token: write
+
     steps:
       - uses: actions/checkout@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: '16.13.0'
+          node-version: "20"
 
       - name: install dependencies
         run: npm ci
@@ -35,20 +49,19 @@ jobs:
         if: ${{ github.event.inputs.onlyUpload == 'not' || github.event.inputs.onlyUpload == 'none' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm run release ${{ github.event.inputs.type }}
+        run: npm run release ${{ github.event.inputs.versionChange }}
 
       - name: Get package version
         if: ${{ github.event.inputs.onlyUpload == 'not' || github.event.inputs.onlyUpload == 'none' }}
-        id: package-version
-        run: echo ::set-output name=package_version::v$(jq -r .version package.json)
+        run: echo "package_version=v$(jq -r .version package.json)" >> $GITHUB_ENV
 
       - name: Commit updated files
         if: ${{ github.event.inputs.onlyUpload == 'not' || github.event.inputs.onlyUpload == 'none' }}
         uses: EndBug/add-and-commit@v7
         with:
-          add: '.'
-          message: '[auto] release  ${{steps.package-version.outputs.package_version}}'
-          tag: '${{steps.package-version.outputs.package_version}}'
+          add: "."
+          message: "[auto] release  ${{env.package_version}}"
+          tag: "${{env.package_version}}"
 
       - name: Release
         if: ${{ github.event.inputs.onlyUpload == 'not' || github.event.inputs.onlyUpload == 'none' }}
@@ -56,15 +69,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: '${{steps.package-version.outputs.package_version}}'
-          files: '*.zip'
+          tag_name: "${{env.package_version}}"
+          files: "*.zip"
 
       - name: Upload to chrome store
         if: ${{ github.event.inputs.onlyUpload != 'firefox' && github.event.inputs.onlyUpload != 'none' }}
         continue-on-error: true
         uses: trmcnvn/chrome-addon@v2
         with:
-          extension: bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc
+          extension: hopghfcljkdgmajlhdfpgpcemcfhbili
           zip: github-material-icons-chrome-extension.zip
           client-id: ${{ secrets.CHROME_CLIENT_ID }}
           client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
@@ -75,7 +88,7 @@ jobs:
         continue-on-error: true
         uses: wdzeng/edge-addon@v1
         with:
-          product-id: d7692295-d84f-4bf5-9447-3cbb6ae29517
+          product-id: fmnacigfpppckhpaafbjdhljbjjclkkj
           zip-path: github-material-icons-edge-extension.zip
           client-id: ${{ secrets.EDGE_CLIENT_ID }}
           client-secret: ${{ secrets.EDGE_CLIENT_SECRET }}
