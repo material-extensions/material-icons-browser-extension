@@ -1,6 +1,6 @@
 {
   "name": "material-icons-browser-addon",
-  "version": "1.8.15",
+  "version": "1.8.16",
   "description": "Browser Addon that enhances file browsers of version controls with material icons.",
   "main": "src/main.ts",
   "author": {
