@@ -57,7 +57,7 @@ jobs:
 
       - name: Commit updated files
         if: ${{ github.event.inputs.onlyUpload == 'not' || github.event.inputs.onlyUpload == 'none' }}
-        uses: EndBug/add-and-commit@v7
+        uses: EndBug/add-and-commit@v9
         with:
           add: "."
           message: "[auto] release  ${{env.package_version}}"
@@ -65,7 +65,7 @@ jobs:
 
       - name: Release
         if: ${{ github.event.inputs.onlyUpload == 'not' || github.event.inputs.onlyUpload == 'none' }}
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
