@@ -30,9 +30,21 @@ export default function github(): Provider {
     },
     canSelfHost: true,
     isCustom: false,
-    getIsLightTheme: () =>
-      document.querySelector('html')?.getAttribute('data-color-mode') ===
-      'light',
+    getIsLightTheme: () => {
+      const colorMode = document
+        .querySelector('html')
+        ?.getAttribute('data-color-mode');
+
+      if (colorMode === 'light') {
+        return true;
+      }
+
+      if (colorMode === 'auto') {
+        return window.matchMedia('(prefers-color-scheme: light)').matches;
+      }
+
+      return false;
+    },
     getIsDirectory: ({ icon }) =>
       icon.getAttribute('aria-label') === 'Directory' ||
       icon.classList.contains('octicon-file-directory-fill') ||
