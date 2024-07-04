@@ -1,4 +1,6 @@
-<h1 align="center">Material Icons for Web</h1>
+<b> NOTE: This repo is in the process of being transferred into this organization so we can better maintain it. See <a href="https://github.com/Claudiohbsantos/github-material-icons-extension/pull/90#issuecomment-2193665707">this discussion</a> for some context until all updates are finished. Thanks for your patience!</b>
+
+<h1 align="center">Material Icons for GitHub</h1>
 
 <div align="center">
 
