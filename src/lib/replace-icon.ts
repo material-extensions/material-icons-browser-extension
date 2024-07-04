@@ -28,8 +28,13 @@ export function replaceIconInRow(
 ): void {
   const fileName = itemRow
     .querySelector(provider.selectors.filename)
-    ?.textContent?.split('/')[0]
-    .trim();
+    ?.textContent// get the last folder for the icon
+    ?.split('/')
+    .reverse()[0]
+    .trim()
+    // remove possible sha from submodule
+    // matches 4 or more to future proof in case they decide to increase it.
+    .replace(/\s+@\s+[a-fA-F0-9]{4,}$/, '');
   if (!fileName) return;
 
   const iconEl = itemRow.querySelector(
