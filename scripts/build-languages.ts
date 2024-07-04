@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import * as path from 'path';
 import { Octokit } from '@octokit/core';
 import * as fs from 'fs-extra';

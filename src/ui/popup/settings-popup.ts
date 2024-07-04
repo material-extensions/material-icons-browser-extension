@@ -190,7 +190,6 @@ function requestAccess(tab: Browser.Tabs.Tab) {
     event: 'request-access',
     data: {
       tabId: tab.id,
-      url: tab.url,
       host,
     },
   });

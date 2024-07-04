@@ -22,10 +22,12 @@
     "webextension-polyfill": "0.12.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.8.3",
     "@octokit/core": "3.5.1",
     "@types/fs-extra": "11.0.4",
     "@types/json-stable-stringify": "1.0.36",
     "@types/webextension-polyfill": "0.10.7",
+    "dotenv": "16.4.5",
     "esbuild": "0.21.5",
     "fs-extra": "11.2.0",
     "husky": "9.0.11",
@@ -39,7 +41,7 @@
     "web-ext": "8.2.0"
   },
   "scripts": {
-    "prebuild": "rimraf *.zip ./dist",
+    "prebuild": "rimraf --glob *.zip ./dist",
     "build": "run-s build-languages build-src bundle",
     "build-languages": "ts-node ./scripts/build-languages.ts",
     "build-src": "ts-node ./scripts/build-src.ts",

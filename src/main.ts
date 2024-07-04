@@ -69,7 +69,7 @@ Browser.runtime.onMessage.addListener(
 
     if (message.cmd === 'guessProvider') {
       const result = handlers[message.cmd](
-        (message.args || []) as unknown as Possibilities
+        (message.args || [])[0] as unknown as Possibilities
       );
       return sendResponse(result);
     }

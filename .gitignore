@@ -15,3 +15,5 @@ node_modules
 .DS_Store
 .eslintcache
 Thumbs.db
+
+.env

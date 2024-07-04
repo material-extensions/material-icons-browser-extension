@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import * as path from 'path';
 import * as esbuild from 'esbuild';
 import * as fs from 'fs-extra';
