@@ -77,7 +77,7 @@ jobs:
         continue-on-error: true
         uses: trmcnvn/chrome-addon@v2
         with:
-          extension: hopghfcljkdgmajlhdfpgpcemcfhbili
+          extension: bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc
           zip: github-material-icons-chrome-extension.zip
           client-id: ${{ secrets.CHROME_CLIENT_ID }}
           client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
@@ -88,7 +88,7 @@ jobs:
         continue-on-error: true
         uses: wdzeng/edge-addon@v1
         with:
-          product-id: fmnacigfpppckhpaafbjdhljbjjclkkj
+          product-id: d7692295-d84f-4bf5-9447-3cbb6ae29517
           zip-path: github-material-icons-edge-extension.zip
           client-id: ${{ secrets.EDGE_CLIENT_ID }}
           client-secret: ${{ secrets.EDGE_CLIENT_SECRET }}
