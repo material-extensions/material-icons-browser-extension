@@ -1,5 +1,5 @@
 {
-  "name": "material-icons-browser-addon",
+  "name": "material-icons-browser-extension",
   "version": "1.8.14",
   "description": "Browser Addon that enhances file browsers of version controls with material icons.",
   "main": "src/main.ts",
@@ -8,13 +8,13 @@
     "url": "https://github.com/material-extensions"
   },
   "license": "MIT",
-  "homepage": "https://github.com/material-extensions/material-icons-browser-addon#readme",
+  "homepage": "https://github.com/material-extensions/material-icons-browser-extension#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/material-extensions/material-icons-browser-addon.git"
+    "url": "git+https://github.com/material-extensions/material-icons-browser-extension.git"
   },
   "bugs": {
-    "url": "https://github.com/material-extensions/material-icons-browser-addon/issues"
+    "url": "https://github.com/material-extensions/material-icons-browser-extension/issues"
   },
   "dependencies": {
     "material-icon-theme": "latest",
