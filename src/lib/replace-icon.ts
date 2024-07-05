@@ -26,22 +26,30 @@ export function replaceIconInRow(
   provider: Provider,
   iconPack: string | null
 ): void {
-  const fileName = itemRow
+  let fileName = itemRow
     .querySelector(provider.selectors.filename)
-    ?.textContent// get the last folder for the icon
+    ?.textContent // get the last folder for the icon
     ?.split('/')
     .reverse()[0]
-    .trim()
-    // remove possible sha from submodule
-    // matches 4 or more to future proof in case they decide to increase it.
-    .replace(/\s+@\s+[a-fA-F0-9]{4,}$/, '');
+    // when using textContent, it can add multiple types of whitespace,
+    // using regex to replace them with a single space,
+    // can be used later to transform the filename
+    .replace(/\s+/g, ' ')
+    .trim();
   if (!fileName) return;
 
   const iconEl = itemRow.querySelector(
     provider.selectors.icon
   ) as HTMLElement | null;
   if (iconEl?.getAttribute('data-material-icons-extension')) return;
-  if (iconEl) replaceIcon(iconEl, fileName, itemRow, provider, iconPack);
+
+  if (!iconEl) return;
+
+  fileName = provider.transformFileName(itemRow, iconEl, fileName);
+
+  console.log(fileName);
+
+  replaceIcon(iconEl, fileName, itemRow, provider, iconPack);
 }
 
 function replaceIcon(

@@ -42,5 +42,12 @@ export default function gitee(): Provider {
       svgEl.parentNode?.replaceChild(newSVG, svgEl);
     },
     onAdd: () => {},
+    transformFileName: (
+      rowEl: HTMLElement,
+      iconEl: HTMLElement,
+      fileName: string
+    ): string => {
+      return fileName;
+    },
   };
 }

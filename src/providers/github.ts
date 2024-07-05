@@ -14,17 +14,21 @@ export default function github(): Provider {
         file-tree .ActionList-content,
         a.tree-browser-result,
         .PRIVATE_TreeView-item-content,
-        .react-directory-filename-column`,
+        .react-directory-filename-column,
+        .Box details .Box-row`,
       filename: `div[role="rowheader"] > span,
         .ActionList-item-label,
         a.tree-browser-result > marked-text,
         .PRIVATE_TreeView-item-content > .PRIVATE_TreeView-item-content-text,
-        .react-directory-filename-column a`,
+        .react-directory-filename-column a,
+        a.Truncate`,
       icon: `.octicon-file,
         .octicon-file-directory-fill,
         .octicon-file-directory-open-fill,
         .octicon-file-submodule,
-        .react-directory-filename-column > svg`,
+        .react-directory-filename-column > svg,
+        .octicon-package,
+        .octicon-file-zip`,
       // Element by which to detect if the tested domain is github.
       detect: 'body > div[data-turbo-body]',
     },
@@ -82,5 +86,26 @@ export default function github(): Provider {
       }
     },
     onAdd: () => {},
+    transformFileName: (
+      rowEl: HTMLElement,
+      iconEl: HTMLElement,
+      fileName: string
+    ): string => {
+      // remove possible sha from submodule
+      // matches 4 or more to future proof in case they decide to increase it.
+      if (fileName.includes('@')) {
+        return fileName.replace(/\s+@\s+[a-fA-F0-9]{4,}$/, '');
+      }
+
+      // try to match the 'Source code (zip)' type of rows in releases page in github.
+      if (
+        rowEl.classList.contains('Box-row') &&
+        fileName.includes('Source code')
+      ) {
+        return fileName.replace(/\s+\((.*?)\)$/, '.$1');
+      }
+
+      return fileName;
+    },
   };
 }
