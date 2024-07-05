@@ -11,12 +11,17 @@ export default function gitee(): Provider {
     ],
     selectors: {
       // File list row, README header, file view header
-      row: '#git-project-content .tree-content .row.tree-item, .file_title, .blob-description',
+      row: `#git-project-content .tree-content .row.tree-item,
+        .file_title,
+        .blob-description,
+        .release-body .releases-download-list .item`,
       // File name table cell, Submodule name table cell, file view header
-      filename:
-        '.tree-list-item > a, .tree-item-submodule-name a, span.file_name',
+      filename: `.tree-list-item > a,
+        .tree-item-submodule-name a,
+        span.file_name,
+        a`,
       // The iconfont icon not including the delete button icon in the file view header
-      icon: 'i.iconfont:not(.icon-delete)',
+      icon: 'i.iconfont:not(.icon-delete), i.icon',
       // Element by which to detect if the tested domain is gitee.
       detect: null,
     },
@@ -47,6 +52,14 @@ export default function gitee(): Provider {
       iconEl: HTMLElement,
       fileName: string
     ): string => {
+      // try to match the 'Source code (zip)' type of rows in releases page in github.
+      if (
+        rowEl.classList.contains('item') &&
+        fileName.includes('Source code')
+      ) {
+        return fileName.replace(/\s+\((.*?)\)$/, '.$1');
+      }
+
       return fileName;
     },
   };

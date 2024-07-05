@@ -28,3 +28,8 @@ img[data-material-icons-extension='icon'] + svg.octicon-file-directory-fill {
 .octicon-file-zip[data-material-icons-extension] {
   margin-right: 5px;
 }
+
+.releases-download-list .item a {
+  display: flex;
+  align-items: center;
+}
