@@ -47,8 +47,6 @@ export function replaceIconInRow(
 
   fileName = provider.transformFileName(itemRow, iconEl, fileName);
 
-  console.log(fileName);
-
   replaceIcon(iconEl, fileName, itemRow, provider, iconPack);
 }
 
