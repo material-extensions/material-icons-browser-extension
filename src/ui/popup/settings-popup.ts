@@ -7,9 +7,6 @@ import {
   providerConfig,
 } from '../../providers';
 
-const HOST_IS_NEW = 1;
-const HOST_NO_MATCH = 2;
-
 const isPageSupported = (domain: string) => getGitProvider(domain);
 
 function getCurrentTab() {
@@ -150,7 +147,7 @@ function guessProvider(tab: Browser.Tabs.Tab) {
 
   return Browser.tabs.sendMessage(tab.id ?? 0, cmd).then((match) => {
     if (match === null) {
-      return HOST_NO_MATCH;
+      return false;
     }
 
     return match;
@@ -174,30 +171,88 @@ function checkAccess(tab: Browser.Tabs.Tab) {
     origins: [`*://${host}/*`],
   };
 
-  return Browser.permissions.contains(perm).then((r) => {
+  return Browser.permissions.contains(perm).then(async (r) => {
     if (r) {
+      await ensureContentScriptRegistered(tab);
+
       return tab;
     }
 
-    return HOST_IS_NEW;
+    return false;
   });
 }
 
 function requestAccess(tab: Browser.Tabs.Tab) {
   const { host } = new URL(tab.url ?? '');
 
-  return Browser.runtime.sendMessage({
-    event: 'request-access',
-    data: {
-      tabId: tab.id,
-      host,
-    },
+  const perm: Browser.Permissions.Permissions = {
+    permissions: ['activeTab'],
+    origins: [`*://${host}/*`],
+  };
+
+  // request the permission
+  Browser.permissions.request(perm).then(async (granted: boolean) => {
+    if (!granted) {
+      return;
+    }
+
+    // when granted reload the popup to show ui changes
+    window.location.reload();
   });
+
+  // close the popup, in firefox it stays open for some reason.
+  window.close();
+}
+
+async function ensureContentScriptRegistered(tab: Browser.Tabs.Tab) {
+  const { host } = new URL(tab.url ?? '');
+
+  const scripts = await Browser.scripting.getRegisteredContentScripts({
+    ids: ['material-icons'],
+  });
+
+  const pattern: string = `*://${host}/*`;
+
+  if (!scripts.length) {
+    // run the script now in the current tab to prevent need for reloading
+    await Browser.scripting.executeScript({
+      files: ['./main.js'],
+      target: {
+        tabId: tab.id ?? 0,
+      },
+    });
+
+    // register content script for future use
+    return Browser.scripting.registerContentScripts([
+      {
+        id: 'material-icons',
+        js: ['./main.js'],
+        css: ['./injected-styles.css'],
+        matches: [pattern],
+        runAt: 'document_start',
+      },
+    ]);
+  }
+
+  const matches = scripts[0].matches ?? [];
+
+  // if we somehow already registered the script for requested origin, skip it
+  if (matches.includes(pattern)) {
+    return;
+  }
+
+  // add new origin to content script
+  return Browser.scripting.updateContentScripts([
+    {
+      id: 'material-icons',
+      matches: [...matches, pattern],
+    },
+  ]);
 }
 
 function doGuessProvider(tab: Browser.Tabs.Tab, domain: string) {
   return guessProvider(tab).then((match) => {
-    if (match !== HOST_NO_MATCH) {
+    if (match !== false) {
       registerControls(domain);
       displayDomainSettings();
 
@@ -224,15 +279,8 @@ function init(tab: Browser.Tabs.Tab) {
         return displayPageNotSupported(domain);
       }
 
-      // overwrite for firefox browser, currently does not support
-      // asking for permissions from background, so it will run
-      // on all pages.
-      if (isFirefox()) {
-        return doGuessProvider(tab, domain);
-      }
-
       return checkAccess(tab).then((access) => {
-        if (access === HOST_IS_NEW) {
+        if (access === false) {
           return askDomainAccess(tab);
         }
 
