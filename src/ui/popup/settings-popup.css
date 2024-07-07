@@ -46,8 +46,8 @@ body {
 
 #options-btn {
   margin-left: auto;
-  width: 24;
-  height: 24;
+  width: 24px;
+  height: 24px;
   filter: grayscale(1);
 }
 
