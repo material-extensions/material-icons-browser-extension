@@ -28,7 +28,7 @@ export function replaceIconInRow(
 ): void {
   const fileName = itemRow
     .querySelector(provider.selectors.filename)
-    ?.textContent// get the last folder for the icon
+    ?.textContent // get the last folder for the icon
     ?.split('/')
     .reverse()[0]
     .trim()
