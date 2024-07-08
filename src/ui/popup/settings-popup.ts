@@ -263,10 +263,6 @@ function doGuessProvider(tab: Browser.Tabs.Tab, domain: string) {
   });
 }
 
-function isFirefox() {
-  return navigator.userAgent.toLowerCase().includes('firefox');
-}
-
 function init(tab: Browser.Tabs.Tab) {
   const domain = new URL(tab.url ?? '').host;
 
