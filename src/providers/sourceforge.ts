@@ -71,8 +71,8 @@ export default function sourceforge(): Provider {
     },
     onAdd: () => {},
     transformFileName: (
-      rowEl: HTMLElement,
-      iconEl: HTMLElement,
+      _rowEl: HTMLElement,
+      _iconEl: HTMLElement,
       fileName: string
     ): string => {
       return fileName;

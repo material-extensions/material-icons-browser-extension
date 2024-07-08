@@ -41,7 +41,7 @@ export default function gitea(): Provider {
     onAdd: () => {},
     transformFileName: (
       rowEl: HTMLElement,
-      iconEl: HTMLElement,
+      _iconEl: HTMLElement,
       fileName: string
     ): string => {
       // try to match the 'Source code (zip)' type of rows in releases page in github.

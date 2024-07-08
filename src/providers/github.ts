@@ -88,7 +88,7 @@ export default function github(): Provider {
     onAdd: () => {},
     transformFileName: (
       rowEl: HTMLElement,
-      iconEl: HTMLElement,
+      _iconEl: HTMLElement,
       fileName: string
     ): string => {
       // remove possible sha from submodule

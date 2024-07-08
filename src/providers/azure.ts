@@ -79,8 +79,8 @@ export default function azure(): Provider {
       });
     },
     transformFileName: (
-      rowEl: HTMLElement,
-      iconEl: HTMLElement,
+      _rowEl: HTMLElement,
+      _iconEl: HTMLElement,
       fileName: string
     ): string => {
       return fileName;
