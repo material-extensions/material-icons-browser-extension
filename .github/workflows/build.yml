@@ -1,0 +1,35 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: [ubuntu-latest]
+
+    name: Build Material Icons Browser Extension
+
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        with:
+          persist-credentials: false
+
+      - name: Install dependencies 📦
+        run: npm ci
+
+      - name: Check code quality 🔍
+        run: npm run lint
+
+      - name: Build extension 🛠
+        run: npm run build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
