@@ -28,7 +28,7 @@ export function replaceIconInRow(
 ): void {
   const fileName = itemRow
     .querySelector(provider.selectors.filename)
-    ?.textContent// get the last folder for the icon
+    ?.textContent // get the last folder for the icon
     ?.split('/')
     .reverse()[0]
     .trim()
@@ -77,12 +77,15 @@ function replaceIcon(
     iconName = lookForLightMatch(iconName, fileName, fileExtensions, isDir);
   }
 
+  // get correct icon name from icon list
+  iconName = iconsListTyped[iconName] ?? 'file.svg';
+
   replaceElementWithIcon(iconEl, iconName, fileName, iconPack, provider);
 }
 
 export function replaceElementWithIcon(
   iconEl: HTMLElement,
-  iconName: string | undefined,
+  iconName: string,
   fileName: string,
   iconPack: string | null,
   provider: Provider
@@ -90,13 +93,11 @@ export function replaceElementWithIcon(
   const svgFileName =
     lookForIconPackMatch(iconPack, fileName.toLowerCase()) ?? iconName;
 
-  if (!svgFileName) return;
-
   const newSVG = document.createElement('img');
   newSVG.setAttribute('data-material-icons-extension', 'icon');
   newSVG.setAttribute('data-material-icons-extension-iconname', iconName ?? '');
   newSVG.setAttribute('data-material-icons-extension-filename', fileName);
-  newSVG.src = Browser.runtime.getURL(`${svgFileName}.svg`);
+  newSVG.src = Browser.runtime.getURL(svgFileName);
 
   provider.replaceIcon(iconEl, newSVG);
 }
@@ -108,7 +109,7 @@ function lookForMatch(
   isDir: boolean,
   isSubmodule: boolean,
   isSymlink: boolean
-): string | undefined {
+): string {
   if (isSubmodule) return 'folder-git';
   if (isSymlink) return 'folder-symlink';
 
@@ -145,11 +146,11 @@ function lookForMatch(
 }
 
 function lookForLightMatch(
-  iconName: string | undefined,
+  iconName: string,
   fileName: string,
   fileExtensions: string[],
   isDir: boolean
-): string | undefined {
+): string {
   if (iconMapTyped.light.fileNames[fileName] && !isDir)
     return iconMapTyped.light.fileNames[fileName];
   if (iconMapTyped.light.folderNames[fileName] && isDir)
@@ -170,27 +171,27 @@ function lookForIconPackMatch(
   if (!iconPack) return null;
   switch (iconPack) {
     case 'angular':
-      if (iconsListTyped[`folder-angular-${lowerFileName}.svg`])
+      if (iconsListTyped[`folder-angular-${lowerFileName}`])
         return `folder-angular-${lowerFileName}`;
       break;
     case 'angular_ngrx':
-      if (iconsListTyped[`folder-ngrx-${lowerFileName}.svg`])
+      if (iconsListTyped[`folder-ngrx-${lowerFileName}`])
         return `folder-ngrx-${lowerFileName}`;
-      if (iconsListTyped[`folder-angular-${lowerFileName}.svg`])
+      if (iconsListTyped[`folder-angular-${lowerFileName}`])
         return `folder-angular-${lowerFileName}`;
       break;
     case 'react':
     case 'react_redux':
-      if (iconsListTyped[`folder-react-${lowerFileName}.svg`])
+      if (iconsListTyped[`folder-react-${lowerFileName}`])
         return `folder-react-${lowerFileName}`;
-      if (iconsListTyped[`folder-redux-${lowerFileName}.svg`])
+      if (iconsListTyped[`folder-redux-${lowerFileName}`])
         return `folder-redux-${lowerFileName}`;
       break;
     case 'vue':
     case 'vue_vuex':
-      if (iconsListTyped[`folder-vuex-${lowerFileName}.svg`])
+      if (iconsListTyped[`folder-vuex-${lowerFileName}`])
         return `folder-vuex-${lowerFileName}`;
-      if (iconsListTyped[`folder-vue-${lowerFileName}.svg`])
+      if (iconsListTyped[`folder-vue-${lowerFileName}`])
         return `folder-vue-${lowerFileName}`;
       if (lowerFileName === 'nuxt') return `folder-nuxt`;
       break;
