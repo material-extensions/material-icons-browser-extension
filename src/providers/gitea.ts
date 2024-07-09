@@ -10,9 +10,10 @@ export default function gitea(): Provider {
       },
     ],
     selectors: {
-      row: 'tr.ready.entry',
-      filename: 'td.name.four.wide > span.truncate > a',
-      icon: 'td.name.four.wide > span.truncate > svg',
+      row: 'tr.ready.entry, details.download ul.list li',
+      filename:
+        'td.name.four.wide > span.truncate > a, a[download] strong, a.archive-link strong',
+      icon: 'td.name.four.wide > span.truncate > svg, .octicon-package, .octicon-file-zip',
       // Element by which to detect if the tested domain is gitea.
       detect: 'body > .full.height > .page-content[role=main]',
     },
@@ -38,5 +39,20 @@ export default function gitea(): Provider {
       svgEl.parentNode?.replaceChild(newSVG, svgEl);
     },
     onAdd: () => {},
+    transformFileName: (
+      rowEl: HTMLElement,
+      _iconEl: HTMLElement,
+      fileName: string
+    ): string => {
+      // try to match the 'Source code (zip)' type of rows in releases page in github.
+      if (
+        rowEl.querySelector('.archive-link') &&
+        fileName.includes('Source code')
+      ) {
+        return fileName.replace(/\s+\((.*?)\)$/, '.$1');
+      }
+
+      return fileName;
+    },
   };
 }
