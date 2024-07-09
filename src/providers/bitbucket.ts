@@ -46,5 +46,12 @@ export default function bitbucket(): Provider {
       svgEl.parentNode?.replaceChild(newSVG, svgEl);
     },
     onAdd: () => {},
+    transformFileName: (
+      _rowEl: HTMLElement,
+      _iconEl: HTMLElement,
+      fileName: string
+    ): string => {
+      return fileName;
+    },
   };
 }

@@ -70,5 +70,12 @@ export default function sourceforge(): Provider {
       }
     },
     onAdd: () => {},
+    transformFileName: (
+      _rowEl: HTMLElement,
+      _iconEl: HTMLElement,
+      fileName: string
+    ): string => {
+      return fileName;
+    },
   };
 }
