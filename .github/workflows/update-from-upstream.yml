@@ -39,7 +39,7 @@ jobs:
         if: env.release_tag != env.current_tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm ci && npm run update
+        run: npm run update
 
       - name: Get package version
         if: env.release_tag != env.current_tag
@@ -63,6 +63,7 @@ jobs:
           tag_name: "${{env.package_version}}"
           body: Built with icons from VSCode Material Icon Theme ${{env.release_tag}}
           files: "*.zip"
+          generate_release_notes: true
 
       - name: Upload to chrome store
         if: env.release_tag != env.current_tag

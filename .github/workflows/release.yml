@@ -71,6 +71,7 @@ jobs:
         with:
           tag_name: "${{env.package_version}}"
           files: "*.zip"
+          generate_release_notes: true
 
       - name: Upload to chrome store
         if: ${{ github.event.inputs.onlyUpload != 'firefox' && github.event.inputs.onlyUpload != 'none' }}
