@@ -11,12 +11,20 @@ export default function gitlab(): Provider {
     ],
     selectors: {
       // Row in file list, file view header
-      row: 'table[data-testid="file-tree-table"].table.tree-table tr.tree-item, table[data-qa-selector="file_tree_table"] tr, .file-header-content',
+      row: `table[data-testid="file-tree-table"].table.tree-table tr.tree-item,
+         table[data-qa-selector="file_tree_table"] tr,
+         .file-header-content,
+         .gl-card[data-testid="release-block"] .js-assets-list ul li`,
       // Cell in file list, file view header, readme header
-      filename:
-        'td.tree-item-file-name .tree-item-link, td.tree-item-file-name, .file-header-content .file-title-name, .file-header-content .gl-link',
+      filename: `td.tree-item-file-name .tree-item-link,
+        td.tree-item-file-name,
+        .file-header-content .file-title-name,
+        .file-header-content .gl-link,
+        .gl-link`,
       // Any icon not contained in a button
-      icon: 'td.tree-item-file-name .tree-item-link svg, .tree-item svg, .file-header-content svg:not(.gl-button-icon)',
+      icon: `td.tree-item-file-name .tree-item-link svg,
+        .tree-item svg, .file-header-content svg:not(.gl-button-icon),
+        .gl-link svg.gl-icon[data-testid="doc-code-icon"]`,
       // Element by which to detect if the tested domain is gitlab.
       detect: 'body.page-initialized[data-page]',
     },
@@ -46,5 +54,22 @@ export default function gitlab(): Provider {
       svgEl.parentNode?.replaceChild(newSVG, svgEl);
     },
     onAdd: () => {},
+    transformFileName: (
+      rowEl: HTMLElement,
+      _iconEl: HTMLElement,
+      fileName: string
+    ): string => {
+      // try to match the 'Source code (zip)' type of rows in releases page in github.
+      if (
+        rowEl.parentElement?.parentElement?.classList.contains(
+          'js-assets-list'
+        ) &&
+        fileName.includes('Source code')
+      ) {
+        return fileName.replace(/\s+\((.*?)\)$/, '.$1');
+      }
+
+      return fileName;
+    },
   };
 }

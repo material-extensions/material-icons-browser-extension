@@ -20,3 +20,16 @@ img[data-material-icons-extension='icon'] + svg.octicon-file-directory-open-fill
 img[data-material-icons-extension='icon'] + svg.octicon-file-directory-fill {
   display: none !important;
 }
+
+/* github package icon spacing fix */
+.octicon-package[data-material-icons-extension] {
+  margin-right: 5px;
+}
+.octicon-file-zip[data-material-icons-extension] {
+  margin-right: 5px;
+}
+
+.releases-download-list .item a {
+  display: flex;
+  align-items: center;
+}
