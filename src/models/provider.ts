@@ -15,4 +15,9 @@ export interface Provider {
   getIsSymlink: (params: { row: HTMLElement; icon: HTMLElement }) => boolean;
   getIsLightTheme: () => boolean;
   replaceIcon: (oldIcon: HTMLElement, newIcon: HTMLElement) => void;
+  transformFileName: (
+    rowEl: HTMLElement,
+    iconEl: HTMLElement,
+    fileName: string
+  ) => string;
 }

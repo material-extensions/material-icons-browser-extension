@@ -78,5 +78,12 @@ export default function azure(): Provider {
         subtree: true,
       });
     },
+    transformFileName: (
+      _rowEl: HTMLElement,
+      _iconEl: HTMLElement,
+      fileName: string
+    ): string => {
+      return fileName;
+    },
   };
 }

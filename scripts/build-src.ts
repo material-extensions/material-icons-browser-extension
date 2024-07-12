@@ -65,13 +65,10 @@ function src(
     );
   const bundleOptionsScript = (): Promise<esbuild.BuildResult> =>
     bundleJS(distPath, path.resolve(srcPath, 'ui', 'options', 'options.ts'));
-  const bundleBackgroundScript = (): Promise<esbuild.BuildResult> =>
-    bundleJS(distPath, path.resolve(srcPath, 'background', 'background.ts'));
 
   const bundleAll: Promise<esbuild.BuildResult> = bundleMainScript()
     .then(bundlePopupScript)
-    .then(bundleOptionsScript)
-    .then(bundleBackgroundScript);
+    .then(bundleOptionsScript);
 
   const copyPopup: Promise<void[]> = Promise.all(
     [

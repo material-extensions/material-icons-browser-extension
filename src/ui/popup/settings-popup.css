@@ -4,6 +4,8 @@ body {
   color: #1a202c;
   font-size: 16px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  /** firefox has bigger popup width limit, this is to bring it to parity with chromium **/
+  max-width: 300px;
 }
 
 #content {
@@ -44,8 +46,8 @@ body {
 
 #options-btn {
   margin-left: auto;
-  width: 24;
-  height: 24;
+  width: 24px;
+  height: 24px;
   filter: grayscale(1);
 }
 
