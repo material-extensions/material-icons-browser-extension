@@ -1,58 +1,64 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="stylesheet" href="options.css" />
-  </head>
 
-  <body>
-    <div id="settings-header" class="centered">
-      <img id="logo" src="/icon-128.png" />
-      <h1>Settings</h1>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" href="options.css" />
+</head>
+
+<body>
+  <div id="settings-header" class="centered">
+    <img id="logo" src="/icon-128.png" />
+    <h1>Settings</h1>
+  </div>
+
+  <div id="domains">
+    <div id="domains-header">
+      <h2>Domains</h2>
+      <button id="reset">reset all</button>
     </div>
 
-    <div id="domains">
-      <div id="domains-header">
-        <h2>Domains</h2>
-        <button id="reset">reset all</button>
-      </div>
+    <template id="domain-row">
+      <div class="domain">
+        <input type="checkbox" class="extEnabled" />
 
-      <template id="domain-row">
-        <div class="domain">
-          <input type="checkbox" class="extEnabled" />
+        <h3 class="domain-name"></h3>
 
-          <h3 class="domain-name"></h3>
-
-          <label class="domain-icon-size-label">Icon Size:</label>
-          <div class="select-wrapper">
-            <select class="iconSize">
-              <option selected class="default-option" value="'default"></option>
-              <option value="sm">Small</option>
-              <option value="md">Medium</option>
-              <option value="lg">Large</option>
-              <option value="xl">Extra Large</option>
-            </select>
-          </div>
-
-          <label class="domain-icon-pack-label">Icon Pack:</label>
-          <div class="select-wrapper">
-            <select class="iconPack">
-              <option selected class="default-option" value="'default"></option>
-              <option value="angular">angular</option>
-              <option value="react">react</option>
-              <option value="vue">vue</option>
-              <option value="nest">nest</option>
-            </select>
-          </div>
+        <label class="domain-icon-size-label">Icon Size:</label>
+        <div class="select-wrapper">
+          <select class="iconSize">
+            <option selected class="default-option" value="'default'"></option>
+            <option value="sm">Small</option>
+            <option value="md">Medium</option>
+            <option value="lg">Large</option>
+            <option value="xl">Extra Large</option>
+          </select>
         </div>
-      </template>
-    </div>
 
-    <div id="footer" class="centered">
-      <a href="https://github.com/material-extensions/material-icons-browser-extension" target="_blank"
-        ><img src="settings-popup.github-logo.svg"
-      /></a>
-    </div>
-    <script src="options.js"></script>
-  </body>
+        <label class="domain-icon-pack-label">Icon Pack:</label>
+        <div class="select-wrapper">
+          <select class="iconPack">
+            <option selected class="default-option" value="'default'"></option>
+            <option value="angular">Angular</option>
+            <option value="angular_ngrx">Angular + Ngrx</option>
+            <option value="react">React</option>
+            <option value="react_redux">React + Redux</option>
+            <option value="qwik">Qwik</option>
+            <option value="vue">Vue</option>
+            <option value="vue_vuex">Vue + Vuex</option>
+            <option value="nest">Nest</option>
+            <option value="none">None</option>
+          </select>
+        </div>
+      </div>
+    </template>
+  </div>
+
+  <div id="footer" class="centered">
+    <a href="https://github.com/material-extensions/material-icons-browser-extension" target="_blank"><img
+        src="settings-popup.github-logo.svg" /></a>
+  </div>
+  <script src="options.js"></script>
+</body>
+
 </html>
