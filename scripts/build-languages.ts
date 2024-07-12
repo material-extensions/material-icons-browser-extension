@@ -3,14 +3,7 @@ import * as path from 'path';
 import { Octokit } from '@octokit/core';
 import * as fs from 'fs-extra';
 import stringify from 'json-stable-stringify';
-import iconMap from 'material-icon-theme/dist/material-icons.json';
-
-const iconMapTyped: {
-  languageIds: { [key: string]: string };
-  fileExtensions: { [key: string]: string };
-  fileNames: { [key: string]: string };
-  iconDefinitions: { [key: string]: any };
-} = iconMap;
+import { generateManifest, Manifest } from 'material-icon-theme';
 
 interface LanguageContribution {
   id: string;
@@ -30,6 +23,7 @@ const srcPath: string = path.resolve(__dirname, '..', 'src');
 
 let index: number = 0;
 let total: number;
+let manifest: Manifest;
 const items: Array<[string, string]> = [];
 const contributions: LanguageContribution[] = [];
 const languages: Language[] = [];
@@ -52,8 +46,11 @@ async function main(): Promise<void> {
   await fs.ensureDir(vsDataPath);
   await fs.remove(path.resolve(srcPath, 'language-map.json'));
 
+  console.log('[1/8] Generating icon configuration (manifest) file.');
+  manifest = generateManifest();
+
   console.log(
-    '[1/7] Querying Github API for official VSC language contributions.'
+    '[2/8] Querying Github API for official VSC language contributions.'
   );
   queryLanguageContributions();
 }
@@ -72,7 +69,7 @@ async function queryLanguageContributions(): Promise<void> {
     )
   );
   if (resultsPerPage * index >= total) {
-    console.log('[2/7] Fetching Microsoft language contributions from Github.');
+    console.log('[3/8] Fetching Microsoft language contributions from Github.');
     index = 0;
     total = items.length;
     items.forEach(([htmlUrl, path]) =>
@@ -106,14 +103,14 @@ async function fetchLanguageContribution(
   items[index] = [extPath, extManifest];
   index += 1;
   if (index === total) {
-    console.log('[3/7] Loading VSC language contributions into Node.');
+    console.log('[4/8] Loading VSC language contributions into Node.');
     index = 0;
     items.forEach(([extPath, extManifest]) =>
       loadLanguageContribution(extPath, extManifest)
     );
 
     console.log(
-      '[4/7] Processing language contributions for VSC File Icon API compatibility.'
+      '[5/8] Processing language contributions for VSC File Icon API compatibility.'
     );
     index = 0;
     total = contributions.length;
@@ -169,7 +166,7 @@ function processLanguageContribution(contribution: LanguageContribution): void {
   index += 1;
   if (index === total) {
     console.log(
-      '[5/7] Mapping language contributions into file icon configuration.'
+      '[6/8] Mapping language contributions into file icon configuration.'
     );
     index = 0;
     total = languages.length;
@@ -186,29 +183,25 @@ const languageMap: {
 };
 
 function mapLanguageContribution(lang: Language): void {
-  // Assuming iconMap is defined elsewhere in the code or imported
-  const langIcon: string | undefined = iconMapTyped.languageIds[lang.id];
+  const langIcon: string | undefined = manifest.languageIds?.[lang.id];
   lang.extensions.forEach((ext) => {
     const iconName: string | undefined =
-      iconMapTyped.fileExtensions[ext] || langIcon;
+      manifest.fileExtensions?.[ext] || langIcon;
     if (
-      !iconMapTyped.fileExtensions[ext] &&
+      !manifest.fileExtensions?.[ext] &&
       iconName &&
-      iconMapTyped.iconDefinitions[iconName]
+      manifest.iconDefinitions?.[iconName]
     ) {
       languageMap.fileExtensions[ext] = iconName;
     }
   });
   lang.filenames.forEach((name) => {
-    const iconName: string | undefined =
-      iconMapTyped.fileNames[name] || langIcon;
+    const iconName: string | undefined = manifest.fileNames?.[name] || langIcon;
     if (
-      !iconMapTyped.fileNames[name] &&
-      !(
-        name.startsWith('.') && iconMapTyped.fileExtensions[name.substring(1)]
-      ) &&
+      !manifest.fileNames?.[name] &&
+      !(name.startsWith('.') && manifest.fileExtensions?.[name.substring(1)]) &&
       iconName &&
-      iconMapTyped.iconDefinitions[iconName]
+      manifest.iconDefinitions?.[iconName]
     ) {
       languageMap.fileNames[name] = iconName;
     }
@@ -221,12 +214,12 @@ function mapLanguageContribution(lang: Language): void {
 
 async function generateLanguageMap(): Promise<void> {
   console.log(
-    '[6/7] Writing language contribution map to icon configuration file.'
+    '[7/8] Writing language contribution map to icon configuration file.'
   );
   await fs.writeFile(
     path.resolve(srcPath, 'language-map.json'),
     stringify(languageMap, { space: '  ' })
   );
-  console.log('[7/7] Deleting language contribution cache.');
+  console.log('[8/8] Deleting language contribution cache.');
   await fs.remove(vsDataPath);
 }
