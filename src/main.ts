@@ -14,7 +14,7 @@ const init = (): void => {
 
   const { href } = window.location;
 
-  getGitProvider(href).then((Provider: Provider | null) => {
+  getGitProvider(href).then((provider: Provider | null) => {
     Promise.all([
       getConfig('iconPack'),
       getConfig('extEnabled'),
@@ -25,11 +25,9 @@ const init = (): void => {
         boolean,
         boolean,
       ]) => {
-        if (!globalExtEnabled || !extEnabled || !Provider) return;
-        observePage(Provider, iconPack);
-        onConfigChange('iconPack', (newIconPack: string) =>
-          replaceAllIcons(Provider, newIconPack)
-        );
+        if (!globalExtEnabled || !extEnabled || !provider) return;
+        observePage(provider, iconPack);
+        onConfigChange('iconPack', () => replaceAllIcons(provider));
       }
     );
   });

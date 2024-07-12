@@ -18,7 +18,7 @@ const getUpstreamVersion = async (): Promise<string> => {
   const packageData: string = await fs.readFile(packagePath, {
     encoding: 'utf8',
   });
-  const packageJson = JSON.parse(packageData);
+  const packageJson = JSON.parse(packageData) as { version: string };
   return packageJson.version;
 };
 
