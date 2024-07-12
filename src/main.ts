@@ -1,7 +1,7 @@
 import Browser from 'webextension-polyfill';
 import { initIconSizes } from './lib/icon-sizes';
 import { observePage, replaceAllIcons } from './lib/replace-icons';
-import { getConfig, onConfigChange } from './lib/user-config';
+import { addConfigChangeListener, getConfig } from './lib/user-config';
 import { Provider } from './models';
 import { getGitProvider } from './providers';
 
@@ -27,7 +27,7 @@ const init = (): void => {
       ]) => {
         if (!globalExtEnabled || !extEnabled || !provider) return;
         observePage(provider, iconPack);
-        onConfigChange('iconPack', () => replaceAllIcons(provider));
+        addConfigChangeListener('iconPack', () => replaceAllIcons(provider));
       }
     );
   });

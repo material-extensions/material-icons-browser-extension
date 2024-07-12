@@ -1,8 +1,8 @@
 import {
   UserConfig,
+  addConfigChangeListener,
   clearConfig,
   getConfig,
-  onConfigChange,
   setConfig,
 } from '../../lib/user-config';
 import { getGitProviders } from '../../providers';
@@ -41,7 +41,7 @@ const domainToggles = (row: DomainRowElement): void => {
   };
 
   getConfig('extEnabled', 'default').then(toggleRow);
-  onConfigChange('extEnabled', toggleRow, 'default');
+  addConfigChangeListener('extEnabled', toggleRow, 'default');
 };
 
 const fillRow = (
@@ -76,8 +76,8 @@ const fillRow = (
       getConfig(configName, domain, false).then(updateInput(input));
 
     input.addEventListener('change', updateConfig(configName));
-    onConfigChange(configName, updateInput(input), domain);
-    onConfigChange(
+    addConfigChangeListener(configName, updateInput(input), domain);
+    addConfigChangeListener(
       configName,
       () => getConfig(configName, domain, false).then(updateInput(input)),
       'default'

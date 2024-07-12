@@ -45,7 +45,7 @@ export const clearConfig = (
   domain = window.location.hostname
 ) => Browser.storage.sync.remove(`${domain}:${configName}`);
 
-export const onConfigChange = (
+export const addConfigChangeListener = (
   configName: keyof UserConfig,
   handler: Function,
   domain = window.location.hostname

@@ -1,4 +1,4 @@
-import { getConfig, onConfigChange } from './user-config';
+import { addConfigChangeListener, getConfig } from './user-config';
 
 export type IconSize = 'sm' | 'md' | 'lg' | 'xl';
 
@@ -10,6 +10,6 @@ export const initIconSizes = () => {
 
   document.addEventListener('DOMContentLoaded', setIconSize, false);
 
-  onConfigChange('iconSize', setSizeAttribute);
-  onConfigChange('iconSize', setIconSize, 'default');
+  addConfigChangeListener('iconSize', setSizeAttribute);
+  addConfigChangeListener('iconSize', setIconSize, 'default');
 };
