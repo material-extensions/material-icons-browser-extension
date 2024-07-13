@@ -1,9 +1,12 @@
-import { generateManifest } from 'material-icon-theme';
+import { IconPackValue, generateManifest } from 'material-icon-theme';
 import { observe } from 'selector-observer';
 import { Provider } from '../models';
 import { replaceElementWithIcon, replaceIconInRow } from './replace-icon';
 
-export const observePage = (gitProvider: Provider, iconPack: string): void => {
+export const observePage = (
+  gitProvider: Provider,
+  iconPack: IconPackValue
+): void => {
   const manifest = generateManifest({
     activeIconPack: iconPack ?? undefined,
   });
