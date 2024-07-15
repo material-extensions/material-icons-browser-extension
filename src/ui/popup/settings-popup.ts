@@ -1,5 +1,7 @@
+import { IconPackValue } from 'material-icon-theme';
 import Browser from 'webextension-polyfill';
 import { addCustomProvider } from '../../lib/custom-providers';
+import { IconSize } from '../../lib/icon-sizes';
 import { getConfig, setConfig } from '../../lib/user-config';
 import {
   addGitProvider,
@@ -16,7 +18,7 @@ function getCurrentTab() {
 }
 
 function registerControls(domain: string) {
-  getConfig('iconSize', domain).then((size) => {
+  getConfig<IconSize>('iconSize', domain).then((size) => {
     getElementByIdOrThrow<HTMLInputElement>('icon-size').value = size;
   });
   const updateIconSize = (event: Event) =>
@@ -25,7 +27,7 @@ function registerControls(domain: string) {
     ?.getElementById('icon-size')
     ?.addEventListener('change', updateIconSize);
 
-  getConfig('iconPack', domain).then((pack) => {
+  getConfig<IconPackValue>('iconPack', domain).then((pack) => {
     getElementByIdOrThrow<HTMLInputElement>('icon-pack').value = pack;
   });
   const updateIconPack = (event: Event) =>
@@ -34,7 +36,7 @@ function registerControls(domain: string) {
     ?.getElementById('icon-pack')
     ?.addEventListener('change', updateIconPack);
 
-  getConfig('extEnabled', domain).then((enabled) => {
+  getConfig<boolean>('extEnabled', domain).then((enabled) => {
     getElementByIdOrThrow<HTMLInputElement>('enabled').checked = enabled;
   });
   const updateExtEnabled = (event: Event) =>

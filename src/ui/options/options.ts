@@ -40,7 +40,7 @@ const domainToggles = (row: DomainRowElement): void => {
     else row.classList.add('disabled');
   };
 
-  getConfig('extEnabled', 'default').then(toggleRow);
+  getConfig<boolean>('extEnabled', 'default').then(toggleRow);
   addConfigChangeListener('extEnabled', toggleRow, 'default');
 };
 
@@ -73,13 +73,13 @@ const fillRow = (
     const input = row.querySelector(`.${configName}`) as HTMLElement;
 
     const populateInput = (): Promise<void> =>
-      getConfig(configName, domain, false).then(updateInput(input));
+      getConfig<T>(configName, domain, false).then(updateInput(input));
 
     input.addEventListener('change', updateConfig(configName));
     addConfigChangeListener(configName, updateInput(input), domain);
     addConfigChangeListener(
       configName,
-      () => getConfig(configName, domain, false).then(updateInput(input)),
+      () => getConfig<T>(configName, domain, false).then(updateInput(input)),
       'default'
     );
     resetButton?.addEventListener('click', () =>

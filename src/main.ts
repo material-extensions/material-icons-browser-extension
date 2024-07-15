@@ -1,3 +1,4 @@
+import { IconPackValue } from 'material-icon-theme';
 import Browser from 'webextension-polyfill';
 import { initIconSizes } from './lib/icon-sizes';
 import { observePage, replaceAllIcons } from './lib/replace-icons';
@@ -9,28 +10,24 @@ interface Possibilities {
   [key: string]: string;
 }
 
-const init = (): void => {
+const init = async () => {
   initIconSizes();
-
   const { href } = window.location;
+  await handleProvider(href);
+};
 
-  getGitProvider(href).then((provider: Provider | null) => {
-    Promise.all([
-      getConfig('iconPack'),
-      getConfig('extEnabled'),
-      getConfig('extEnabled', 'default'),
-    ]).then(
-      ([iconPack, extEnabled, globalExtEnabled]: [
-        string,
-        boolean,
-        boolean,
-      ]) => {
-        if (!globalExtEnabled || !extEnabled || !provider) return;
-        observePage(provider, iconPack);
-        addConfigChangeListener('iconPack', () => replaceAllIcons(provider));
-      }
-    );
-  });
+const handleProvider = async (href: string) => {
+  const provider: Provider | null = await getGitProvider(href);
+  if (!provider) return;
+
+  const iconPack = await getConfig<IconPackValue>('iconPack');
+  const extEnabled = await getConfig<boolean>('extEnabled');
+  const globalExtEnabled = await getConfig<boolean>('extEnabled', 'default');
+
+  if (!globalExtEnabled || !extEnabled) return;
+
+  observePage(provider, iconPack);
+  addConfigChangeListener('iconPack', () => replaceAllIcons(provider));
 };
 
 type Handlers = {
