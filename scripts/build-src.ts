@@ -20,7 +20,15 @@ async function consolidateSVGFiles(): Promise<void> {
     .copy(path.resolve(srcPath, 'custom'), destSVGPath)
     .then(() => fs.readdir(destSVGPath))
     .then((files) =>
-      Object.fromEntries(files.map((filename) => [filename, filename]))
+      Object.fromEntries(
+        files.map((filename) => [
+          // Remove '.clone' and '.svg' from filename
+          filename
+            .replace('.clone', '')
+            .replace('.svg', ''),
+          filename,
+        ])
+      )
     )
     .then((iconsDict) =>
       fs.writeJSON(path.resolve(srcPath, 'icon-list.json'), iconsDict)

@@ -12,24 +12,22 @@ const hardDefaults: UserConfig = {
   extEnabled: true,
 };
 
-export const getConfig = (
+export const getConfig = async <T = unknown>(
   configName: keyof UserConfig,
   domain = window.location.hostname,
   useDefault = true
-) =>
-  Browser.storage.sync
-    .get({
-      // get custom domain config (if not getting default).
-      [`${domain !== 'default' ? domain : 'SKIP'}:${configName}`]: null,
-      // also get user default as fallback
-      [`default:${configName}`]: hardDefaults[configName],
-    })
-    .then(
-      ({
-        [`${domain}:${configName}`]: value,
-        [`default:${configName}`]: fallback,
-      }) => value ?? (useDefault ? fallback : null)
-    );
+): Promise<T> => {
+  const keys = {
+    [`${domain !== 'default' ? domain : 'SKIP'}:${configName}`]: null,
+    [`default:${configName}`]: hardDefaults[configName],
+  };
+
+  const result = await Browser.storage.sync.get(keys);
+  const domainSpecificValue = result[`${domain}:${configName}`];
+  const defaultValue = result[`default:${configName}`];
+
+  return domainSpecificValue ?? (useDefault ? defaultValue : null);
+};
 
 export const setConfig = (
   configName: keyof UserConfig,
@@ -45,7 +43,7 @@ export const clearConfig = (
   domain = window.location.hostname
 ) => Browser.storage.sync.remove(`${domain}:${configName}`);
 
-export const onConfigChange = (
+export const addConfigChangeListener = (
   configName: keyof UserConfig,
   handler: Function,
   domain = window.location.hostname

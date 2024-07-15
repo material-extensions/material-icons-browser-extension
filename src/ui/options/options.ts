@@ -1,8 +1,8 @@
 import {
   UserConfig,
+  addConfigChangeListener,
   clearConfig,
   getConfig,
-  onConfigChange,
   setConfig,
 } from '../../lib/user-config';
 import { getGitProviders } from '../../providers';
@@ -40,8 +40,8 @@ const domainToggles = (row: DomainRowElement): void => {
     else row.classList.add('disabled');
   };
 
-  getConfig('extEnabled', 'default').then(toggleRow);
-  onConfigChange('extEnabled', toggleRow, 'default');
+  getConfig<boolean>('extEnabled', 'default').then(toggleRow);
+  addConfigChangeListener('extEnabled', toggleRow, 'default');
 };
 
 const fillRow = (
@@ -73,13 +73,13 @@ const fillRow = (
     const input = row.querySelector(`.${configName}`) as HTMLElement;
 
     const populateInput = (): Promise<void> =>
-      getConfig(configName, domain, false).then(updateInput(input));
+      getConfig<T>(configName, domain, false).then(updateInput(input));
 
     input.addEventListener('change', updateConfig(configName));
-    onConfigChange(configName, updateInput(input), domain);
-    onConfigChange(
+    addConfigChangeListener(configName, updateInput(input), domain);
+    addConfigChangeListener(
       configName,
-      () => getConfig(configName, domain, false).then(updateInput(input)),
+      () => getConfig<T>(configName, domain, false).then(updateInput(input)),
       'default'
     );
     resetButton?.addEventListener('click', () =>

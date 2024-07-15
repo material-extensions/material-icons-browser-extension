@@ -130,7 +130,7 @@ select {
   border-color: transparent;
   background-color: transparent;
   min-width: 100px;
-  text-align: end;
+  text-align: start;
 }
 
 select:hover {
