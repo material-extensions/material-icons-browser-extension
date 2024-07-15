@@ -42,10 +42,11 @@
     "web-ext": "8.2.0"
   },
   "scripts": {
-    "prebuild": "rimraf --glob *.zip ./dist && tsc -p ./",
-    "build": "run-s build-languages build-src bundle",
+    "prebuild": "rimraf --glob *.zip ./dist",
+    "build": "run-s build-languages build-src compile bundle",
     "build-languages": "ts-node ./scripts/build-languages.ts",
     "build-src": "ts-node ./scripts/build-src.ts",
+    "compile": "tsc -p ./",
     "rebuild-logos": "ts-node ./scripts/build-icons.ts",
     "bundle": "run-p bundle-edge bundle-chrome bundle-firefox",
     "bundle-edge": "zip -r -j github-material-icons-edge-extension.zip dist/chrome-edge",
