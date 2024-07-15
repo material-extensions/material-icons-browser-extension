@@ -4,6 +4,7 @@
     "module": "commonjs",
     "outDir": "./dist",
     "strict": true,
+    "noEmit": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "lib": ["es2022", "dom"]
