@@ -17,7 +17,7 @@
     "url": "https://github.com/material-extensions/material-icons-browser-extension/issues"
   },
   "dependencies": {
-    "material-icon-theme": "latest",
+    "material-icon-theme": "^5.5.1",
     "selector-observer": "2.1.6",
     "webextension-polyfill": "0.12.0"
   },
