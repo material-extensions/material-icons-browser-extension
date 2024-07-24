@@ -5,6 +5,7 @@
   "main": "src/main.ts",
   "author": {
     "name": "Material Extensions",
+    "email": "material-icons-extensions@googlegroups.com",
     "url": "https://github.com/material-extensions"
   },
   "license": "MIT",
