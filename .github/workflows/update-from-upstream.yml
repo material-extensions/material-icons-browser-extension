@@ -39,7 +39,9 @@ jobs:
         if: env.release_tag != env.current_tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm run update
+        run: |
+          npm run update
+          npm i material-icon-theme@5.x
 
       - name: Get package version
         if: env.release_tag != env.current_tag
