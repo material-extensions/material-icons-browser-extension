@@ -1,6 +1,5 @@
 import Browser from 'webextension-polyfill';
 import { checkAccess } from './access';
-import { registerControls } from './controls';
 import {
   askDomainAccess,
   displayDomainSettings,
@@ -29,7 +28,6 @@ export async function init(tab: Browser.Tabs.Tab) {
     });
   }
 
-  registerControls(domain);
   displayDomainSettings();
   displayAllDisabledNote();
 }
