@@ -57,7 +57,7 @@ export function DomainSettings() {
   }, [domain]);
 
   return (
-    <div id='domain-settings'>
+    <div className='domain-settings'>
       <TextField disabled label='Domain' value={domain} variant='standard' />
       <FormGroup>
         <FormControlLabel
