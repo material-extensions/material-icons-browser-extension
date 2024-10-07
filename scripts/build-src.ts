@@ -61,7 +61,7 @@ function src(
   const bundlePopupScript = (): Promise<esbuild.BuildResult> =>
     bundleJS(
       distPath,
-      path.resolve(srcPath, 'ui', 'popup', 'settings-popup.ts')
+      path.resolve(srcPath, 'ui', 'popup', 'settings-popup.tsx')
     );
   const bundleOptionsScript = (): Promise<esbuild.BuildResult> =>
     bundleJS(distPath, path.resolve(srcPath, 'ui', 'options', 'options.ts'));
@@ -71,11 +71,7 @@ function src(
     .then(bundleOptionsScript);
 
   const copyPopup: Promise<void[]> = Promise.all(
-    [
-      'settings-popup.html',
-      'settings-popup.css',
-      'settings-popup.github-logo.svg',
-    ].map((file) =>
+    ['settings-popup.html', 'settings-popup.css'].map((file) =>
       fs.copy(
         path.resolve(srcPath, 'ui', 'popup', file),
         path.resolve(distPath, file)

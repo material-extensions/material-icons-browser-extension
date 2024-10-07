@@ -49,7 +49,7 @@ const handlers: Handlers = {
 
 Browser.runtime.onMessage.addListener(
   (
-    message: { cmd: keyof Handlers; args?: any[] },
+    message: { cmd: keyof Handlers; args?: unknown[] },
     _: Browser.Runtime.MessageSender,
     sendResponse: (response?: any) => void
   ) => {
