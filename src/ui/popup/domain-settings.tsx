@@ -28,8 +28,8 @@ export function DomainSettings() {
   );
 
   const changeVisibility = (event: ChangeEvent<HTMLInputElement>) => {
-    setConfig('extEnabled', (event.target as HTMLInputElement).checked);
-    setExtensionEnabled((event.target as HTMLInputElement).checked);
+    setConfig('extEnabled', event.target.checked);
+    setExtensionEnabled(event.target.checked);
   };
 
   const updateIconSize = (event: SelectChangeEvent<string>) => {
