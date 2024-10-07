@@ -13,8 +13,8 @@ import {
 } from '@mui/material';
 import { IconPackValue, availableIconPacks } from 'material-icon-theme';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { snakeToTitleCase } from '../shared/utils';
-import { getDomainFromCurrentTab } from './helper';
+import { snakeToTitleCase } from '../../shared/utils';
+import { getDomainFromCurrentTab } from '../api/helper';
 
 export function DomainSettings() {
   const iconSizes: IconSize[] = ['sm', 'md', 'lg', 'xl'];

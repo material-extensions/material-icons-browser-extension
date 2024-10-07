@@ -1,7 +1,6 @@
 import { ProviderMap } from '@/models';
 import { providerConfig } from '@/providers';
 import Browser from 'webextension-polyfill';
-import { registerControls } from './controls';
 import {
   displayCustomDomain,
   displayDomainSettings,
@@ -38,7 +37,6 @@ export function guessProvider(tab: Browser.Tabs.Tab) {
 export function doGuessProvider(tab: Browser.Tabs.Tab, domain: string) {
   return guessProvider(tab).then((match) => {
     if (match !== false) {
-      registerControls(domain);
       displayDomainSettings();
 
       return displayCustomDomain(tab, domain, match);

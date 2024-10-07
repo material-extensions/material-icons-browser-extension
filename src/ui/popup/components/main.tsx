@@ -10,9 +10,9 @@ import Box from '@mui/material/Box';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import * as React from 'react';
 import Browser from 'webextension-polyfill';
+import { getCurrentTab } from '../api/helper';
+import { init } from '../api/init';
 import { DomainSettings } from './domain-settings';
-import { getCurrentTab } from './helper';
-import { init } from './init';
 
 function SettingsPopup() {
   React.useEffect(() => {
