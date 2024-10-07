@@ -4,10 +4,6 @@ import Browser from 'webextension-polyfill';
 import { requestAccess } from './access';
 import { getElementByIdOrThrow } from './helper';
 
-export function setDomain(domain: string) {
-  getElementByIdOrThrow('domain-name').innerText = domain;
-}
-
 export function displayDomainSettings() {
   getElementByIdOrThrow('domain-settings').style.display = 'block';
 }

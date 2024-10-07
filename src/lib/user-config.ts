@@ -1,12 +1,14 @@
+import { IconPackValue } from 'material-icon-theme';
 import Browser from 'webextension-polyfill';
+import { IconSize } from './icon-sizes';
 
 export type UserConfig = {
-  iconPack: string;
-  iconSize: string;
+  iconPack: IconPackValue;
+  iconSize: IconSize;
   extEnabled: boolean;
 };
 
-const hardDefaults: UserConfig = {
+export const hardDefaults: UserConfig = {
   iconPack: 'react',
   iconSize: 'md',
   extEnabled: true,

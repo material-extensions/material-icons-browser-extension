@@ -4,8 +4,8 @@ import {
   clearConfig,
   getConfig,
   setConfig,
-} from '../../lib/user-config';
-import { getGitProviders } from '../../providers';
+} from '@/lib/user-config';
+import { getGitProviders } from '@/providers';
 
 const resetButton = document.getElementById(
   'reset'
@@ -15,7 +15,7 @@ interface DomainRowElement extends HTMLElement {
   id: string;
 }
 
-const newDomainRow = (): ChildNode => {
+export const newDomainRow = (): ChildNode => {
   const template = document.getElementById('domain-row');
   if (template instanceof HTMLTemplateElement) {
     const row = template.content.firstElementChild?.cloneNode(true);
@@ -44,7 +44,7 @@ const domainToggles = (row: DomainRowElement): void => {
   addConfigChangeListener('extEnabled', toggleRow, 'default');
 };
 
-const fillRow = (
+export const fillRow = (
   rowElement: ChildNode,
   domain: string
 ): Promise<DomainRowElement> => {
@@ -133,17 +133,11 @@ const fillRow = (
     .then(() => row);
 };
 
-function getDomains(): Promise<string[]> {
+export function getDomains(): Promise<string[]> {
   return getGitProviders().then((providers) => [
     'default',
     ...Object.values(providers).flatMap((p) => p.domains.map((d) => d.host)),
   ]);
 }
 
-const domainsDiv = document.getElementById('domains') as HTMLDivElement;
-
-getDomains().then((domains) => {
-  Promise.all(domains.map((d) => fillRow(newDomainRow(), d))).then((rows) =>
-    rows.forEach((r) => domainsDiv.appendChild(r))
-  );
-});
+export const domainsDiv = document.getElementById('domains') as HTMLDivElement;

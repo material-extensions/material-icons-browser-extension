@@ -64,7 +64,7 @@ function src(
       path.resolve(srcPath, 'ui', 'popup', 'settings-popup.tsx')
     );
   const bundleOptionsScript = (): Promise<esbuild.BuildResult> =>
-    bundleJS(distPath, path.resolve(srcPath, 'ui', 'options', 'options.ts'));
+    bundleJS(distPath, path.resolve(srcPath, 'ui', 'options', 'options.tsx'));
 
   const bundleAll: Promise<esbuild.BuildResult> = bundleMainScript()
     .then(bundlePopupScript)

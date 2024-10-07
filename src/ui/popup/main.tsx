@@ -1,9 +1,16 @@
 import SettingsIcon from '@mui/icons-material/Settings';
-import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
+import {
+  AppBar,
+  IconButton,
+  Toolbar,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import Box from '@mui/material/Box';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import * as React from 'react';
 import Browser from 'webextension-polyfill';
+import { DomainSettings } from './domain-settings';
 import { getCurrentTab } from './helper';
 import { init } from './init';
 
@@ -21,8 +28,9 @@ function SettingsPopup() {
       sx={{
         width: '20rem',
         bgcolor: 'background.default',
+        color: 'text.primary',
         borderRadius: 0,
-        minHeight: '10rem',
+        minHeight: '30rem',
       }}
     >
       <AppBar position='static'>
@@ -31,15 +39,18 @@ function SettingsPopup() {
             Material Icons
           </Typography>
           <span className='toolbar-spacer'></span>
-          <IconButton
-            color='primary'
-            aria-label='add to shopping cart'
-            onClick={openOptions}
-          >
-            <SettingsIcon />
-          </IconButton>
+          <Tooltip title='Configure Domains'>
+            <IconButton
+              color='primary'
+              aria-label='add to shopping cart'
+              onClick={openOptions}
+            >
+              <SettingsIcon />
+            </IconButton>
+          </Tooltip>
         </Toolbar>
       </AppBar>
+      <DomainSettings />
     </Box>
   );
 }

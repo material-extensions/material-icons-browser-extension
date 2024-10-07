@@ -23,15 +23,6 @@ export function registerControls(domain: string) {
     ?.getElementById('icon-pack')
     ?.addEventListener('change', updateIconPack);
 
-  getConfig<boolean>('extEnabled', domain).then((enabled) => {
-    getElementByIdOrThrow<HTMLInputElement>('enabled').checked = enabled;
-  });
-  const updateExtEnabled = (event: Event) =>
-    setConfig('extEnabled', (event.target as HTMLInputElement).checked, domain);
-  document
-    ?.getElementById('enabled')
-    ?.addEventListener('change', updateExtEnabled);
-
   document
     .getElementById('options-btn')
     ?.addEventListener('click', () => Browser.runtime.openOptionsPage());

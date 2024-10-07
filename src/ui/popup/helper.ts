@@ -19,3 +19,11 @@ export function getCurrentTab() {
 
   return Browser.tabs.query(queryOptions).then(([tab]) => tab);
 }
+
+export function getDomainFromCurrentTab() {
+  return getCurrentTab().then((tab) => {
+    console.log(tab);
+    const url = new URL(tab.url ?? '');
+    return url.hostname;
+  });
+}
