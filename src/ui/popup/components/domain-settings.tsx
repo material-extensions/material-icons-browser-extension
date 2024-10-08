@@ -9,16 +9,13 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
-  TextField,
 } from '@mui/material';
 import { IconPackValue, availableIconPacks } from 'material-icon-theme';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { snakeToTitleCase } from '../../shared/utils';
-import { getDomainFromCurrentTab } from '../api/helper';
 
-export function DomainSettings() {
+export function DomainSettings({ domain }: { domain: string }) {
   const iconSizes: IconSize[] = ['sm', 'md', 'lg', 'xl'];
-  const [domain, setDomain] = useState<string>('');
   const [extensionEnabled, setExtensionEnabled] = useState<boolean>(
     hardDefaults.extEnabled
   );
@@ -43,10 +40,6 @@ export function DomainSettings() {
   };
 
   useEffect(() => {
-    getDomainFromCurrentTab().then((domain) => setDomain(domain));
-  }, []);
-
-  useEffect(() => {
     getConfig<boolean>('extEnabled', domain).then((enabled) =>
       setExtensionEnabled(enabled)
     );
@@ -54,11 +47,10 @@ export function DomainSettings() {
     getConfig<IconPackValue>('iconPack', domain).then((pack) =>
       setIconPack(pack)
     );
-  }, [domain]);
+  }, []);
 
   return (
     <div className='domain-settings'>
-      <TextField disabled label='Domain' value={domain} variant='standard' />
       <FormGroup>
         <FormControlLabel
           control={

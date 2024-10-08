@@ -1,13 +1,8 @@
 import { ProviderMap } from '@/models';
 import { providerConfig } from '@/providers';
 import Browser from 'webextension-polyfill';
-import {
-  displayCustomDomain,
-  displayDomainSettings,
-  displayPageNotSupported,
-} from './custom-domain';
 
-export function guessProvider(tab: Browser.Tabs.Tab) {
+export async function guessProvider(tab: Browser.Tabs.Tab) {
   const possibilities: ProviderMap = {};
 
   for (const provider of Object.values(providerConfig)) {
@@ -25,23 +20,5 @@ export function guessProvider(tab: Browser.Tabs.Tab) {
     args: [possibilities],
   };
 
-  return Browser.tabs.sendMessage(tab.id ?? 0, cmd).then((match) => {
-    if (match === null) {
-      return false;
-    }
-
-    return match;
-  });
-}
-
-export function doGuessProvider(tab: Browser.Tabs.Tab, domain: string) {
-  return guessProvider(tab).then((match) => {
-    if (match !== false) {
-      displayDomainSettings();
-
-      return displayCustomDomain(tab, domain, match);
-    }
-
-    return displayPageNotSupported(domain);
-  });
+  return (await Browser.tabs.sendMessage(tab.id ?? 0, cmd)) ?? false;
 }

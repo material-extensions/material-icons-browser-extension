@@ -2,22 +2,60 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import {
   AppBar,
   IconButton,
+  TextField,
   Toolbar,
   Tooltip,
   Typography,
 } from '@mui/material';
 import Box from '@mui/material/Box';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import Browser from 'webextension-polyfill';
-import { getCurrentTab } from '../api/helper';
-import { init } from '../api/init';
+import { getCurrentTab, getDomainFromCurrentTab } from '../api/helper';
+import { PageState, checkPageState } from '../api/page-state';
+import { guessProvider } from '../api/provider';
+import { AddProvider } from './add-provider';
+import { AskForAccess } from './ask-for-access';
+import { DomainName } from './domain-name';
 import { DomainSettings } from './domain-settings';
+import { NotSupported } from './not-supported';
 
 function SettingsPopup() {
-  React.useEffect(() => {
-    getCurrentTab().then(init);
+  const [domain, setDomain] = useState<string>('');
+  const [pageSupported, setPageSupported] = useState<boolean>(false);
+  const [showAskForAccess, setShowAskForAccess] = useState<boolean>(false);
+  const [showAddProvider, setShowAddProvider] = useState<boolean>(false);
+  const [suggestedProvider, setSuggestedProvider] = useState<string>('');
+
+  useEffect(() => {
+    getDomainFromCurrentTab().then((domain) => setDomain(domain));
   }, []);
+
+  useEffect(() => {
+    getCurrentTab()
+      .then(checkPageState)
+      .then(async (state) => {
+        switch (state) {
+          case PageState.Supported:
+            setPageSupported(true);
+            break;
+          case PageState.AskForAccess:
+            setShowAskForAccess(true);
+            break;
+          case PageState.HasAccess:
+            const tab = await getCurrentTab();
+            const match = await guessProvider(tab);
+            setSuggestedProvider(match);
+            if (match) {
+              setPageSupported(true);
+              setShowAddProvider(true);
+            } else {
+              setPageSupported(false);
+            }
+            break;
+        }
+      });
+  }, [domain]);
 
   const openOptions = () => {
     Browser.runtime.openOptionsPage();
@@ -50,7 +88,15 @@ function SettingsPopup() {
           </Tooltip>
         </Toolbar>
       </AppBar>
-      <DomainSettings />
+
+      {pageSupported && <DomainName domain={domain} /> && (
+        <DomainSettings domain={domain} />
+      )}
+      {!pageSupported && <NotSupported />}
+      {showAskForAccess && <AskForAccess />}
+      {showAddProvider && (
+        <AddProvider domain={domain} suggestedProvider={suggestedProvider} />
+      )}
     </Box>
   );
 }
