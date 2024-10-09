@@ -1,6 +1,7 @@
 import { addConfigChangeListener, getConfig } from './user-config';
 
-export type IconSize = 'sm' | 'md' | 'lg' | 'xl';
+export const iconSizes = ['sm', 'md', 'lg', 'xl'];
+export type IconSize = (typeof iconSizes)[number];
 
 const setSizeAttribute = (iconSize: IconSize) =>
   document.body.setAttribute(`data-material-icons-extension-size`, iconSize);

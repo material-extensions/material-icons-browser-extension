@@ -15,6 +15,7 @@ import {
 } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 import Browser from 'webextension-polyfill';
+import { Footer } from '../../shared/footer';
 import { getCurrentTab, getDomainFromCurrentTab } from '../api/helper';
 import { PageState, checkPageState } from '../api/page-state';
 import { guessProvider } from '../api/provider';
@@ -23,7 +24,6 @@ import { AskForAccess } from './ask-for-access';
 import { DomainName } from './domain-name';
 import { DomainSettings } from './domain-settings';
 import { NotSupported } from './not-supported';
-import { Footer } from './footer';
 
 function SettingsPopup() {
   const [domain, setDomain] = useState<string>('');

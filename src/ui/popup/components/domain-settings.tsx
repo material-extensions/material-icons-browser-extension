@@ -1,21 +1,10 @@
 import { IconSize } from '@/lib/icon-sizes';
 import { getConfig, hardDefaults, setConfig } from '@/lib/user-config';
-import {
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-} from '@mui/material';
-import { IconPackValue, availableIconPacks } from 'material-icon-theme';
-import { ChangeEvent, useEffect, useState } from 'react';
-import { snakeToTitleCase } from '../../shared/utils';
+import { DomainSettingsControls } from '@/ui/shared/domain-settings-controls';
+import { IconPackValue } from 'material-icon-theme';
+import { useEffect, useState } from 'react';
 
 export function DomainSettings({ domain }: { domain: string }) {
-  const iconSizes: IconSize[] = ['sm', 'md', 'lg', 'xl'];
   const [extensionEnabled, setExtensionEnabled] = useState<boolean>(
     hardDefaults.extEnabled
   );
@@ -24,19 +13,19 @@ export function DomainSettings({ domain }: { domain: string }) {
     hardDefaults.iconPack
   );
 
-  const changeVisibility = (event: ChangeEvent<HTMLInputElement>) => {
-    setConfig('extEnabled', event.target.checked);
-    setExtensionEnabled(event.target.checked);
+  const changeVisibility = (visible: boolean) => {
+    setConfig('extEnabled', visible, domain);
+    setExtensionEnabled(visible);
   };
 
-  const updateIconSize = (event: SelectChangeEvent<string>) => {
-    setConfig('iconSize', event.target.value as IconSize, domain);
-    setIconSize(event.target.value as IconSize);
+  const updateIconSize = (iconSize: IconSize) => {
+    setConfig('iconSize', iconSize, domain);
+    setIconSize(iconSize);
   };
 
-  const updateIconPack = (event: SelectChangeEvent<string>) => {
-    setConfig('iconPack', event.target.value, domain);
-    setIconPack(event.target.value as IconPackValue);
+  const updateIconPack = (iconPack: IconPackValue) => {
+    setConfig('iconPack', iconPack, domain);
+    setIconPack(iconPack);
   };
 
   useEffect(() => {
@@ -51,44 +40,14 @@ export function DomainSettings({ domain }: { domain: string }) {
 
   return (
     <div className='domain-settings'>
-      <FormGroup>
-        <FormControlLabel
-          control={
-            <Checkbox checked={extensionEnabled} onChange={changeVisibility} />
-          }
-          label='Enable icons'
-        />
-      </FormGroup>
-      <FormControl fullWidth size='small'>
-        <InputLabel>Icon Size</InputLabel>
-        <Select
-          id='select-icon-size'
-          label='Icon Size'
-          value={iconSize}
-          onChange={updateIconSize}
-        >
-          {iconSizes.map((size) => (
-            <MenuItem key={size} value={size}>
-              {size}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl fullWidth size='small'>
-        <InputLabel>Icon Pack</InputLabel>
-        <Select
-          id='select-icon-pack'
-          label='Icon Pack'
-          value={iconPack}
-          onChange={updateIconPack}
-        >
-          {availableIconPacks.map((pack) => (
-            <MenuItem key={pack} value={pack}>
-              {snakeToTitleCase(pack)}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <DomainSettingsControls
+        iconSize={iconSize}
+        iconPack={iconPack}
+        extensionEnabled={extensionEnabled}
+        changeVisibility={changeVisibility}
+        changeIconSize={updateIconSize}
+        changeIconPack={updateIconPack}
+      />
     </div>
   );
 }

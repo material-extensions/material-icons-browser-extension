@@ -22,7 +22,6 @@ export function getCurrentTab() {
 
 export function getDomainFromCurrentTab() {
   return getCurrentTab().then((tab) => {
-    console.log(tab);
     const url = new URL(tab.url ?? '');
     return url.hostname;
   });
