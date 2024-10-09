@@ -102,7 +102,7 @@ function SettingsPopup() {
         </Toolbar>
       </AppBar>
 
-      {pageSupported && <DomainName domain={domain} /> && (
+      {pageSupported && !showAddProvider && <DomainName domain={domain} /> && (
         <DomainSettings domain={domain} />
       )}
       {!pageSupported && !showAskForAccess && <NotSupported />}

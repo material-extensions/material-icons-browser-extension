@@ -1,6 +1,14 @@
 import { addCustomProvider } from '@/lib/custom-providers';
 import { addGitProvider, providerConfig } from '@/providers';
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Typography,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import Browser from 'webextension-polyfill';
 import { getCurrentTab } from '../api/helper';
@@ -11,7 +19,6 @@ export function AddProvider(props: {
 }) {
   const { suggestedProvider, domain } = props;
   const [providers, setProviders] = useState<string[]>([]);
-  const [selectedProvider, setSelectedProvider] = useState<string>('');
 
   useEffect(() => {
     const providers = Object.values(providerConfig)
@@ -22,9 +29,9 @@ export function AddProvider(props: {
   }, []);
 
   const addProvider = () => {
-    if (!selectedProvider) return;
-    addCustomProvider(domain, selectedProvider).then(async () => {
-      addGitProvider(domain, selectedProvider);
+    if (!suggestedProvider) return;
+    addCustomProvider(domain, suggestedProvider).then(async () => {
+      addGitProvider(domain, suggestedProvider);
 
       const cmd = {
         cmd: 'init',
@@ -39,15 +46,17 @@ export function AddProvider(props: {
   };
 
   return (
-    <>
-      <div>
+    <Box sx={{ p: 2 }}>
+      <Typography variant='body1'>
+        Select a provider configuration to add to the domain.
+      </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
         <FormControl fullWidth size='small'>
           <InputLabel>Provider Configuration</InputLabel>
           <Select
             id='select-provider-config'
             label='Provider Configuration'
             value={suggestedProvider}
-            onChange={(event) => setSelectedProvider(event.target.value)}
           >
             {providers.map((provider) => (
               <MenuItem key={provider} value={provider}>
@@ -56,11 +65,12 @@ export function AddProvider(props: {
             ))}
           </Select>
         </FormControl>
-      </div>
-
-      <button type='button' onClick={addProvider}>
-        <span>Add custom provider</span>
-      </button>
-    </>
+      </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+        <Button onClick={addProvider} variant='contained'>
+          Add custom provider
+        </Button>
+      </Box>
+    </Box>
   );
 }
