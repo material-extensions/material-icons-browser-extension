@@ -2,9 +2,9 @@ import { AppBar, Button, Toolbar, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
-import { Footer } from '../shared/footer';
+import { Footer } from '../../shared/footer';
+import { getDomains } from '../api/domains';
 import { DomainSettings } from './domain-settings';
-import { getDomains } from './domains';
 
 function Options() {
   const [domains, setDomains] = useState<string[]>([]);

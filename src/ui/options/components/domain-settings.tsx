@@ -7,7 +7,7 @@ import {
 } from '@/lib/user-config';
 import { IconPackValue } from 'material-icon-theme';
 import { CSSProperties, useEffect, useState } from 'react';
-import { DomainSettingsControls } from '../shared/domain-settings-controls';
+import { DomainSettingsControls } from '../../shared/domain-settings-controls';
 import { DomainName } from './domain-name';
 
 export function DomainSettings({ domain }: { domain: string }) {
