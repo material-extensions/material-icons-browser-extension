@@ -1,10 +1,14 @@
+import { Logo } from '@/ui/shared/logo';
+import { theme } from '@/ui/shared/theme';
 import SettingsIcon from '@mui/icons-material/Settings';
 import {
   AppBar,
+  CssBaseline,
   IconButton,
   Toolbar,
   Tooltip,
   Typography,
+  useTheme,
 } from '@mui/material';
 import Box from '@mui/material/Box';
 import {
@@ -66,27 +70,32 @@ function SettingsPopup() {
     Browser.runtime.openOptionsPage();
   };
 
-  const styles: SxProps<Theme> = {
+  const containerStyles: SxProps<Theme> = {
     width: '20rem',
-    bgcolor: 'background.default',
     color: 'text.primary',
     borderRadius: 0,
+    bgcolor: 'background.default',
     minHeight: '10rem',
   };
+
+  const toolbarStyles: SxProps<Theme> = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    width: '100%',
+    alignItems: 'center',
+    boxSizing: 'border-box',
+  };
+
   return (
-    <Box sx={styles}>
+    <Box sx={containerStyles}>
       <AppBar position='static'>
-        <Toolbar>
+        <Toolbar sx={toolbarStyles}>
+          <Logo />
           <Typography variant='h6' component='div'>
             Material Icons
           </Typography>
-          <span className='toolbar-spacer'></span>
           <Tooltip title='Configure Domains'>
-            <IconButton
-              color='primary'
-              aria-label='add to shopping cart'
-              onClick={openOptions}
-            >
+            <IconButton aria-label='Open options' onClick={openOptions}>
               <SettingsIcon />
             </IconButton>
           </Tooltip>
@@ -106,15 +115,10 @@ function SettingsPopup() {
   );
 }
 
-const theme = createTheme({
-  colorSchemes: {
-    dark: true,
-  },
-});
-
 export default function Main() {
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <SettingsPopup />
     </ThemeProvider>
   );

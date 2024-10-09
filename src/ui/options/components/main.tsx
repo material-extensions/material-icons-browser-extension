@@ -1,6 +1,13 @@
-import { AppBar, Button, Toolbar, Typography } from '@mui/material';
+import { theme } from '@/ui/shared/theme';
+import {
+  AppBar,
+  Button,
+  CssBaseline,
+  Toolbar,
+  Typography,
+} from '@mui/material';
 import Box from '@mui/material/Box';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 import { Footer } from '../../shared/footer';
 import { getDomains } from '../api/domains';
@@ -27,6 +34,7 @@ function Options() {
         minHeight: '100vh',
         bgcolor: 'background.default',
         borderRadius: 0,
+        color: 'text.primary',
       }}
     >
       <AppBar position='static'>
@@ -35,7 +43,9 @@ function Options() {
             Material Icons
           </Typography>
           <span className='toolbar-spacer'></span>
-          <Button onClick={resetAll}>Reset all</Button>
+          <Button onClick={resetAll} sx={{ color: 'white' }}>
+            Reset all
+          </Button>
         </Toolbar>
       </AppBar>
 
@@ -48,15 +58,10 @@ function Options() {
   );
 }
 
-const theme = createTheme({
-  colorSchemes: {
-    dark: true,
-  },
-});
-
 export default function Main() {
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <Options />
     </ThemeProvider>
   );

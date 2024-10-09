@@ -45,6 +45,7 @@ function bundleJS(
     minify: true,
     sourcemap: false,
     outdir: outDir,
+    loader: { '.svg': 'dataurl' },
   };
   return esbuild.build(buildOptions);
 }

@@ -4,7 +4,6 @@ import {
   Checkbox,
   FormControl,
   FormControlLabel,
-  FormGroup,
   InputLabel,
   MenuItem,
   Select,
@@ -31,17 +30,15 @@ export function DomainSettingsControls({
 }: DomainSettingsControls) {
   return (
     <>
-      <FormGroup>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={extensionEnabled ?? hardDefaults.extEnabled}
-              onChange={(e) => changeVisibility(e.target.checked)}
-            />
-          }
-          label='Enable icons'
-        />
-      </FormGroup>
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={extensionEnabled ?? hardDefaults.extEnabled}
+            onChange={(e) => changeVisibility(e.target.checked)}
+          />
+        }
+        label='Enable icons'
+      />
       <FormControl fullWidth size='small'>
         <InputLabel>Icon Size</InputLabel>
         <Select

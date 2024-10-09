@@ -81,7 +81,7 @@ export function DomainSettings({ domain }: { domain: string }) {
     display: 'grid',
     gridTemplateColumns:
       windowWidth <= breakpointWidth ? '1fr 1fr' : '1fr 1fr 2fr 2fr',
-    color: 'white',
+    color: 'text.primary',
     alignItems: 'center',
     fontSize: '1rem',
     padding: '1rem 1.5rem',
