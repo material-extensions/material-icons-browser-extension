@@ -4,7 +4,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 import { Footer } from '../shared/footer';
 import { DomainSettings } from './domain-settings';
-import { getDomains } from './utils';
+import { getDomains } from './domains';
 
 function Options() {
   const [domains, setDomains] = useState<string[]>([]);
