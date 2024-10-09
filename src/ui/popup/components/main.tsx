@@ -2,13 +2,17 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import {
   AppBar,
   IconButton,
-  TextField,
   Toolbar,
   Tooltip,
   Typography,
 } from '@mui/material';
 import Box from '@mui/material/Box';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import {
+  SxProps,
+  Theme,
+  ThemeProvider,
+  createTheme,
+} from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 import Browser from 'webextension-polyfill';
 import { getCurrentTab, getDomainFromCurrentTab } from '../api/helper';
@@ -19,6 +23,7 @@ import { AskForAccess } from './ask-for-access';
 import { DomainName } from './domain-name';
 import { DomainSettings } from './domain-settings';
 import { NotSupported } from './not-supported';
+import { Footer } from './footer';
 
 function SettingsPopup() {
   const [domain, setDomain] = useState<string>('');
@@ -61,16 +66,15 @@ function SettingsPopup() {
     Browser.runtime.openOptionsPage();
   };
 
+  const styles: SxProps<Theme> = {
+    width: '20rem',
+    bgcolor: 'background.default',
+    color: 'text.primary',
+    borderRadius: 0,
+    minHeight: '10rem',
+  };
   return (
-    <Box
-      sx={{
-        width: '20rem',
-        bgcolor: 'background.default',
-        color: 'text.primary',
-        borderRadius: 0,
-        minHeight: '30rem',
-      }}
-    >
+    <Box sx={styles}>
       <AppBar position='static'>
         <Toolbar>
           <Typography variant='h6' component='div'>
@@ -92,11 +96,12 @@ function SettingsPopup() {
       {pageSupported && <DomainName domain={domain} /> && (
         <DomainSettings domain={domain} />
       )}
-      {!pageSupported && <NotSupported />}
+      {!pageSupported && !showAskForAccess && <NotSupported />}
       {showAskForAccess && <AskForAccess />}
       {showAddProvider && (
         <AddProvider domain={domain} suggestedProvider={suggestedProvider} />
       )}
+      <Footer />
     </Box>
   );
 }
