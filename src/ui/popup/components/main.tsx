@@ -96,7 +96,7 @@ function SettingsPopup() {
           </Typography>
           <Tooltip title='Configure Domains'>
             <IconButton aria-label='Open options' onClick={openOptions}>
-              <SettingsIcon />
+              <SettingsIcon style={{ color: 'white' }} />
             </IconButton>
           </Tooltip>
         </Toolbar>
