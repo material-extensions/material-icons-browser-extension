@@ -28,6 +28,19 @@ export function DomainSettingsControls({
   changeIconSize,
   changeIconPack,
 }: DomainSettingsControls) {
+  const displayIconSize = (iconSize: IconSize) => {
+    switch (iconSize) {
+      case 'sm':
+        return 'Small';
+      case 'md':
+        return 'Medium';
+      case 'lg':
+        return 'Large';
+      case 'xl':
+        return 'Extra Large';
+    }
+  };
+
   return (
     <>
       <FormControlLabel
@@ -49,7 +62,7 @@ export function DomainSettingsControls({
         >
           {iconSizes.map((size) => (
             <MenuItem key={size} value={size}>
-              {size}
+              {displayIconSize(size)}
             </MenuItem>
           ))}
         </Select>
