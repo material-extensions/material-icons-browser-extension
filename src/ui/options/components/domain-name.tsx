@@ -1,8 +1,9 @@
+import { Domain } from '@/models';
 import PublicIcon from '@mui/icons-material/Public';
 import { Typography } from '@mui/material';
 import { CSSProperties } from 'react';
 
-export function DomainName({ domain }: { domain: string }) {
+export function DomainName({ domain }: { domain: Domain }) {
   const styles: CSSProperties = {
     display: 'flex',
     alignItems: 'center',
@@ -14,7 +15,7 @@ export function DomainName({ domain }: { domain: string }) {
     <Typography color='textPrimary'>
       <div style={styles}>
         <PublicIcon />
-        <span>{domain}</span>
+        <span>{domain.name}</span>
       </div>
     </Typography>
   );

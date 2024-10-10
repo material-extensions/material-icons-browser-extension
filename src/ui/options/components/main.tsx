@@ -1,3 +1,5 @@
+import { Domain } from '@/models';
+import { Logo } from '@/ui/shared/logo';
 import { theme } from '@/ui/shared/theme';
 import {
   AppBar,
@@ -14,11 +16,16 @@ import { getDomains } from '../api/domains';
 import { DomainSettings } from './domain-settings';
 
 function Options() {
-  const [domains, setDomains] = useState<string[]>([]);
+  const [customDomains, setCustomDomains] = useState<Domain[]>([]);
+  const [defaultDomains, setDefaultDomains] = useState<Domain[]>([]);
 
   useEffect(() => {
     getDomains().then((domains) => {
-      setDomains(domains);
+      const customDomainsList = domains.filter((domain) => domain.isCustom);
+      const defaultDomainsList = domains.filter((domain) => !domain.isCustom);
+
+      setCustomDomains(customDomainsList);
+      setDefaultDomains(defaultDomainsList);
     });
   }, []);
 
@@ -27,19 +34,23 @@ function Options() {
     window.dispatchEvent(event);
   };
 
+  const containerStyling = {
+    width: '100vw',
+    minHeight: '100vh',
+    bgcolor: 'background.default',
+    borderRadius: 0,
+    color: 'text.primary',
+  };
   return (
-    <Box
-      sx={{
-        width: '100vw',
-        minHeight: '100vh',
-        bgcolor: 'background.default',
-        borderRadius: 0,
-        color: 'text.primary',
-      }}
-    >
+    <Box sx={containerStyling}>
       <AppBar position='static'>
         <Toolbar>
-          <Typography variant='h6' component='div'>
+          <Logo />
+          <Typography
+            variant='h6'
+            component='div'
+            style={{ paddingLeft: '.5rem' }}
+          >
             Material Icons
           </Typography>
           <span className='toolbar-spacer'></span>
@@ -49,9 +60,17 @@ function Options() {
         </Toolbar>
       </AppBar>
 
-      {domains.map((domain) => (
-        <DomainSettings domain={domain} />
-      ))}
+      <Box p={4}>
+        <h3>Default domains</h3>
+        {defaultDomains.map((domain) => (
+          <DomainSettings domain={domain} />
+        ))}
+
+        <h3>Custom domains</h3>
+        {customDomains.map((domain) => (
+          <DomainSettings domain={domain} />
+        ))}
+      </Box>
 
       <Footer />
     </Box>

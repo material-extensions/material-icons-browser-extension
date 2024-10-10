@@ -22,4 +22,6 @@ export type Provider = {
   ) => string;
 };
 
+export type Domain = Pick<Provider, 'name' | 'isCustom'>;
+
 export type ProviderMap = Record<string, string>;

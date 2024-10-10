@@ -5,12 +5,13 @@ import {
   hardDefaults,
   setConfig,
 } from '@/lib/user-config';
+import { Domain } from '@/models';
 import { IconPackValue } from 'material-icon-theme';
 import { CSSProperties, useEffect, useState } from 'react';
 import { DomainSettingsControls } from '../../shared/domain-settings-controls';
 import { DomainName } from './domain-name';
 
-export function DomainSettings({ domain }: { domain: string }) {
+export function DomainSettings({ domain }: { domain: Domain }) {
   const [iconSize, setIconSize] = useState<IconSize | undefined>(
     hardDefaults.iconSize
   );
@@ -22,9 +23,11 @@ export function DomainSettings({ domain }: { domain: string }) {
   );
 
   useEffect(() => {
-    getConfig<IconSize>('iconSize', domain, false).then(setIconSize);
-    getConfig<IconPackValue>('iconPack', domain, false).then(setIconPack);
-    getConfig<boolean>('extEnabled', domain, false).then(setExtensionEnabled);
+    getConfig<IconSize>('iconSize', domain.name, false).then(setIconSize);
+    getConfig<IconPackValue>('iconPack', domain.name, false).then(setIconPack);
+    getConfig<boolean>('extEnabled', domain.name, false).then(
+      setExtensionEnabled
+    );
 
     const handleResetAllDomains = (event: Event) => {
       if (event.type === 'RESET_ALL_DOMAINS') {
@@ -32,7 +35,7 @@ export function DomainSettings({ domain }: { domain: string }) {
       }
     };
 
-    if (domain !== 'default') {
+    if (domain.name !== 'default') {
       window.addEventListener('RESET_ALL_DOMAINS', handleResetAllDomains);
 
       // return cleanup function
@@ -42,25 +45,25 @@ export function DomainSettings({ domain }: { domain: string }) {
     }
   }, []);
 
-  const updateIconSize = (iconSize: IconSize) => {
-    setConfig('iconSize', iconSize, domain);
+  const changeIconSize = (iconSize: IconSize) => {
+    setConfig('iconSize', iconSize, domain.name);
     setIconSize(iconSize);
   };
 
-  const updateIconPack = (iconPack: IconPackValue) => {
-    setConfig('iconPack', iconPack, domain);
+  const changeIconPack = (iconPack: IconPackValue) => {
+    setConfig('iconPack', iconPack, domain.name);
     setIconPack(iconPack);
   };
 
   const changeVisibility = (visible: boolean) => {
-    setConfig('extEnabled', visible, domain);
+    setConfig('extEnabled', visible, domain.name);
     setExtensionEnabled(visible);
   };
 
   const resetToDefaults = async () => {
-    clearConfig('iconSize', domain);
-    clearConfig('iconPack', domain);
-    clearConfig('extEnabled', domain);
+    clearConfig('iconSize', domain.name);
+    clearConfig('iconPack', domain.name);
+    clearConfig('extEnabled', domain.name);
 
     setIconSize(undefined);
     setIconPack(undefined);
@@ -80,11 +83,11 @@ export function DomainSettings({ domain }: { domain: string }) {
   const styles: CSSProperties = {
     display: 'grid',
     gridTemplateColumns:
-      windowWidth <= breakpointWidth ? '1fr 1fr' : '1fr 1fr 2fr 2fr',
+      windowWidth <= breakpointWidth ? '1fr 1fr' : '2fr 1fr 1fr 1fr',
     color: 'text.primary',
     alignItems: 'center',
     fontSize: '1rem',
-    padding: '1rem 1.5rem',
+    padding: '0.5rem 1.5rem',
     gap: windowWidth <= breakpointWidth ? '0.5rem' : '1.5rem',
   };
 
@@ -96,8 +99,8 @@ export function DomainSettings({ domain }: { domain: string }) {
         iconPack={iconPack}
         extensionEnabled={extensionEnabled}
         changeVisibility={changeVisibility}
-        changeIconSize={updateIconSize}
-        changeIconPack={updateIconPack}
+        changeIconSize={changeIconSize}
+        changeIconPack={changeIconPack}
       />
     </div>
   );
