@@ -17,3 +17,11 @@ export const addCustomProvider = (
 
     return Browser.storage.sync.set({ customProviders });
   });
+
+export const removeCustomProvider = (name: string) => {
+  return getCustomProviders().then((customProviders) => {
+    delete customProviders[name];
+
+    Browser.storage.sync.set({ customProviders });
+  });
+};

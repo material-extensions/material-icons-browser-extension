@@ -19,6 +19,8 @@ export function AddProvider(props: {
 }) {
   const { suggestedProvider, domain } = props;
   const [providers, setProviders] = useState<string[]>([]);
+  const [selectedProvider, setSelectedProvider] =
+    useState<string>(suggestedProvider);
 
   useEffect(() => {
     const providers = Object.values(providerConfig)
@@ -29,9 +31,9 @@ export function AddProvider(props: {
   }, []);
 
   const addProvider = () => {
-    if (!suggestedProvider) return;
-    addCustomProvider(domain, suggestedProvider).then(async () => {
-      addGitProvider(domain, suggestedProvider);
+    if (!selectedProvider) return;
+    addCustomProvider(domain, selectedProvider).then(async () => {
+      addGitProvider(domain, selectedProvider);
 
       const cmd = {
         cmd: 'init',
@@ -56,7 +58,8 @@ export function AddProvider(props: {
           <Select
             id='select-provider-config'
             label='Provider Configuration'
-            value={suggestedProvider}
+            onChange={(e) => setSelectedProvider(e.target.value as string)}
+            value={selectedProvider}
           >
             {providers.map((provider) => (
               <MenuItem key={provider} value={provider}>

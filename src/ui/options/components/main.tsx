@@ -1,4 +1,6 @@
+import { removeCustomProvider } from '@/lib/custom-providers';
 import { Domain } from '@/models';
+import { removeGitProvider } from '@/providers';
 import { Logo } from '@/ui/shared/logo';
 import { theme } from '@/ui/shared/theme';
 import {
@@ -20,18 +22,28 @@ function Options() {
   const [defaultDomains, setDefaultDomains] = useState<Domain[]>([]);
 
   useEffect(() => {
-    getDomains().then((domains) => {
+    updateDomains();
+  }, []);
+
+  const resetAll = async () => {
+    const event = new CustomEvent('RESET_ALL_DOMAINS');
+    window.dispatchEvent(event);
+  };
+
+  const updateDomains = () => {
+    return getDomains().then((domains) => {
       const customDomainsList = domains.filter((domain) => domain.isCustom);
       const defaultDomainsList = domains.filter((domain) => !domain.isCustom);
 
       setCustomDomains(customDomainsList);
       setDefaultDomains(defaultDomainsList);
     });
-  }, []);
+  };
 
-  const resetAll = async () => {
-    const event = new CustomEvent('RESET_ALL_DOMAINS');
-    window.dispatchEvent(event);
+  const deleteDomain = async (domain: Domain) => {
+    await removeCustomProvider(domain.name);
+    await removeGitProvider(domain.name);
+    await updateDomains();
   };
 
   const containerStyling = {
@@ -63,12 +75,18 @@ function Options() {
       <Box p={4}>
         <h3>Default domains</h3>
         {defaultDomains.map((domain) => (
-          <DomainSettings domain={domain} />
+          <DomainSettings
+            domain={domain}
+            deleteDomain={() => deleteDomain(domain)}
+          />
         ))}
 
-        <h3>Custom domains</h3>
+        {customDomains.length > 0 && <h3>Custom domains</h3>}
         {customDomains.map((domain) => (
-          <DomainSettings domain={domain} />
+          <DomainSettings
+            domain={domain}
+            deleteDomain={() => deleteDomain(domain)}
+          />
         ))}
       </Box>
 

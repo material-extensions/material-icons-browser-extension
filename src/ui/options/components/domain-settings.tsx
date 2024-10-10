@@ -9,9 +9,13 @@ import { Domain } from '@/models';
 import { IconPackValue } from 'material-icon-theme';
 import { CSSProperties, useEffect, useState } from 'react';
 import { DomainSettingsControls } from '../../shared/domain-settings-controls';
+import { DomainActions } from './domain-actions';
 import { DomainName } from './domain-name';
 
-export function DomainSettings({ domain }: { domain: Domain }) {
+export function DomainSettings({
+  domain,
+  deleteDomain,
+}: { domain: Domain; deleteDomain: () => void }) {
   const [iconSize, setIconSize] = useState<IconSize | undefined>(
     hardDefaults.iconSize
   );
@@ -83,7 +87,7 @@ export function DomainSettings({ domain }: { domain: Domain }) {
   const styles: CSSProperties = {
     display: 'grid',
     gridTemplateColumns:
-      windowWidth <= breakpointWidth ? '1fr 1fr' : '2fr 1fr 1fr 1fr',
+      windowWidth <= breakpointWidth ? '1fr 1fr' : '2fr 1fr 1fr 1fr .5fr',
     color: 'text.primary',
     alignItems: 'center',
     fontSize: '1rem',
@@ -102,6 +106,7 @@ export function DomainSettings({ domain }: { domain: Domain }) {
         changeIconSize={changeIconSize}
         changeIconPack={changeIconPack}
       />
+      <DomainActions domain={domain} deleteDomain={deleteDomain} />
     </div>
   );
 }
