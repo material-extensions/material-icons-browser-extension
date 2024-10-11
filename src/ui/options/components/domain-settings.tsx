@@ -27,11 +27,9 @@ export function DomainSettings({
   );
 
   useEffect(() => {
-    getConfig<IconSize>('iconSize', domain.name, false).then(setIconSize);
-    getConfig<IconPackValue>('iconPack', domain.name, false).then(setIconPack);
-    getConfig<boolean>('extEnabled', domain.name, false).then(
-      setExtensionEnabled
-    );
+    getConfig('iconSize', domain.name, false).then(setIconSize);
+    getConfig('iconPack', domain.name, false).then(setIconPack);
+    getConfig('extEnabled', domain.name, false).then(setExtensionEnabled);
 
     const handleResetAllDomains = (event: Event) => {
       if (event.type === 'RESET_ALL_DOMAINS') {

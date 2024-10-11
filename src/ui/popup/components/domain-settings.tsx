@@ -29,13 +29,11 @@ export function DomainSettings({ domain }: { domain: string }) {
   };
 
   useEffect(() => {
-    getConfig<boolean>('extEnabled', domain).then((enabled) =>
+    getConfig('extEnabled', domain).then((enabled) =>
       setExtensionEnabled(enabled)
     );
-    getConfig<IconSize>('iconSize', domain).then((size) => setIconSize(size));
-    getConfig<IconPackValue>('iconPack', domain).then((pack) =>
-      setIconPack(pack)
-    );
+    getConfig('iconSize', domain).then((size) => setIconSize(size));
+    getConfig('iconPack', domain).then((pack) => setIconPack(pack));
   }, []);
 
   return (
