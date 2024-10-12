@@ -89,7 +89,7 @@ export function DomainSettings({
     color: 'text.primary',
     alignItems: 'center',
     fontSize: '1rem',
-    padding: '0.5rem 1.5rem',
+    padding: windowWidth <= breakpointWidth ? '0' : '0.5rem 1.5rem',
     gap: windowWidth <= breakpointWidth ? '0.5rem' : '1.5rem',
   };
 

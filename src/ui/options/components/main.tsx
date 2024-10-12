@@ -47,8 +47,7 @@ function Options() {
   };
 
   const containerStyling = {
-    width: '100vw',
-    minHeight: '100vh',
+    width: '100%',
     bgcolor: 'background.default',
     borderRadius: 0,
     color: 'text.primary',

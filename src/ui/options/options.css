@@ -3,6 +3,10 @@ body {
   margin: 0;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 .toolbar-spacer {
   flex: 1 1 auto;
 }

@@ -8,15 +8,9 @@ import {
   Toolbar,
   Tooltip,
   Typography,
-  useTheme,
 } from '@mui/material';
 import Box from '@mui/material/Box';
-import {
-  SxProps,
-  Theme,
-  ThemeProvider,
-  createTheme,
-} from '@mui/material/styles';
+import { SxProps, Theme, ThemeProvider } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 import Browser from 'webextension-polyfill';
 import { Footer } from '../../shared/footer';
@@ -25,12 +19,13 @@ import { PageState, checkPageState } from '../api/page-state';
 import { guessProvider } from '../api/provider';
 import { AddProvider } from './add-provider';
 import { AskForAccess } from './ask-for-access';
-import { DomainName } from './domain-name';
 import { DomainSettings } from './domain-settings';
+import { LoadingSpinner } from './loading-spinner';
 import { NotSupported } from './not-supported';
 
 function SettingsPopup() {
   const [domain, setDomain] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [pageSupported, setPageSupported] = useState<boolean>(false);
   const [showAskForAccess, setShowAskForAccess] = useState<boolean>(false);
   const [showAddProvider, setShowAddProvider] = useState<boolean>(false);
@@ -63,6 +58,7 @@ function SettingsPopup() {
             }
             break;
         }
+        setIsLoading(false);
       });
   }, [domain]);
 
@@ -86,6 +82,14 @@ function SettingsPopup() {
     boxSizing: 'border-box',
   };
 
+  const shouldShowDomainSettings =
+    !isLoading && pageSupported && !showAddProvider;
+  const shouldShowNotSupported =
+    !isLoading && !pageSupported && !showAskForAccess;
+  const shouldShowAskForAccess = showAskForAccess;
+  const shouldShowAddProvider = showAddProvider;
+  const shouldShowLoadingSpinner = isLoading;
+
   return (
     <Box sx={containerStyles}>
       <AppBar position='static'>
@@ -102,14 +106,14 @@ function SettingsPopup() {
         </Toolbar>
       </AppBar>
 
-      {pageSupported && !showAddProvider && <DomainName domain={domain} /> && (
-        <DomainSettings domain={domain} />
-      )}
-      {!pageSupported && !showAskForAccess && <NotSupported />}
-      {showAskForAccess && <AskForAccess />}
-      {showAddProvider && (
+      {shouldShowDomainSettings && <DomainSettings domain={domain} />}
+      {shouldShowNotSupported && <NotSupported />}
+      {shouldShowAskForAccess && <AskForAccess />}
+      {shouldShowAddProvider && (
         <AddProvider domain={domain} suggestedProvider={suggestedProvider} />
       )}
+      {shouldShowLoadingSpinner && <LoadingSpinner />}
+
       <Footer />
     </Box>
   );
