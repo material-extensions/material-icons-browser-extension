@@ -80,7 +80,7 @@ function replaceIcon(
   }
 
   // get correct icon name from icon list
-  iconName = iconsListTyped[iconName] ?? 'file.svg';
+  iconName = iconsListTyped[iconName] ?? (isDir ? 'folder.svg' : 'file.svg');
 
   replaceElementWithIcon(iconEl, iconName, fileName, provider);
 }

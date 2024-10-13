@@ -1,5 +1,6 @@
 import { Domain } from '@/models';
 import { getListOfFileIcons } from '../api/icons';
+import { getLanguageIds } from '../api/language-ids';
 import { IconBindingControls } from './icon-binding-controls';
 
 export function LanguageIconBindings({ domain }: { domain: Domain }) {
@@ -8,6 +9,8 @@ export function LanguageIconBindings({ domain }: { domain: Domain }) {
       domain={domain}
       title='Language Icon Bindings'
       iconList={getListOfFileIcons()}
+      bindings={getLanguageIds()}
+      bindingsLabel='Language ID'
       configName='languageIconBindings'
       placeholder='typescript / javascript'
       label='Language ID'

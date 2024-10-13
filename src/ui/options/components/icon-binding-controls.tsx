@@ -6,14 +6,7 @@ import { Autocomplete, Button, IconButton, TextField } from '@mui/material';
 import { IconAssociations } from 'material-icon-theme';
 import { CSSProperties, useEffect, useState } from 'react';
 
-export function IconBindingControls({
-  domain,
-  title,
-  iconList,
-  configName,
-  placeholder,
-  label,
-}: {
+type IconBindingControlProps = {
   domain: Domain;
   title: string;
   iconList: string[];
@@ -23,7 +16,30 @@ export function IconBindingControls({
   >;
   placeholder: string;
   label: string;
-}) {
+  bindings?: string[];
+  bindingsLabel?: string;
+};
+
+/**
+ * If binding values are provided, the component will render a dropdown for selecting the binding values.
+ * Therefor, the `bindings` and `bindingsLabel` props are required.
+ */
+type ValidatedIconBindingControlProps = IconBindingControlProps &
+  (
+    | { bindings: string[]; bindingsLabel: string }
+    | { bindings?: undefined; bindingsLabel?: undefined }
+  );
+
+export function IconBindingControls({
+  domain,
+  title,
+  iconList,
+  configName,
+  placeholder,
+  label,
+  bindings,
+  bindingsLabel,
+}: ValidatedIconBindingControlProps) {
   type IconBinding = {
     binding: string;
     iconName: string | null;
@@ -112,15 +128,32 @@ export function IconBindingControls({
       <div style={controlStyling}>
         {iconBindings.map(({ binding, iconName }, index) => (
           <div key={index} style={iconBindingStyle}>
-            <TextField
-              label={label}
-              variant='outlined'
-              value={binding}
-              onChange={(e) => {
-                changeBinding(index, e.target.value);
-              }}
-              placeholder={placeholder}
-            />
+            {bindings ? (
+              <Autocomplete
+                disablePortal
+                value={binding}
+                onChange={(_, value) => {
+                  if (value !== null) {
+                    changeBinding(index, value);
+                  }
+                }}
+                options={bindings}
+                sx={{ width: 300 }}
+                renderInput={(params) => (
+                  <TextField {...params} label={bindingsLabel} />
+                )}
+              />
+            ) : (
+              <TextField
+                label={label}
+                variant='outlined'
+                value={binding}
+                onChange={(e) => {
+                  changeBinding(index, e.target.value);
+                }}
+                placeholder={placeholder}
+              />
+            )}
             <Autocomplete
               disablePortal
               value={iconName}
