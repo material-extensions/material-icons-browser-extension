@@ -2,7 +2,15 @@ import { UserConfig, getConfig, setConfig } from '@/lib/user-config';
 import { Domain } from '@/models';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Autocomplete, Button, IconButton, TextField } from '@mui/material';
+import {
+  Autocomplete,
+  Box,
+  Button,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Tooltip,
+} from '@mui/material';
 import { IconAssociations } from 'material-icon-theme';
 import { CSSProperties, useEffect, useState } from 'react';
 
@@ -160,18 +168,81 @@ export function IconBindingControls({
               onChange={(_, value) => {
                 onChangeIconName(index, value);
               }}
+              renderOption={(props, option) => {
+                const { key, ...optionProps } = props;
+                return (
+                  <Box
+                    key={key}
+                    component='li'
+                    sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
+                    {...optionProps}
+                  >
+                    <IconOption
+                      iconName={
+                        configName === 'folderIconBindings'
+                          ? option === 'folder'
+                            ? 'folder'
+                            : `folder-${option}`
+                          : option
+                      }
+                    />
+                    {option}
+                  </Box>
+                );
+              }}
               options={iconList}
               sx={{ width: 300 }}
-              renderInput={(params) => <TextField {...params} label='Icon' />}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  slotProps={{
+                    input: {
+                      ...params.InputProps,
+                      startAdornment: (
+                        <InputAdornment position='start'>
+                          <IconOption
+                            iconName={
+                              configName === 'folderIconBindings'
+                                ? iconName === 'folder'
+                                  ? 'folder'
+                                  : `folder-${iconName}`
+                                : iconName
+                            }
+                          />
+                        </InputAdornment>
+                      ),
+                    },
+                  }}
+                  label='Icon'
+                />
+              )}
             />
             <div>
-              <IconButton onClick={() => removeBinding(index)}>
-                <DeleteIcon />
-              </IconButton>
+              <Tooltip title='Remove binding'>
+                <IconButton onClick={() => removeBinding(index)}>
+                  <DeleteIcon />
+                </IconButton>
+              </Tooltip>
             </div>
           </div>
         ))}
       </div>
     </div>
+  );
+}
+
+function IconOption({ iconName }: { iconName: string | null }) {
+  return (
+    <img
+      loading='lazy'
+      width='20'
+      src={`./${iconName?.toLowerCase()}.svg`}
+      alt=''
+      onError={(e) => {
+        const target = e.target as HTMLImageElement;
+        target.onerror = null; // Prevent infinite loop in case the fallback also fails
+        target.src = `./${iconName?.toLowerCase()}.clone.svg`;
+      }}
+    />
   );
 }

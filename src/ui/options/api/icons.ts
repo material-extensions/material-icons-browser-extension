@@ -19,6 +19,7 @@ export function getListOfFolderIcons(): string[] {
       (name) =>
         name.startsWith('folder') &&
         !name.includes('-open') &&
+        !name.includes('-root') &&
         !blacklist.some((term) => name.includes(term))
     )
     .map((name) => name.replace('folder-', ''))
