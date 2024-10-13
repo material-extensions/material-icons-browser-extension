@@ -15,8 +15,8 @@ import { ThemeProvider } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 import { Footer } from '../../shared/footer';
 import { getDomains } from '../api/domains';
-import { DomainSettings } from './domain-settings';
 import { ConfirmDialog } from './confirm-dialog';
+import { DomainSettings } from './domain-settings';
 
 function Options() {
   const [customDomains, setCustomDomains] = useState<Domain[]>([]);
