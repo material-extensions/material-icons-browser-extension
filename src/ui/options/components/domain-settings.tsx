@@ -63,9 +63,12 @@ export function DomainSettings({
   };
 
   const resetToDefaults = async () => {
-    clearConfig('iconSize', domain.name);
-    clearConfig('iconPack', domain.name);
-    clearConfig('extEnabled', domain.name);
+    await clearConfig('iconSize', domain.name);
+    await clearConfig('iconPack', domain.name);
+    await clearConfig('extEnabled', domain.name);
+    await clearConfig('languageIconBindings', domain.name);
+    await clearConfig('fileIconBindings', domain.name);
+    await clearConfig('folderIconBindings', domain.name);
 
     setIconSize(undefined);
     setIconPack(undefined);

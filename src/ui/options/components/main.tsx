@@ -16,10 +16,12 @@ import { useEffect, useState } from 'react';
 import { Footer } from '../../shared/footer';
 import { getDomains } from '../api/domains';
 import { DomainSettings } from './domain-settings';
+import { ConfirmDialog } from './confirm-dialog';
 
 function Options() {
   const [customDomains, setCustomDomains] = useState<Domain[]>([]);
   const [defaultDomains, setDefaultDomains] = useState<Domain[]>([]);
+  const [showResetConfirmDialog, setShowResetConfirmDialog] = useState(false);
 
   useEffect(() => {
     updateDomains();
@@ -53,44 +55,64 @@ function Options() {
     color: 'text.primary',
   };
   return (
-    <Box sx={containerStyling}>
-      <AppBar position='static'>
-        <Toolbar>
-          <Logo />
-          <Typography
-            variant='h6'
-            component='div'
-            style={{ paddingLeft: '.5rem' }}
-          >
-            Material Icons
-          </Typography>
-          <span className='toolbar-spacer'></span>
-          <Button onClick={resetAll} sx={{ color: 'white' }}>
-            Reset all
-          </Button>
-        </Toolbar>
-      </AppBar>
+    <>
+      <Box sx={containerStyling}>
+        <AppBar position='static'>
+          <Toolbar>
+            <Logo />
+            <Typography
+              variant='h6'
+              component='div'
+              style={{ paddingLeft: '.5rem' }}
+            >
+              Material Icons
+            </Typography>
+            <span className='toolbar-spacer'></span>
+            <Button
+              onClick={() => setShowResetConfirmDialog(true)}
+              sx={{ color: 'white' }}
+            >
+              Reset all
+            </Button>
+          </Toolbar>
+        </AppBar>
 
-      <Box p={4}>
-        <h3>Default domains</h3>
-        {defaultDomains.map((domain) => (
-          <DomainSettings
-            domain={domain}
-            deleteDomain={() => deleteDomain(domain)}
-          />
-        ))}
+        <Box p={4}>
+          <h3>Default domains</h3>
+          {defaultDomains.map((domain) => (
+            <DomainSettings
+              domain={domain}
+              deleteDomain={() => deleteDomain(domain)}
+            />
+          ))}
 
-        {customDomains.length > 0 && <h3>Custom domains</h3>}
-        {customDomains.map((domain) => (
-          <DomainSettings
-            domain={domain}
-            deleteDomain={() => deleteDomain(domain)}
-          />
-        ))}
+          {customDomains.length > 0 && <h3>Custom domains</h3>}
+          {customDomains.map((domain) => (
+            <DomainSettings
+              domain={domain}
+              deleteDomain={() => deleteDomain(domain)}
+            />
+          ))}
+        </Box>
+
+        <Footer />
       </Box>
 
-      <Footer />
-    </Box>
+      {/* Dialogs */}
+
+      <ConfirmDialog
+        title='Reset all domains'
+        message={`Are you sure to reset all domain settings to the settings of the default domain? It will also remove the icon bindings of the custom domains.`}
+        onConfirm={() => {
+          resetAll();
+          setShowResetConfirmDialog(false);
+        }}
+        onCancel={() => {
+          setShowResetConfirmDialog(false);
+        }}
+        show={showResetConfirmDialog}
+      />
+    </>
   );
 }
 
