@@ -50,7 +50,7 @@ export function IconBindingControls({
   ]);
 
   useEffect(() => {
-    getConfig(configName, domain.name).then((iconBinding) => {
+    getConfig(configName, domain.name, false).then((iconBinding) => {
       const bindings = Object.entries(iconBinding ?? []).map(
         ([binding, iconName]) => ({
           binding,

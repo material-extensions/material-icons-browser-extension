@@ -11,16 +11,4 @@ body {
   flex: 1 1 auto;
 }
 
-.icon-settings {
-  display: grid;
-  gap: 1.5rem;
-  grid-template-columns: 1fr 1fr 1fr;
-  padding: 1rem 0;
-  box-sizing: border-box;
-}
 
-@media (max-width: 1300px) {
-  .icon-settings {
-    grid-template-columns: 1fr;
-  }
-}

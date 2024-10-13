@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
-import { ReactElement, Ref, forwardRef } from 'react';
+import { CSSProperties, ReactElement, Ref, forwardRef } from 'react';
 import { FileIconBindings } from './file-icon-bindings';
 import { FolderIconBindings } from './folder-icon-bindings';
 import { LanguageIconBindings } from './language-icon-bindings';
@@ -35,6 +35,14 @@ export function IconSettingsDialog({
   domain,
   onClose,
 }: IconSettingsDialogProps) {
+  const iconSettingStyles: CSSProperties = {
+    display: 'grid',
+    gap: '1.5rem',
+    gridTemplateColumns: '1fr',
+    padding: '1rem 0',
+    boxSizing: 'border-box',
+  };
+
   return (
     <Dialog
       fullScreen
@@ -42,7 +50,7 @@ export function IconSettingsDialog({
       onClose={onClose}
       TransitionComponent={Transition}
     >
-      <AppBar sx={{ position: 'relative' }}>
+      <AppBar sx={{ position: 'sticky' }}>
         <Toolbar>
           <IconButton
             edge='start'
@@ -61,7 +69,7 @@ export function IconSettingsDialog({
         <Typography variant='h6' component='div'>
           Domain: {domain.name}
         </Typography>
-        <div className='icon-settings'>
+        <div style={iconSettingStyles}>
           <FileIconBindings domain={domain} />
           <FolderIconBindings domain={domain} />
           <LanguageIconBindings domain={domain} />
