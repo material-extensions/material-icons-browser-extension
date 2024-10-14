@@ -57,7 +57,7 @@ function Options() {
   return (
     <>
       <Box sx={containerStyling}>
-        <AppBar position='static'>
+        <AppBar position='sticky'>
           <Toolbar>
             <Logo />
             <Typography
