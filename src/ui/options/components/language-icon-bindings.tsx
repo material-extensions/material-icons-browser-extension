@@ -7,7 +7,6 @@ export function LanguageIconBindings({ domain }: { domain: Domain }) {
   return (
     <IconBindingControls
       domain={domain}
-      title='Language Icon Bindings'
       iconList={getListOfFileIcons()}
       bindings={getLanguageIds()}
       bindingsLabel='Language ID'

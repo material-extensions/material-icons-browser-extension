@@ -6,7 +6,6 @@ export function FileIconBindings({ domain }: { domain: Domain }) {
   return (
     <IconBindingControls
       domain={domain}
-      title='File Icon Bindings'
       iconList={getListOfFileIcons()}
       configName='fileIconBindings'
       placeholder='*.ts / tsconfig.json'

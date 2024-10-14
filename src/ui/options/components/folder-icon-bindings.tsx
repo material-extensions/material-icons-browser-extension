@@ -6,7 +6,6 @@ export function FolderIconBindings({ domain }: { domain: Domain }) {
   return (
     <IconBindingControls
       domain={domain}
-      title='Folder Icon Bindings'
       iconList={getListOfFolderIcons()}
       configName='folderIconBindings'
       placeholder='src / dist'

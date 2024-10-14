@@ -16,7 +16,6 @@ import { CSSProperties, useEffect, useState } from 'react';
 
 type IconBindingControlProps = {
   domain: Domain;
-  title: string;
   iconList: string[];
   configName: keyof Pick<
     UserConfig,
@@ -40,7 +39,6 @@ type ValidatedIconBindingControlProps = IconBindingControlProps &
 
 export function IconBindingControls({
   domain,
-  title,
   iconList,
   configName,
   placeholder,
@@ -71,9 +69,11 @@ export function IconBindingControls({
 
   const iconBindingStyle: CSSProperties = {
     width: '100%',
-    display: 'flex',
-    gap: '1rem',
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr 2rem',
     alignItems: 'center',
+    gap: '1rem',
+    marginBottom: '1rem',
   };
 
   const controlStyling: CSSProperties = {
@@ -124,15 +124,6 @@ export function IconBindingControls({
 
   return (
     <div>
-      <h3>{title}</h3>
-      <Button
-        variant='contained'
-        onClick={addIconBinding}
-        endIcon={<AddIcon />}
-        style={{ marginBottom: '1.5rem' }}
-      >
-        Add new binding
-      </Button>
       <div style={controlStyling}>
         {iconBindings.map(({ binding, iconName }, index) => (
           <div key={index} style={iconBindingStyle}>
@@ -146,7 +137,7 @@ export function IconBindingControls({
                   }
                 }}
                 options={bindings}
-                sx={{ width: 300 }}
+                sx={{ width: '100%' }}
                 renderInput={(params) => (
                   <TextField {...params} label={bindingsLabel} />
                 )}
@@ -191,7 +182,7 @@ export function IconBindingControls({
                 );
               }}
               options={iconList}
-              sx={{ width: 300 }}
+              sx={{ width: '100%' }}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -227,6 +218,9 @@ export function IconBindingControls({
           </div>
         ))}
       </div>
+      <Button onClick={addIconBinding} startIcon={<AddIcon />}>
+        Add new binding
+      </Button>
     </div>
   );
 }

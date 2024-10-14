@@ -1,9 +1,17 @@
 import { Domain } from '@/models';
 import CloseIcon from '@mui/icons-material/Close';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   AppBar,
   Box,
+  Button,
   Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   IconButton,
   Slide,
   Toolbar,
@@ -35,46 +43,49 @@ export function IconSettingsDialog({
   domain,
   onClose,
 }: IconSettingsDialogProps) {
-  const iconSettingStyles: CSSProperties = {
-    display: 'grid',
-    gap: '1.5rem',
-    gridTemplateColumns: '1fr',
-    padding: '1rem 0',
-    boxSizing: 'border-box',
-  };
-
   return (
     <Dialog
-      fullScreen
       open={show}
       onClose={onClose}
       TransitionComponent={Transition}
+      fullWidth={true}
+      maxWidth='lg'
     >
-      <AppBar sx={{ position: 'sticky' }}>
-        <Toolbar>
-          <IconButton
-            edge='start'
-            color='inherit'
-            onClick={onClose}
-            aria-label='close'
-          >
-            <CloseIcon />
-          </IconButton>
-          <Typography sx={{ ml: 2, flex: 1 }} variant='h6' component='div'>
-            Configure Icon Associations
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Box sx={{ p: 4 }}>
-        <Typography variant='h6' component='div'>
+      <DialogTitle>Configure Icon Bindings</DialogTitle>
+      <DialogContent>
+        <Typography component='div' style={{ paddingBottom: '1.5rem' }}>
           Domain: {domain.name}
         </Typography>
-        <div style={iconSettingStyles}>
-          <FileIconBindings domain={domain} />
-          <FolderIconBindings domain={domain} />
-          <LanguageIconBindings domain={domain} />
-        </div>
-      </Box>
+        <Accordion defaultExpanded>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>File Icon Bindings</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <FileIconBindings domain={domain} />
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion defaultExpanded>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>Folder Icon Bindings</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <FolderIconBindings domain={domain} />
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion defaultExpanded>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>Language Icon Bindings</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <LanguageIconBindings domain={domain} />
+          </AccordionDetails>
+        </Accordion>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose}>Close</Button>
+      </DialogActions>
     </Dialog>
   );
 }
