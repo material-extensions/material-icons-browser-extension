@@ -140,7 +140,6 @@ export function IconBindingControls({
               infoText={iconInfoText}
             />
             <Autocomplete
-              disablePortal
               value={iconName}
               onChange={(_, value) => {
                 onChangeIconName(index, value);

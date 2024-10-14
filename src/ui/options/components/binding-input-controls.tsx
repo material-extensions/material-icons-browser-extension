@@ -20,7 +20,6 @@ export function BindingControls({
 }: WithBindingProps<BindingControlsProps>): JSX.Element {
   return bindings ? (
     <Autocomplete
-      disablePortal
       value={binding}
       onChange={(_, value) => {
         if (value !== null) {
