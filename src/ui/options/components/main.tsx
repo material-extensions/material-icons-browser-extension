@@ -102,7 +102,7 @@ function Options() {
 
       <ConfirmDialog
         title='Reset all domains'
-        message={`Are you sure to reset all domain settings to the settings of the default domain? It will also remove the icon bindings of the custom domains.`}
+        message={`Are you sure to reset all domain settings to the settings of the default domain? It will also put the icon bindings to the default domain.`}
         onConfirm={() => {
           resetAll();
           setShowResetConfirmDialog(false);
