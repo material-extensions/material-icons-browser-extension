@@ -1,5 +1,6 @@
 import { UserConfig, getConfig, setConfig } from '@/lib/user-config';
 import { Domain } from '@/models';
+import { InfoPopover } from '@/ui/shared/info-popover';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
@@ -13,8 +14,11 @@ import {
 } from '@mui/material';
 import { IconAssociations } from 'material-icon-theme';
 import { CSSProperties, useEffect, useState } from 'react';
+import { WithBindingProps } from '../types/binding-control-props';
+import { BindingControls } from './binding-input-controls';
 
 type IconBindingControlProps = {
+  title: string;
   domain: Domain;
   iconList: string[];
   configName: keyof Pick<
@@ -23,29 +27,22 @@ type IconBindingControlProps = {
   >;
   placeholder: string;
   label: string;
+  iconInfoText: string;
   bindings?: string[];
   bindingsLabel?: string;
 };
 
-/**
- * If binding values are provided, the component will render a dropdown for selecting the binding values.
- * Therefor, the `bindings` and `bindingsLabel` props are required.
- */
-type ValidatedIconBindingControlProps = IconBindingControlProps &
-  (
-    | { bindings: string[]; bindingsLabel: string }
-    | { bindings?: undefined; bindingsLabel?: undefined }
-  );
-
 export function IconBindingControls({
+  title,
   domain,
   iconList,
   configName,
   placeholder,
   label,
+  iconInfoText,
   bindings,
   bindingsLabel,
-}: ValidatedIconBindingControlProps) {
+}: WithBindingProps<IconBindingControlProps>) {
   type IconBinding = {
     binding: string;
     iconName: string | null;
@@ -124,35 +121,24 @@ export function IconBindingControls({
 
   return (
     <div>
+      <h3>{title}</h3>
       <div style={controlStyling}>
         {iconBindings.map(({ binding, iconName }, index) => (
           <div key={index} style={iconBindingStyle}>
-            {bindings ? (
-              <Autocomplete
-                disablePortal
-                value={binding}
-                onChange={(_, value) => {
-                  if (value !== null) {
-                    changeBinding(index, value);
-                  }
-                }}
-                options={bindings}
-                sx={{ width: '100%' }}
-                renderInput={(params) => (
-                  <TextField {...params} label={bindingsLabel} />
-                )}
-              />
-            ) : (
-              <TextField
-                label={label}
-                variant='outlined'
-                value={binding}
-                onChange={(e) => {
-                  changeBinding(index, e.target.value);
-                }}
-                placeholder={placeholder}
-              />
-            )}
+            <InfoPopover
+              renderContent={() => (
+                <BindingControls
+                  binding={binding}
+                  index={index}
+                  placeholder={placeholder}
+                  label={label}
+                  changeBinding={changeBinding}
+                  bindings={bindings}
+                  bindingsLabel={bindingsLabel}
+                />
+              )}
+              infoText={iconInfoText}
+            />
             <Autocomplete
               disablePortal
               value={iconName}

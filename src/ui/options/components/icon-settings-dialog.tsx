@@ -1,24 +1,15 @@
 import { Domain } from '@/models';
-import CloseIcon from '@mui/icons-material/Close';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  AppBar,
-  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  IconButton,
   Slide,
-  Toolbar,
   Typography,
 } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
-import { CSSProperties, ReactElement, Ref, forwardRef } from 'react';
+import { ReactElement, Ref, forwardRef } from 'react';
 import { FileIconBindings } from './file-icon-bindings';
 import { FolderIconBindings } from './folder-icon-bindings';
 import { LanguageIconBindings } from './language-icon-bindings';
@@ -56,32 +47,10 @@ export function IconSettingsDialog({
         <Typography component='div' style={{ paddingBottom: '1.5rem' }}>
           Domain: {domain.name}
         </Typography>
-        <Accordion defaultExpanded>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>File Icon Bindings</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <FileIconBindings domain={domain} />
-          </AccordionDetails>
-        </Accordion>
 
-        <Accordion defaultExpanded>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>Folder Icon Bindings</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <FolderIconBindings domain={domain} />
-          </AccordionDetails>
-        </Accordion>
-
-        <Accordion defaultExpanded>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>Language Icon Bindings</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <LanguageIconBindings domain={domain} />
-          </AccordionDetails>
-        </Accordion>
+        <FileIconBindings domain={domain} />
+        <FolderIconBindings domain={domain} />
+        <LanguageIconBindings domain={domain} />
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Close</Button>
