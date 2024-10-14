@@ -7,7 +7,7 @@ export function FolderIconBindings({ domain }: { domain: Domain }) {
     <IconBindingControls
       title='Folder Icon Bindings'
       domain={domain}
-      iconInfoText='You can enter a folder name. The folder name must be the exact name of the folder, e.g. src.'
+      iconInfoText='Enter the exact folder name, e.g. src.'
       iconList={getListOfFolderIcons()}
       configName='folderIconBindings'
       placeholder='src / dist'

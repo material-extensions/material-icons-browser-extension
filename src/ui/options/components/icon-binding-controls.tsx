@@ -153,15 +153,7 @@ export function IconBindingControls({
                     sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
                     {...optionProps}
                   >
-                    <IconOption
-                      iconName={
-                        configName === 'folderIconBindings'
-                          ? option === 'folder'
-                            ? 'folder'
-                            : `folder-${option}`
-                          : option
-                      }
-                    />
+                    <IconOption configName={configName} iconName={option} />
                     {option}
                   </Box>
                 );
@@ -177,13 +169,8 @@ export function IconBindingControls({
                       startAdornment: (
                         <InputAdornment position='start'>
                           <IconOption
-                            iconName={
-                              configName === 'folderIconBindings'
-                                ? iconName === 'folder'
-                                  ? 'folder'
-                                  : `folder-${iconName}`
-                                : iconName
-                            }
+                            configName={configName}
+                            iconName={iconName ?? undefined}
                           />
                         </InputAdornment>
                       ),
@@ -210,17 +197,31 @@ export function IconBindingControls({
   );
 }
 
-function IconOption({ iconName }: { iconName: string | null }) {
+function IconOption({
+  configName,
+  iconName,
+}: { configName: string; iconName?: string }) {
+  const getIconSrc = (iconName?: string) => {
+    if (configName === 'folderIconBindings') {
+      return iconName === 'folder' ? 'folder' : `folder-${iconName}`;
+    }
+    return iconName;
+  };
+
+  if (!iconName) {
+    return null;
+  }
+
   return (
     <img
       loading='lazy'
       width='20'
-      src={`./${iconName?.toLowerCase()}.svg`}
+      src={`./${getIconSrc(iconName)?.toLowerCase()}.svg`}
       alt=''
       onError={(e) => {
         const target = e.target as HTMLImageElement;
         target.onerror = null; // Prevent infinite loop in case the fallback also fails
-        target.src = `./${iconName?.toLowerCase()}.clone.svg`;
+        target.src = `./${getIconSrc(iconName)?.toLowerCase()}.clone.svg`;
       }}
     />
   );

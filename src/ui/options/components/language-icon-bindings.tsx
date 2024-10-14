@@ -8,7 +8,7 @@ export function LanguageIconBindings({ domain }: { domain: Domain }) {
     <IconBindingControls
       title='Language Icon Bindings'
       domain={domain}
-      iconInfoText='You can select a language ID from the dropdown list. The list shows all language IDs that are supported at the moment.'
+      iconInfoText='Select a supported language ID from the dropdown list.'
       iconList={getListOfFileIcons()}
       bindings={getLanguageIds()}
       bindingsLabel='Language ID'
