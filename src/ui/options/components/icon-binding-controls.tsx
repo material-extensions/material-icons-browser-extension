@@ -16,6 +16,7 @@ import { IconAssociations } from 'material-icon-theme';
 import { CSSProperties, useEffect, useState } from 'react';
 import { WithBindingProps } from '../types/binding-control-props';
 import { BindingControls } from './binding-input-controls';
+import { IconPreview } from './icon-preview';
 
 type IconBindingControlProps = {
   title: string;
@@ -153,7 +154,7 @@ export function IconBindingControls({
                     sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
                     {...optionProps}
                   >
-                    <IconOption configName={configName} iconName={option} />
+                    <IconPreview configName={configName} iconName={option} />
                     {option}
                   </Box>
                 );
@@ -168,7 +169,7 @@ export function IconBindingControls({
                       ...params.InputProps,
                       startAdornment: (
                         <InputAdornment position='start'>
-                          <IconOption
+                          <IconPreview
                             configName={configName}
                             iconName={iconName ?? undefined}
                           />
@@ -194,35 +195,5 @@ export function IconBindingControls({
         Add new binding
       </Button>
     </div>
-  );
-}
-
-function IconOption({
-  configName,
-  iconName,
-}: { configName: string; iconName?: string }) {
-  const getIconSrc = (iconName?: string) => {
-    if (configName === 'folderIconBindings') {
-      return iconName === 'folder' ? 'folder' : `folder-${iconName}`;
-    }
-    return iconName;
-  };
-
-  if (!iconName) {
-    return null;
-  }
-
-  return (
-    <img
-      loading='lazy'
-      width='20'
-      src={`./${getIconSrc(iconName)?.toLowerCase()}.svg`}
-      alt=''
-      onError={(e) => {
-        const target = e.target as HTMLImageElement;
-        target.onerror = null; // Prevent infinite loop in case the fallback also fails
-        target.src = `./${getIconSrc(iconName)?.toLowerCase()}.clone.svg`;
-      }}
-    />
   );
 }
