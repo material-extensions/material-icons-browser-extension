@@ -27,6 +27,7 @@ export function InfoPopover({
     display: 'grid',
     width: '100%',
     gridTemplateColumns: '1fr 4rem',
+    gap: '.5rem',
   };
 
   const contentStyles: CSSProperties = {
