@@ -1,3 +1,4 @@
+import { useTheme } from '@mui/material/styles';
 import { getIconFileName } from '../../api/icons';
 
 interface IconPreviewProps {
@@ -6,6 +7,7 @@ interface IconPreviewProps {
 }
 
 export function IconPreview({ configName, iconName }: IconPreviewProps) {
+  const theme = useTheme();
   const getIconSrc = (iconName?: string): string | undefined => {
     if (configName === 'folderIconBindings') {
       return iconName === 'folder' ? 'folder' : `folder-${iconName}`;
@@ -26,7 +28,7 @@ export function IconPreview({ configName, iconName }: IconPreviewProps) {
     <img
       loading='lazy'
       width='20'
-      src={`./${getIconFileName(iconSrc)}`}
+      src={`./${getIconFileName(iconSrc, theme.palette.mode === 'light')}`}
       alt={`${iconName} icon`}
     />
   );

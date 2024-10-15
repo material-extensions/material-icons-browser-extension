@@ -11,7 +11,14 @@ function filterIcons(predicate: (name: string) => boolean): string[] {
   return Object.keys(iconsListTyped).filter(predicate).sort();
 }
 
-export function getIconFileName(iconName: string): string {
+export function getIconFileName(
+  iconName: string,
+  isLightMode: boolean
+): string {
+  const lightIconName = `${iconName}_light`;
+  if (isLightMode && iconsListTyped[lightIconName]) {
+    return iconsListTyped[lightIconName];
+  }
   return iconsListTyped[iconName];
 }
 
