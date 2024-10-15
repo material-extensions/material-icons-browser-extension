@@ -1,8 +1,12 @@
-export function IconPreview({
-  configName,
-  iconName,
-}: { configName: string; iconName?: string }) {
-  const getIconSrc = (iconName?: string) => {
+import { getIconFileName } from '../../api/icons';
+
+interface IconPreviewProps {
+  configName: string;
+  iconName?: string;
+}
+
+export function IconPreview({ configName, iconName }: IconPreviewProps) {
+  const getIconSrc = (iconName?: string): string | undefined => {
     if (configName === 'folderIconBindings') {
       return iconName === 'folder' ? 'folder' : `folder-${iconName}`;
     }
@@ -13,17 +17,17 @@ export function IconPreview({
     return null;
   }
 
+  const iconSrc = getIconSrc(iconName)?.toLowerCase();
+  if (!iconSrc) {
+    return null;
+  }
+
   return (
     <img
       loading='lazy'
       width='20'
-      src={`./${getIconSrc(iconName)?.toLowerCase()}.svg`}
-      alt=''
-      onError={(e) => {
-        const target = e.target as HTMLImageElement;
-        target.onerror = null; // Prevent infinite loop in case the fallback also fails
-        target.src = `./${getIconSrc(iconName)?.toLowerCase()}.clone.svg`;
-      }}
+      src={`./${getIconFileName(iconSrc)}`}
+      alt={`${iconName} icon`}
     />
   );
 }

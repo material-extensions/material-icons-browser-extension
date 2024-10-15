@@ -168,7 +168,10 @@ export function IconBindingControls({
                     input: {
                       ...params.InputProps,
                       startAdornment: (
-                        <InputAdornment position='start'>
+                        <InputAdornment
+                          position='start'
+                          style={{ paddingLeft: '0.5rem' }}
+                        >
                           <IconPreview
                             configName={configName}
                             iconName={iconName ?? undefined}

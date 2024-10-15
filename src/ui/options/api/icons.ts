@@ -1,27 +1,32 @@
 import iconsList from '../../../icon-list.json';
-const iconsListTyped = iconsList as Record<string, string>;
 
+const iconsListTyped = iconsList as Record<string, string>;
 const blacklist = ['_light', '_highContrast'];
 
+function isNotBlacklisted(name: string): boolean {
+  return !blacklist.some((term) => name.includes(term));
+}
+
+function filterIcons(predicate: (name: string) => boolean): string[] {
+  return Object.keys(iconsListTyped).filter(predicate).sort();
+}
+
+export function getIconFileName(iconName: string): string {
+  return iconsListTyped[iconName];
+}
+
 export function getListOfFileIcons(): string[] {
-  return Object.keys(iconsListTyped)
-    .filter(
-      (name) =>
-        !name.startsWith('folder') &&
-        !blacklist.some((term) => name.includes(term))
-    )
-    .sort();
+  return filterIcons(
+    (name) => !name.startsWith('folder') && isNotBlacklisted(name)
+  );
 }
 
 export function getListOfFolderIcons(): string[] {
-  return Object.keys(iconsListTyped)
-    .filter(
-      (name) =>
-        name.startsWith('folder') &&
-        !name.includes('-open') &&
-        !name.includes('-root') &&
-        !blacklist.some((term) => name.includes(term))
-    )
-    .map((name) => name.replace('folder-', ''))
-    .sort();
+  return filterIcons(
+    (name) =>
+      name.startsWith('folder') &&
+      !name.includes('-open') &&
+      !name.includes('-root') &&
+      isNotBlacklisted(name)
+  ).map((name) => name.replace('folder-', ''));
 }
