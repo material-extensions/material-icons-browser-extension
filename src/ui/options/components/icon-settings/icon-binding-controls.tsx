@@ -110,7 +110,7 @@ export function IconBindingControls({
   };
 
   const addIconBinding = () => {
-    setIconBindings([{ binding: '', iconName: null }, ...iconBindings]);
+    setIconBindings([...iconBindings, { binding: '', iconName: null }]);
   };
 
   const removeBinding = (index: number) => {
