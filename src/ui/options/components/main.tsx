@@ -1,9 +1,11 @@
 import { removeCustomProvider } from '@/lib/custom-providers';
 import { Domain } from '@/models';
 import { removeGitProvider } from '@/providers';
+import { InfoPopover } from '@/ui/shared/info-popover';
 import { Logo } from '@/ui/shared/logo';
 import { theme } from '@/ui/shared/theme';
 import {
+  Alert,
   AppBar,
   Button,
   CssBaseline,
@@ -20,7 +22,8 @@ import { DomainSettings } from './domain-settings';
 
 function Options() {
   const [customDomains, setCustomDomains] = useState<Domain[]>([]);
-  const [defaultDomains, setDefaultDomains] = useState<Domain[]>([]);
+  const [defaultDomain, setDefaultDomain] = useState<Domain>();
+  const [initialDomains, setInitialDomains] = useState<Domain[]>([]);
   const [showResetConfirmDialog, setShowResetConfirmDialog] = useState(false);
 
   useEffect(() => {
@@ -35,10 +38,14 @@ function Options() {
   const updateDomains = () => {
     return getDomains().then((domains) => {
       const customDomainsList = domains.filter((domain) => domain.isCustom);
-      const defaultDomainsList = domains.filter((domain) => !domain.isCustom);
+      const initialDomainList = domains.filter(
+        (domain) => !domain.isCustom && !domain.isDefault
+      );
+      const defaultDomain = domains.find((domain) => domain.isDefault);
 
       setCustomDomains(customDomainsList);
-      setDefaultDomains(defaultDomainsList);
+      setInitialDomains(initialDomainList);
+      setDefaultDomain(defaultDomain);
     });
   };
 
@@ -78,12 +85,17 @@ function Options() {
         </AppBar>
 
         <Box p={4}>
-          <h3>Default domains</h3>
-          {defaultDomains.map((domain) => (
-            <DomainSettings
-              domain={domain}
-              deleteDomain={() => deleteDomain(domain)}
+          <div style={{ width: 'fit-content' }}>
+            <InfoPopover
+              infoText='The settings of the default domain will be applied to all other domains.'
+              renderContent={() => <h3>Default domain</h3>}
             />
+          </div>
+          {defaultDomain && <DomainSettings domain={defaultDomain} />}
+
+          <h3>Other domains</h3>
+          {initialDomains.map((domain) => (
+            <DomainSettings domain={domain} />
           ))}
 
           {customDomains.length > 0 && <h3>Custom domains</h3>}

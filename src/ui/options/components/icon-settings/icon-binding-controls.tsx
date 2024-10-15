@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { IconAssociations } from 'material-icon-theme';
 import { CSSProperties, useEffect, useState } from 'react';
-import { WithBindingProps } from '../types/binding-control-props';
+import { WithBindingProps } from '../../types/binding-control-props';
 import { BindingControls } from './binding-input-controls';
 import { IconPreview } from './icon-preview';
 

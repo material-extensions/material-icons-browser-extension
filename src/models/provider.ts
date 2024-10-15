@@ -22,6 +22,8 @@ export type Provider = {
   ) => string;
 };
 
-export type Domain = Pick<Provider, 'name' | 'isCustom'>;
+export type Domain = Pick<Provider, 'name' | 'isCustom'> & {
+  isDefault: boolean;
+};
 
 export type ProviderMap = Record<string, string>;

@@ -1,5 +1,5 @@
 import { Autocomplete, TextField } from '@mui/material';
-import { WithBindingProps } from '../types/binding-control-props';
+import { WithBindingProps } from '../../types/binding-control-props';
 
 type BindingControlsProps = {
   binding: string;

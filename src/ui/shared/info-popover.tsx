@@ -31,7 +31,6 @@ export function InfoPopover({
 
   const contentStyles: CSSProperties = {
     display: 'flex',
-    justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
   };

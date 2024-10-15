@@ -15,7 +15,7 @@ import { DomainName } from './domain-name';
 export function DomainSettings({
   domain,
   deleteDomain,
-}: { domain: Domain; deleteDomain: () => void }) {
+}: { domain: Domain; deleteDomain?: () => void }) {
   const [iconSize, setIconSize] = useState<IconSize | undefined>(
     hardDefaults.iconSize
   );

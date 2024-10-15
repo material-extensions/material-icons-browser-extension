@@ -1,5 +1,5 @@
 import { Domain } from '@/models';
-import { getListOfFolderIcons } from '../api/icons';
+import { getListOfFolderIcons } from '../../api/icons';
 import { IconBindingControls } from './icon-binding-controls';
 
 export function FolderIconBindings({ domain }: { domain: Domain }) {
