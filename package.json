@@ -54,7 +54,7 @@
   },
   "scripts": {
     "prebuild": "rimraf --glob *.zip ./dist",
-    "build": "run-s build-src build-languages check-type-safety bundle",
+    "build": "run-s build-languages build-src check-type-safety bundle",
     "build-languages": "ts-node ./scripts/build-languages.ts",
     "build-src": "ts-node ./scripts/build-src.ts",
     "build-src-watch": "nodemon --watch ./src --ext ts,tsx,css,html --exec npm run build-src",
