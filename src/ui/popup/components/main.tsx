@@ -59,6 +59,11 @@ function SettingsPopup() {
             break;
         }
         setIsLoading(false);
+      })
+      .catch(() => {
+        // If there is an error, we assume the page is not supported
+        setPageSupported(false);
+        setIsLoading(false);
       });
   }, [domain]);
 
@@ -86,9 +91,6 @@ function SettingsPopup() {
     !isLoading && pageSupported && !showAddProvider;
   const shouldShowNotSupported =
     !isLoading && !pageSupported && !showAskForAccess;
-  const shouldShowAskForAccess = showAskForAccess;
-  const shouldShowAddProvider = showAddProvider;
-  const shouldShowLoadingSpinner = isLoading;
 
   return (
     <Box sx={containerStyles}>
@@ -108,11 +110,11 @@ function SettingsPopup() {
 
       {shouldShowDomainSettings && <DomainSettings domain={domain} />}
       {shouldShowNotSupported && <NotSupported />}
-      {shouldShowAskForAccess && <AskForAccess />}
-      {shouldShowAddProvider && (
+      {showAskForAccess && <AskForAccess />}
+      {showAddProvider && (
         <AddProvider domain={domain} suggestedProvider={suggestedProvider} />
       )}
-      {shouldShowLoadingSpinner && <LoadingSpinner />}
+      {isLoading && <LoadingSpinner />}
 
       <Footer />
     </Box>
