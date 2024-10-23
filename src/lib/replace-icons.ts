@@ -1,14 +1,26 @@
-import { IconPackValue, generateManifest } from 'material-icon-theme';
+import {
+  IconAssociations,
+  IconPackValue,
+  generateManifest,
+} from 'material-icon-theme';
 import { observe } from 'selector-observer';
 import { Provider } from '../models';
 import { replaceElementWithIcon, replaceIconInRow } from './replace-icon';
 
 export const observePage = (
   gitProvider: Provider,
-  iconPack: IconPackValue
+  iconPack: IconPackValue,
+  fileBindings?: IconAssociations,
+  folderBindings?: IconAssociations,
+  languageBindings?: IconAssociations
 ): void => {
   const manifest = generateManifest({
-    activeIconPack: iconPack ?? undefined,
+    activeIconPack: iconPack || undefined,
+    files: { associations: fileBindings },
+    folders: { associations: folderBindings },
+    languages: {
+      associations: languageBindings,
+    },
   });
 
   observe(gitProvider.selectors.row, {

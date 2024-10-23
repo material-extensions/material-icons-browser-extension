@@ -52,6 +52,10 @@ export const addGitProvider = (
   providerConfig[name] = provider;
 };
 
+export const removeGitProvider = (name: string) => {
+  delete providerConfig[name];
+};
+
 export const getGitProviders = () =>
   getCustomProviders().then((customProviders) => {
     for (const [domain, handler] of Object.entries(customProviders)) {

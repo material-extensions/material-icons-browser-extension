@@ -1,144 +1,14 @@
 body {
   padding: 0;
   margin: 0;
-  color: #1a202c;
-  font-size: 16px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  background-color: aliceblue;
 }
 
-.centered {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#settings-header {
-  margin-top: 32px;
-  gap: 20px;
-}
-
-#logo {
-  height: 2.4rem;
-  width: 2.4rem;
-}
-
-#domains {
-  display: flex;
-  flex-direction: column;
-  width: 80%;
-  align-items: center;
-  padding: 0 1rem;
+* {
   box-sizing: border-box;
-  border-radius: 10px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-  margin: 2rem;
-  max-width: 800px;
 }
 
-#domains-header {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.toolbar-spacer {
+  flex: 1 1 auto;
 }
 
-#reset {
-  color: #5c6068;
-  padding: 0.3rem 1rem;
-  outline: transparent solid 2px;
-  outline-offset: 2px;
-  transition: 200ms all;
-  font-size: 1rem;
-  border-radius: 0.375rem;
-  border-width: 1px;
-  border-color: transparent;
-  background-color: transparent;
-}
 
-#reset:hover {
-  border-color: red;
-  color: red;
-  cursor: pointer;
-}
-
-.domain {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.5rem;
-  width: 100%;
-  padding: 0 1rem;
-  border-top: 1px solid #cbd5e0;
-}
-
-.domain.disabled {
-  background-color: rgb(177, 177, 177);
-  color: rgb(78, 78, 78);
-}
-
-.domain:hover {
-  background-color: rgb(232, 239, 250);
-}
-
-.domain.disabled,
-.domain.disabled:hover {
-  background-color: rgb(177, 177, 177);
-  color: rgb(78, 78, 78);
-}
-
-.domain h3 {
-  margin-right: auto;
-}
-
-.domain:last-child {
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-}
-
-.animated {
-  transition: all 0.8s ease;
-}
-
-.brightDomain {
-  color: red;
-}
-
-#row-default {
-  background-color: #cad9f7;
-}
-
-label {
-  color: #5c6068;
-  font-size: 0.9rem;
-}
-
-select {
-  padding: 0.3rem 1rem;
-  outline: transparent solid 2px;
-  outline-offset: 2px;
-  appearance: none;
-  transition: 200ms all;
-  font-size: 1rem;
-  border-radius: 0.375rem;
-  border-width: 1px;
-  color: #2d3748;
-  border-color: transparent;
-  background-color: transparent;
-  min-width: 100px;
-  text-align: start;
-}
-
-select:hover {
-  border-color: #cbd5e0;
-  background-color: aliceblue;
-}
-
-select:focus-visible {
-  border-color: #3182ce;
-  box-shadow: #3182ce 0px 0px 0px 1px;
-}

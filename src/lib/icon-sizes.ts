@@ -1,13 +1,13 @@
 import { addConfigChangeListener, getConfig } from './user-config';
 
-export type IconSize = 'sm' | 'md' | 'lg' | 'xl';
+export const iconSizes = ['sm', 'md', 'lg', 'xl'];
+export type IconSize = (typeof iconSizes)[number];
 
 const setSizeAttribute = (iconSize: IconSize) =>
   document.body.setAttribute(`data-material-icons-extension-size`, iconSize);
 
 export const initIconSizes = () => {
-  const setIconSize = () =>
-    getConfig<IconSize>('iconSize').then(setSizeAttribute);
+  const setIconSize = () => getConfig('iconSize').then(setSizeAttribute);
 
   document.addEventListener('DOMContentLoaded', setIconSize, false);
 

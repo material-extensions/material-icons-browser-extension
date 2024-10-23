@@ -1,4 +1,4 @@
-export interface Provider {
+export type Provider = {
   name: string;
   domains: { host: string; test: RegExp }[];
   selectors: {
@@ -20,4 +20,10 @@ export interface Provider {
     iconEl: HTMLElement,
     fileName: string
   ) => string;
-}
+};
+
+export type Domain = Pick<Provider, 'name' | 'isCustom'> & {
+  isDefault: boolean;
+};
+
+export type ProviderMap = Record<string, string>;

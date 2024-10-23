@@ -20,13 +20,22 @@ const handleProvider = async (href: string) => {
   const provider: Provider | null = await getGitProvider(href);
   if (!provider) return;
 
-  const iconPack = await getConfig<IconPackValue>('iconPack');
-  const extEnabled = await getConfig<boolean>('extEnabled');
-  const globalExtEnabled = await getConfig<boolean>('extEnabled', 'default');
+  const iconPack = await getConfig('iconPack');
+  const fileBindings = await getConfig('fileIconBindings');
+  const folderBindings = await getConfig('folderIconBindings');
+  const languageBindings = await getConfig('languageIconBindings');
+  const extEnabled = await getConfig('extEnabled');
+  const globalExtEnabled = await getConfig('extEnabled', 'default');
 
   if (!globalExtEnabled || !extEnabled) return;
 
-  observePage(provider, iconPack);
+  observePage(
+    provider,
+    iconPack,
+    fileBindings,
+    folderBindings,
+    languageBindings
+  );
   addConfigChangeListener('iconPack', () => replaceAllIcons(provider));
 };
 
@@ -49,7 +58,7 @@ const handlers: Handlers = {
 
 Browser.runtime.onMessage.addListener(
   (
-    message: { cmd: keyof Handlers; args?: any[] },
+    message: { cmd: keyof Handlers; args?: unknown[] },
     _: Browser.Runtime.MessageSender,
     sendResponse: (response?: any) => void
   ) => {

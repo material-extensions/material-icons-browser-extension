@@ -3,12 +3,17 @@
     "target": "es6",
     "module": "commonjs",
     "outDir": "./dist",
+    "baseUrl": "./",
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "lib": ["es2022", "dom"]
+    "jsx": "react-jsx",
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
-  "include": ["./src/**/*.ts"],
+  "include": ["./src"],
   "exclude": ["node_modules"]
 }

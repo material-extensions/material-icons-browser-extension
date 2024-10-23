@@ -26,7 +26,7 @@ export default function gitlab(): Provider {
         .tree-item svg, .file-header-content svg:not(.gl-button-icon),
         .gl-link svg.gl-icon[data-testid="doc-code-icon"]`,
       // Element by which to detect if the tested domain is gitlab.
-      detect: 'body.page-initialized[data-page]',
+      detect: 'head meta[content="GitLab"]',
     },
     canSelfHost: true,
     isCustom: false,

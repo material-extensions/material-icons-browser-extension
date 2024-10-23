@@ -1,22 +1,32 @@
+import { IconAssociations, IconPackValue } from 'material-icon-theme';
 import Browser from 'webextension-polyfill';
+import { IconSize } from './icon-sizes';
 
 export type UserConfig = {
-  iconPack: string;
-  iconSize: string;
+  iconPack: IconPackValue;
+  iconSize: IconSize;
   extEnabled: boolean;
+  fileIconBindings?: IconAssociations;
+  folderIconBindings?: IconAssociations;
+  languageIconBindings?: IconAssociations;
 };
 
-const hardDefaults: UserConfig = {
+export const hardDefaults: UserConfig = {
   iconPack: 'react',
   iconSize: 'md',
   extEnabled: true,
+  fileIconBindings: {},
+  folderIconBindings: {},
+  languageIconBindings: {},
 };
 
-export const getConfig = async <T = unknown>(
-  configName: keyof UserConfig,
+type ConfigValueType<T extends keyof UserConfig> = UserConfig[T];
+
+export const getConfig = async <T extends keyof UserConfig>(
+  configName: T,
   domain = window.location.hostname,
   useDefault = true
-): Promise<T> => {
+): Promise<ConfigValueType<T>> => {
   const keys = {
     [`${domain !== 'default' ? domain : 'SKIP'}:${configName}`]: null,
     [`default:${configName}`]: hardDefaults[configName],
@@ -29,14 +39,15 @@ export const getConfig = async <T = unknown>(
   return domainSpecificValue ?? (useDefault ? defaultValue : null);
 };
 
-export const setConfig = (
-  configName: keyof UserConfig,
-  value: unknown,
+export const setConfig = <T extends keyof UserConfig>(
+  configName: T,
+  value: ConfigValueType<T>,
   domain = window.location.hostname
-) =>
+) => {
   Browser.storage.sync.set({
     [`${domain}:${configName}`]: value,
   });
+};
 
 export const clearConfig = (
   configName: keyof UserConfig,

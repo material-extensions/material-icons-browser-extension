@@ -80,7 +80,7 @@ function replaceIcon(
   }
 
   // get correct icon name from icon list
-  iconName = iconsListTyped[iconName] ?? 'file.svg';
+  iconName = iconsListTyped[iconName] ?? (isDir ? 'folder.svg' : 'file.svg');
 
   replaceElementWithIcon(iconEl, iconName, fileName, provider);
 }
@@ -122,14 +122,14 @@ function lookForMatch(
       if (manifest.languageIds?.[ext]) return manifest.languageIds?.[ext];
     }
 
-    if (languageMapTyped.fileNames[fileName])
-      return languageMapTyped.fileNames[fileName];
-    if (languageMapTyped.fileNames[lowerFileName])
-      return languageMapTyped.fileNames[lowerFileName];
-    for (const ext of fileExtensions) {
-      if (languageMapTyped.fileExtensions[ext])
-        return languageMapTyped.fileExtensions[ext];
-    }
+    const languageIcon = getLanguageIcon(
+      fileName,
+      lowerFileName,
+      fileExtensions
+    );
+
+    if (languageIcon)
+      return manifest.languageIds?.[languageIcon] ?? languageIcon;
 
     return 'file';
   }
@@ -139,6 +139,23 @@ function lookForMatch(
     return manifest.folderNames?.[lowerFileName];
 
   return 'folder';
+}
+
+function getLanguageIcon(
+  fileName: string,
+  lowerFileName: string,
+  fileExtensions: string[]
+): string | undefined {
+  if (languageMapTyped.fileNames[fileName])
+    return languageMapTyped.fileNames[fileName];
+  if (languageMapTyped.fileNames[lowerFileName])
+    return languageMapTyped.fileNames[lowerFileName];
+  for (const ext of fileExtensions) {
+    if (languageMapTyped.fileExtensions[ext])
+      return languageMapTyped.fileExtensions[ext];
+  }
+
+  return undefined;
 }
 
 function lookForLightMatch(
