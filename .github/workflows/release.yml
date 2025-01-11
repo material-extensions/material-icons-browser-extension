@@ -1,4 +1,4 @@
-name: Release new version
+name: 🚀 Release new version
 on:
   workflow_dispatch:
     inputs:
@@ -28,51 +28,53 @@ jobs:
       id-token: write
 
     steps:
-      - name: Use App Token for the Bot which is allowed to create releases
-        uses: actions/create-github-app-token@v1
+      - name: 🤖 Use App Token for the Bot which is allowed to create releases
+        uses: actions/create-github-app-token@c1a285145b9d317df6ced56c09f525b5c2b6f755 # v1.11.1
         id: app-token
         with:
           app-id: ${{ vars.BOT_APP_ID }}
           private-key: ${{ secrets.BOT_PRIVATE_KEY }}
 
-      - uses: actions/checkout@v4
+      - name: 📥 Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/setup-node@v4
+      - name: 🛠️ Setup Node
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
         with:
           node-version: "20"
 
-      - name: install dependencies
+      - name: 📦 Install dependencies
         run: npm ci
 
-      - name: build extension
+      - name: 🏗️ Build extension
         if: ${{ github.event.inputs.onlyUpload != 'not' && github.event.inputs.onlyUpload != 'none' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run build
 
-      - name: Attempt update
+      - name: 🔄 Attempt update
         if: ${{ github.event.inputs.onlyUpload == 'not' || github.event.inputs.onlyUpload == 'none' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run release ${{ github.event.inputs.versionChange }}
 
-      - name: Get package version
+      - name: 📝 Get package version
         if: ${{ github.event.inputs.onlyUpload == 'not' || github.event.inputs.onlyUpload == 'none' }}
         run: echo "package_version=v$(jq -r .version package.json)" >> $GITHUB_ENV
 
-      - name: Commit updated files
+      - name: 💾 Commit updated files
         if: ${{ github.event.inputs.onlyUpload == 'not' || github.event.inputs.onlyUpload == 'none' }}
-        uses: EndBug/add-and-commit@v9
+        uses: EndBug/add-and-commit@a94899bca583c204427a224a7af87c02f9b325d5 # v9.1.4
         with:
           add: "."
           message: "[auto] release  ${{env.package_version}}"
           tag: "${{env.package_version}}"
 
-      - name: Release
+      - name: 🚀 Release
         if: ${{ github.event.inputs.onlyUpload == 'not' || github.event.inputs.onlyUpload == 'none' }}
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@c95fe1489396fe8a9eb87c0abf8aa5b2ef267fda # v2.2.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -80,10 +82,10 @@ jobs:
           files: "*.zip"
           generate_release_notes: true
 
-      - name: Upload to chrome store
+      - name: 🌐 Upload to chrome store
         if: ${{ github.event.inputs.onlyUpload != 'firefox' && github.event.inputs.onlyUpload != 'none' }}
         continue-on-error: true
-        uses: trmcnvn/chrome-addon@v2
+        uses: trmcnvn/chrome-addon@7fc5a5ad3ff597dc64d6a13de7dcaa8515328be7 # v2
         with:
           extension: bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc
           zip: github-material-icons-chrome-extension.zip
@@ -91,10 +93,10 @@ jobs:
           client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
           refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
 
-      - name: Upload to edge store
+      - name: 🌐 Upload to edge store
         if: ${{ github.event.inputs.onlyUpload != 'edge' && github.event.inputs.onlyUpload != 'none' }}
         continue-on-error: true
-        uses: wdzeng/edge-addon@v1
+        uses: wdzeng/edge-addon@e307af4adb6d4e1c12387dc7d6bd545dcd075909 # v1.2.5
         with:
           product-id: d7692295-d84f-4bf5-9447-3cbb6ae29517
           zip-path: github-material-icons-edge-extension.zip
@@ -102,7 +104,7 @@ jobs:
           client-secret: ${{ secrets.EDGE_CLIENT_SECRET }}
           access-token-url: ${{ secrets.EDGE_ACCESS_TOKEN_URL }}
 
-      - name: Upload to firefox store
+      - name: 🌐 Upload to firefox store
         if: ${{ github.event.inputs.onlyUpload != 'chrome' && github.event.inputs.onlyUpload != 'none'}}
         continue-on-error: true
         run: npx web-ext sign -s ./dist/firefox/ --channel=listed --api-key=${{ secrets.FIREFOX_API_JWT_ISSUER }} --api-secret=${{ secrets.FIREFOX_API_JWT_SECRET }}
