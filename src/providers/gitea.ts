@@ -10,10 +10,9 @@ export default function gitea(): Provider {
       },
     ],
     selectors: {
-      row: 'tr.ready.entry, details.download ul.list li',
-      filename:
-        'td.name.four.wide > span.truncate > a, a[download] strong, a.archive-link strong',
-      icon: 'td.name.four.wide > span.truncate > svg, .octicon-package, .octicon-file-zip',
+      row: '#repo-files-table .repo-file-item',
+      filename: '.repo-file-cell.name a',
+      icon: '.repo-file-cell.name svg',
       // Element by which to detect if the tested domain is gitea.
       detect: 'body > .full.height > .page-content[role=main]',
     },
