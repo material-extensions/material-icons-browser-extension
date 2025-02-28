@@ -6,7 +6,6 @@ on:
 
 permissions:
   pull-requests: write
-  issues: write # Update issue labels
 
 jobs:
   lint-pr-title:
@@ -23,7 +22,6 @@ jobs:
           # Only fetch the config file from the repository
           sparse-checkout-cone-mode: false
           sparse-checkout: |
-            .github/scripts/update-status-label.sh
             commitlint.config.js
 
       - name: 📦 Install dependencies
@@ -33,11 +31,4 @@ jobs:
         id: title-check
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
-          HELP_URL: https://github.com/material-extensions/vscode-material-icon-theme/blob/main/CONTRIBUTING.md#conventional-pull-request-titles
-        run: echo "$PR_TITLE" | npx commitlint --help-url $HELP_URL
-
-      - name: 🏷️ Manage label based on PR title check result
-        if: always()
-        run: .github/scripts/update-status-label.sh ${{ github.event.pull_request.number }} ${{ steps.title-check.outcome }} "🔤 invalid title"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: echo "$PR_TITLE" | npx commitlint
