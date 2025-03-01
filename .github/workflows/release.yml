@@ -1,23 +1,9 @@
 name: 🚀 Release new version
-on:
-  workflow_dispatch:
-    inputs:
-      versionChange:
-        type: choice
-        description: Select the version change
-        required: true
-        default: 'patch'
-        options:
-          - major
-          - minor
-          - patch
-      onlyUpload:
-        description: chrome|firefox|both|not|none  - Only upload to store(s) without bumping version or releasing
-        required: true
-        default: not
 
-permissions:
-  contents: read
+on:
+  schedule:
+    - cron: "0 3 * * *" # Every day at 3:00 UTC
+  workflow_dispatch:
 
 jobs:
   release:
@@ -26,6 +12,7 @@ jobs:
     permissions:
       contents: write
       id-token: write
+      actions: write
 
     steps:
       - name: 🤖 Use App Token for the Bot which is allowed to create releases
@@ -38,52 +25,57 @@ jobs:
       - name: 📥 Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
 
-      - name: 🛠️ Setup Node
-        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
-        with:
-          node-version: "20"
+      - name: 🔧 Configure Git
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git config --global push.followTags true
 
       - name: 📦 Install dependencies
         run: npm ci
 
+      - name: 🔍 Fetch release version
+        id: upstream
+        run: |
+          release_version=$(npm view material-icon-theme version)
+          current_version=$(npm list material-icon-theme --depth=0 | grep 'material-icon-theme@' | cut -d '@' -f 2)
+          echo "release_version=$release_version" >> $GITHUB_ENV
+          echo "current_version=$current_version" >> $GITHUB_ENV
+
+      - name: ❌ Cancel if no new release is required
+        if: ${{ env.release_version == env.current_version && github.event_name == 'schedule' }}
+        run: echo "No new release required. Exiting..." && exit 0
+
+      - name: 🔄 Attempt update
+        if: ${{ env.release_version != env.current_version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # Update the material icon theme dependency to the latest major version (to avoid breaking changes)
+        run: |
+          npm run update
+          npm install material-icon-theme@5.x
+
       - name: 🏗️ Build extension
-        if: ${{ github.event.inputs.onlyUpload != 'not' && github.event.inputs.onlyUpload != 'none' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run build
 
-      - name: 🔄 Attempt update
-        if: ${{ github.event.inputs.onlyUpload == 'not' || github.event.inputs.onlyUpload == 'none' }}
+      - name: 📜 Generate changelog and release notes
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm run release ${{ github.event.inputs.versionChange }}
+          # Don't run husky on `git commit`
+          HUSKY: 0
+        run: |
+          npx changelogen --hideAuthorEmail --release --push
+          npx changelogen github release --token ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 📝 Get package version
-        if: ${{ github.event.inputs.onlyUpload == 'not' || github.event.inputs.onlyUpload == 'none' }}
-        run: echo "package_version=v$(jq -r .version package.json)" >> $GITHUB_ENV
-
-      - name: 💾 Commit updated files
-        if: ${{ github.event.inputs.onlyUpload == 'not' || github.event.inputs.onlyUpload == 'none' }}
-        uses: EndBug/add-and-commit@a94899bca583c204427a224a7af87c02f9b325d5 # v9.1.4
-        with:
-          add: "."
-          message: "[auto] release  ${{env.package_version}}"
-          tag: "${{env.package_version}}"
-
-      - name: 🚀 Release
-        if: ${{ github.event.inputs.onlyUpload == 'not' || github.event.inputs.onlyUpload == 'none' }}
-        uses: softprops/action-gh-release@c95fe1489396fe8a9eb87c0abf8aa5b2ef267fda # v2.2.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: "${{env.package_version}}"
-          files: "*.zip"
-          generate_release_notes: true
+      - name: 📝 Get metadata
+        run: |
+          VERSION=$(jq -r '.version' package.json)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: 🌐 Upload to chrome store
-        if: ${{ github.event.inputs.onlyUpload != 'firefox' && github.event.inputs.onlyUpload != 'none' }}
         continue-on-error: true
         uses: trmcnvn/chrome-addon@7fc5a5ad3ff597dc64d6a13de7dcaa8515328be7 # v2
         with:
@@ -94,17 +86,21 @@ jobs:
           refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
 
       - name: 🌐 Upload to edge store
-        if: ${{ github.event.inputs.onlyUpload != 'edge' && github.event.inputs.onlyUpload != 'none' }}
         continue-on-error: true
         uses: wdzeng/edge-addon@e307af4adb6d4e1c12387dc7d6bd545dcd075909 # v1.2.5
         with:
-          product-id: d7692295-d84f-4bf5-9447-3cbb6ae29517
+          product-id: f95e9c6a-6470-45a1-ae09-821d3b916923
           zip-path: github-material-icons-edge-extension.zip
           client-id: ${{ secrets.EDGE_CLIENT_ID }}
           client-secret: ${{ secrets.EDGE_CLIENT_SECRET }}
           access-token-url: ${{ secrets.EDGE_ACCESS_TOKEN_URL }}
 
       - name: 🌐 Upload to firefox store
-        if: ${{ github.event.inputs.onlyUpload != 'chrome' && github.event.inputs.onlyUpload != 'none'}}
         continue-on-error: true
         run: npx web-ext sign -s ./dist/firefox/ --channel=listed --api-key=${{ secrets.FIREFOX_API_JWT_ISSUER }} --api-secret=${{ secrets.FIREFOX_API_JWT_SECRET }}
+
+      - name: ⬆️ Upload zip files to GitHub release
+        run: |
+          gh release upload v$VERSION github-material-icons-chrome-extension.zip github-material-icons-edge-extension.zip github-material-icons-firefox-extension.zip
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
