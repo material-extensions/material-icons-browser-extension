@@ -58,6 +58,7 @@ jobs:
         run: |
           npm run update
           npm install material-icon-theme@5.x
+          git add package-lock.json
 
       - name: 🏗️ Build extension
         env:
