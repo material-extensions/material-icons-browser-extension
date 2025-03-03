@@ -16,13 +16,13 @@ export default function gitlab(): Provider {
          .file-header-content,
          .gl-card[data-testid="release-block"] .js-assets-list ul li`,
       // Cell in file list, file view header, readme header
-      filename: `td.tree-item-file-name .tree-item-link,
-        td.tree-item-file-name,
+      filename: `.tree-item-file-name .tree-item-link,
+        .tree-item-file-name,
         .file-header-content .file-title-name,
         .file-header-content .gl-link,
         .gl-link`,
       // Any icon not contained in a button
-      icon: `td.tree-item-file-name .tree-item-link svg,
+      icon: `.tree-item-file-name .tree-item-link svg,
         .tree-item svg, .file-header-content svg:not(.gl-button-icon),
         .gl-link svg.gl-icon[data-testid="doc-code-icon"]`,
       // Element by which to detect if the tested domain is gitlab.
