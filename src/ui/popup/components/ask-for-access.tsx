@@ -1,8 +1,8 @@
 import { Box, Button, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
+import Browser from 'webextension-polyfill';
 import { requestAccess } from '../api/access';
 import { getCurrentTab } from '../api/helper';
-import Browser from 'webextension-polyfill';
 
 export function AskForAccess() {
   const [currentTab, setCurrentTab] = useState<Browser.Tabs.Tab | null>(null);
