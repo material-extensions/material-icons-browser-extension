@@ -1,8 +1,16 @@
 import { Box, Button, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { requestAccess } from '../api/access';
 import { getCurrentTab } from '../api/helper';
+import Browser from 'webextension-polyfill';
 
 export function AskForAccess() {
+  const [currentTab, setCurrentTab] = useState<Browser.Tabs.Tab | null>(null);
+
+  useEffect(() => {
+    getCurrentTab().then(setCurrentTab);
+  }, []);
+
   return (
     <Box sx={{ p: 2 }}>
       <Typography variant='body1'>
@@ -13,7 +21,9 @@ export function AskForAccess() {
         <Button
           variant='contained'
           onClick={() => {
-            getCurrentTab().then(requestAccess);
+            if (currentTab) {
+              requestAccess(currentTab);
+            }
           }}
         >
           Grant Access
