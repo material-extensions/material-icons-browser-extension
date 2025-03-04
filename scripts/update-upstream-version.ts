@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs/promises';
 
 /**
- * Gets latest VSCode Extension release version by parsing its most recent 100 commit msgs
+ * Gets latest version of the Material Icon Theme Module
  *
  * @returns {Promise<string>} The current version of the upstream repository.
  */

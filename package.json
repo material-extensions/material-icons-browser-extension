@@ -67,9 +67,7 @@
     "bundle-firefox": "web-ext -s ./dist/firefox/ -n github-material-icons-firefox-extension.zip -a . build --overwrite-dest",
     "update-manifest-version": "ts-node ./scripts/update-manifest-version.ts",
     "update-upstream-version": "ts-node ./scripts/update-upstream-version.ts",
-    "update-package-version": "npm version --no-git-tag-version",
-    "update": "run-s update-upstream-version \"update-package-version patch\" update-manifest-version build",
-    "release": "run-s \"update-package-version {1}\" update-manifest-version build --",
+    "update-versions": "run-s update-upstream-version update-manifest-version",
     "lint": "npx @biomejs/biome check --write ./src",
     "format": "npx @biomejs/biome format --write ./src",
     "prepare": "husky"

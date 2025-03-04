@@ -76,31 +76,34 @@ jobs:
       - name: 📦 Install dependencies
         run: npm ci
 
-      - name: 🔄 Attempt update
+      - name: 🔄 Attempt update and prepare release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          npm run update
           npm install material-icon-theme@5.x
-          git add package-lock.json
+          npx changelogen --bump --hideAuthorEmail
+          npm run update-versions
+
+      - name: 📝 Get metadata
+        run: |
+          VERSION=$(jq -r '.version' package.json)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: 🏗️ Build extension
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run build
 
-      - name: 📜 Generate changelog and release notes
+      - name: 📜 Commit and Tag Release
         env:
           # Don't run husky on `git commit`
           HUSKY: 0
         run: |
-          npx changelogen --hideAuthorEmail --release --push
+          git add package.json package-lock.json src/manifests/base.json CHANGELOG.md README.md
+          git commit -m "chore(release): v$VERSION"
+          git tag "v$VERSION"
+          git push origin --follow-tags
           npx changelogen github release --token ${{ secrets.GITHUB_TOKEN }}
-
-      - name: 📝 Get metadata
-        run: |
-          VERSION=$(jq -r '.version' package.json)
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: 🌐 Upload to chrome store
         continue-on-error: true
