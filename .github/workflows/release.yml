@@ -116,13 +116,12 @@ jobs:
 
       - name: 🌐 Upload to edge store
         continue-on-error: true
-        uses: wdzeng/edge-addon@e307af4adb6d4e1c12387dc7d6bd545dcd075909 # v1.2.5
+        uses: wdzeng/edge-addon@d4db1eea77297a24d799394dec87e8912e0902f9 # v2.1.0
         with:
           product-id: f95e9c6a-6470-45a1-ae09-821d3b916923
           zip-path: github-material-icons-edge-extension.zip
           client-id: ${{ secrets.EDGE_CLIENT_ID }}
-          client-secret: ${{ secrets.EDGE_CLIENT_SECRET }}
-          access-token-url: ${{ secrets.EDGE_ACCESS_TOKEN_URL }}
+          api-key: ${{ secrets.EDGE_API_KEY }}
 
       - name: 🌐 Upload to firefox store
         continue-on-error: true
