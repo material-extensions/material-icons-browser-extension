@@ -1,5 +1,29 @@
 # Changelog
 
+## v1.10.0
+
+[compare changes](https://github.com/material-extensions/material-icons-browser-extension/compare/v1.9.0...v1.10.0)
+
+### 🚀 Enhancements
+
+- Update release workflow to use a preparation step ([061515a](https://github.com/material-extensions/material-icons-browser-extension/commit/061515a))
+- Update icons ([0e01e40](https://github.com/material-extensions/material-icons-browser-extension/commit/0e01e40))
+- **ci:** Update release process ([ebc3fed](https://github.com/material-extensions/material-icons-browser-extension/commit/ebc3fed))
+
+### 🩹 Fixes
+
+- **ci:** Fetch whole history to generate proper changelog ([408a51c](https://github.com/material-extensions/material-icons-browser-extension/commit/408a51c))
+- Update changelog ([ff555f5](https://github.com/material-extensions/material-icons-browser-extension/commit/ff555f5))
+- Remove outdated badge from readme ([eccdc9f](https://github.com/material-extensions/material-icons-browser-extension/commit/eccdc9f))
+- Update readme description ([cfa3e83](https://github.com/material-extensions/material-icons-browser-extension/commit/cfa3e83))
+- Update package-lock.json ([faeefdd](https://github.com/material-extensions/material-icons-browser-extension/commit/faeefdd))
+- Custom GitLab domain on Firefox ([#121](https://github.com/material-extensions/material-icons-browser-extension/pull/121))
+- **ci:** Update release process ([b7c65e6](https://github.com/material-extensions/material-icons-browser-extension/commit/b7c65e6))
+
+### ❤️ Contributors
+
+- Philipp Kief ([@PKief](https://github.com/PKief))
+
 ## v1.8.33...v1.9.0
 
 [compare changes](https://github.com/material-extensions/material-icons-browser-extension/compare/v1.8.33...v1.9.0)

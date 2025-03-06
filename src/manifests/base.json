@@ -1,6 +1,6 @@
 {
   "name": "Material Icons for GitHub",
-  "version": "1.8.33",
+  "version": "1.10.0",
   "description": "Material icons for the file browser of popular websites like GitHub, Azure, Bitbucket etc.",
   "homepage_url": "https://github.com/material-extensions/material-icons-browser-extension",
   "icons": {
@@ -21,8 +21,12 @@
         "*://gitee.com/*",
         "*://sourceforge.net/*"
       ],
-      "js": ["./main.js"],
-      "css": ["./injected-styles.css"],
+      "js": [
+        "./main.js"
+      ],
+      "css": [
+        "./injected-styles.css"
+      ],
       "run_at": "document_start"
     }
   ],
@@ -30,11 +34,17 @@
     "page": "options.html",
     "open_in_tab": true
   },
-  "permissions": ["storage", "activeTab", "scripting"],
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
   "manifest_version": 3,
   "web_accessible_resources": [
     {
-      "resources": ["*.svg"],
+      "resources": [
+        "*.svg"
+      ],
       "matches": [
         "*://github.com/*",
         "*://bitbucket.org/*",
