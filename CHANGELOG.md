@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.10.1
+
+[compare changes](https://github.com/material-extensions/material-icons-browser-extension/compare/v1.10.0...v1.10.1)
+
+### 🩹 Fixes
+
+- **ci:** Use Microsoft Edge Add-ons API v1.1 ([ea8e5eb](https://github.com/material-extensions/material-icons-browser-extension/commit/ea8e5eb))
+- **ci:** Pr title workflow should be executed on updates ([bb1c2c5](https://github.com/material-extensions/material-icons-browser-extension/commit/bb1c2c5))
+
+### ❤️ Contributors
+
+- Philipp Kief ([@PKief](https://github.com/PKief))
+
 ## v1.10.0
 
 [compare changes](https://github.com/material-extensions/material-icons-browser-extension/compare/v1.9.0...v1.10.0)
