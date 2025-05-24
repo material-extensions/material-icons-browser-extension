@@ -58,6 +58,20 @@ export default function github(): Provider {
       icon.getAttribute('aria-label') === 'Submodule',
     getIsSymlink: ({ icon }) =>
       icon.getAttribute('aria-label') === 'Symlink Directory',
+    getisGitHubWorkflowDir: ({ row }) => {
+      const anchor = row.querySelector('a');
+      if (!anchor) return false;
+      const href = anchor.getAttribute('href');
+      if (!href) return false;
+      return href.endsWith('.github/workflows');
+    },
+    getIsGitHubActionsWorkflowFile: ({ row }) => {
+      const anchor = row.querySelector('a');
+      if (!anchor) return false;
+      const href = anchor.getAttribute('href');
+      if (!href) return false;
+      return /\.github\/workflows\/.*\.ya?ml$/.test(href);
+    },
     replaceIcon: (svgEl, newSVG) => {
       svgEl
         .getAttributeNames()

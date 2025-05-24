@@ -49,6 +49,20 @@ function replaceIcon(
   const isDir = provider.getIsDirectory({ row: itemRow, icon: iconEl });
   const isSubmodule = provider.getIsSubmodule({ row: itemRow, icon: iconEl });
   const isSymlink = provider.getIsSymlink({ row: itemRow, icon: iconEl });
+  let isGitHubWorkflowDir = false;
+  if (provider.name === 'github' && provider.getisGitHubWorkflowDir) {
+    isGitHubWorkflowDir = provider.getisGitHubWorkflowDir({
+      row: itemRow,
+      icon: iconEl,
+    });
+  }
+  let isGitHubActionsWorkflowFile = false;
+  if (provider.name === 'github' && provider.getIsGitHubActionsWorkflowFile) {
+    isGitHubActionsWorkflowFile = provider.getIsGitHubActionsWorkflowFile({
+      row: itemRow,
+      icon: iconEl,
+    });
+  }
   const lowerFileName = fileName.toLowerCase();
 
   const fileExtensions: string[] = [];
@@ -65,6 +79,8 @@ function replaceIcon(
     isDir,
     isSubmodule,
     isSymlink,
+    isGitHubWorkflowDir,
+    isGitHubActionsWorkflowFile,
     manifest
   );
 
@@ -107,10 +123,13 @@ function lookForMatch(
   isDir: boolean,
   isSubmodule: boolean,
   isSymlink: boolean,
+  isGitHubWorkflowDir: boolean,
+  isGitHubActionsWorkflowFile: boolean,
   manifest: Manifest
 ): string {
   if (isSubmodule) return 'folder-git';
   if (isSymlink) return 'folder-symlink';
+  if (isGitHubActionsWorkflowFile) return 'github-actions-workflow';
 
   if (!isDir) {
     if (manifest.fileNames?.[fileName]) return manifest.fileNames?.[fileName];
@@ -134,6 +153,7 @@ function lookForMatch(
     return 'file';
   }
 
+  if (isGitHubWorkflowDir) return 'folder-gh-workflows';
   if (manifest.folderNames?.[fileName]) return manifest.folderNames?.[fileName];
   if (manifest.folderNames?.[lowerFileName])
     return manifest.folderNames?.[lowerFileName];
