@@ -58,20 +58,6 @@ export default function github(): Provider {
       icon.getAttribute('aria-label') === 'Submodule',
     getIsSymlink: ({ icon }) =>
       icon.getAttribute('aria-label') === 'Symlink Directory',
-    getisGitHubWorkflowDir: ({ row }) => {
-      const anchor = row.querySelector('a');
-      if (!anchor) return false;
-      const href = anchor.getAttribute('href');
-      if (!href) return false;
-      return href.endsWith('.github/workflows');
-    },
-    getIsGitHubActionsWorkflowFile: ({ row }) => {
-      const anchor = row.querySelector('a');
-      if (!anchor) return false;
-      const href = anchor.getAttribute('href');
-      if (!href) return false;
-      return /\.github\/workflows\/.*\.ya?ml$/.test(href);
-    },
     replaceIcon: (svgEl, newSVG) => {
       svgEl
         .getAttributeNames()
@@ -121,5 +107,41 @@ export default function github(): Provider {
 
       return fileName;
     },
+    customMappings: [
+      {
+        match: ({ row }) => {
+          // Check all anchor tags in the row for .github/workflows
+          const anchors = Array.from(row.querySelectorAll('a'));
+          const hasWorkflowsHref = anchors.some((a) =>
+            (a.getAttribute('href') ?? '').endsWith('.github/workflows')
+          );
+          // Also match if a child has class PRIVATE_TreeView-item-content-text and contains both .github/ and workflows
+          const treeViewText = Array.from(
+            row.querySelectorAll('.PRIVATE_TreeView-item-content-text')
+          );
+          const hasWorkflowsText = treeViewText.some((el) => {
+            const text = el.textContent || '';
+            return text.includes('.github/') && text.includes('workflows');
+          });
+          return Boolean(hasWorkflowsHref || hasWorkflowsText);
+        },
+        iconName: 'folder-gh-workflows',
+      },
+      {
+        match: ({ row }) => {
+          // Always check the closest tree view item (li) for navigation tree view
+          const treeItem = row.closest('.PRIVATE_TreeView-item');
+          const id = treeItem?.id || '';
+          // File list fallback
+          const anchor = row.querySelector('a');
+          const href = anchor?.getAttribute('href');
+          return Boolean(
+            /^\.github\/workflows\/.*\.ya?ml-item$/.test(id) ||
+              /\.github\/workflows\/.*\.ya?ml$/.test(href ?? '')
+          );
+        },
+        iconName: 'github-actions-workflow',
+      },
+    ],
   };
 }

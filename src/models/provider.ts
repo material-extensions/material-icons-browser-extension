@@ -1,3 +1,5 @@
+import { ProviderCustomMapping } from './providerCustomMapping';
+
 export type Provider = {
   name: string;
   domains: { host: string; test: RegExp }[];
@@ -13,14 +15,6 @@ export type Provider = {
   getIsDirectory: (params: { row: HTMLElement; icon: HTMLElement }) => boolean;
   getIsSubmodule: (params: { row: HTMLElement; icon: HTMLElement }) => boolean;
   getIsSymlink: (params: { row: HTMLElement; icon: HTMLElement }) => boolean;
-  getisGitHubWorkflowDir?: (params: {
-    row: HTMLElement;
-    icon: HTMLElement;
-  }) => boolean;
-  getIsGitHubActionsWorkflowFile?: (params: {
-    row: HTMLElement;
-    icon: HTMLElement;
-  }) => boolean;
   getIsLightTheme: () => boolean;
   replaceIcon: (oldIcon: HTMLElement, newIcon: HTMLElement) => void;
   transformFileName: (
@@ -28,6 +22,10 @@ export type Provider = {
     iconEl: HTMLElement,
     fileName: string
   ) => string;
+  /**
+   * Array of custom mappings for special folder/file handling, e.g. workflows, actions, etc.
+   */
+  customMappings?: ProviderCustomMapping[];
 };
 
 export type Domain = Pick<Provider, 'name' | 'isCustom'> & {
