@@ -1,3 +1,5 @@
+import { ProviderCustomMapping } from './providerCustomMapping';
+
 export type Provider = {
   name: string;
   domains: { host: string; test: RegExp }[];
@@ -20,6 +22,10 @@ export type Provider = {
     iconEl: HTMLElement,
     fileName: string
   ) => string;
+  /**
+   * Array of custom mappings for special folder/file handling, e.g. workflows, actions, etc.
+   */
+  customMappings?: ProviderCustomMapping[];
 };
 
 export type Domain = Pick<Provider, 'name' | 'isCustom'> & {

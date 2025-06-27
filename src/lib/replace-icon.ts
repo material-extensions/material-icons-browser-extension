@@ -49,8 +49,19 @@ function replaceIcon(
   const isDir = provider.getIsDirectory({ row: itemRow, icon: iconEl });
   const isSubmodule = provider.getIsSubmodule({ row: itemRow, icon: iconEl });
   const isSymlink = provider.getIsSymlink({ row: itemRow, icon: iconEl });
-  const lowerFileName = fileName.toLowerCase();
 
+  // Check for customMappings and use the first matching mapping's iconName
+  let customIconName: string | undefined;
+  if (provider.customMappings) {
+    for (const mapping of provider.customMappings) {
+      if (mapping.match({ row: itemRow, icon: iconEl })) {
+        customIconName = mapping.iconName;
+        break;
+      }
+    }
+  }
+
+  const lowerFileName = fileName.toLowerCase();
   const fileExtensions: string[] = [];
   if (fileName.length <= 255) {
     for (let i = 0; i < fileName.length; i += 1) {
@@ -58,15 +69,18 @@ function replaceIcon(
     }
   }
 
-  let iconName = lookForMatch(
-    fileName,
-    lowerFileName,
-    fileExtensions,
-    isDir,
-    isSubmodule,
-    isSymlink,
-    manifest
-  );
+  let iconName = customIconName;
+  if (!iconName) {
+    iconName = lookForMatch(
+      fileName,
+      lowerFileName,
+      fileExtensions,
+      isDir,
+      isSubmodule,
+      isSymlink,
+      manifest
+    );
+  }
 
   const isLightTheme = provider.getIsLightTheme();
   if (isLightTheme) {
