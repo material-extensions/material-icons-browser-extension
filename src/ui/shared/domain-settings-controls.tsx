@@ -1,5 +1,3 @@
-import { IconSize, iconSizes } from '@/lib/icon-sizes';
-import { hardDefaults } from '@/lib/user-config';
 import {
   Checkbox,
   FormControl,
@@ -8,7 +6,9 @@ import {
   MenuItem,
   Select,
 } from '@mui/material';
-import { IconPackValue, availableIconPacks } from 'material-icon-theme';
+import { availableIconPacks, IconPackValue } from 'material-icon-theme';
+import { IconSize, iconSizes } from '@/lib/icon-sizes';
+import { hardDefaults } from '@/lib/user-config';
 import { snakeToTitleCase } from './utils';
 
 type DomainSettingsControls = {

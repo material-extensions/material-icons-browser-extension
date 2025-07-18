@@ -1,4 +1,5 @@
 import languageMap from '../../../language-map.json';
+
 const languageMapTyped = languageMap as {
   fileExtensions: Record<string, string>;
   fileNames: Record<string, string>;

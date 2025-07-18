@@ -1,9 +1,9 @@
 import 'dotenv/config';
-import * as path from 'path';
 import { Octokit } from '@octokit/core';
 import * as fs from 'fs-extra';
 import stringify from 'json-stable-stringify';
 import { generateManifest, Manifest } from 'material-icon-theme';
+import * as path from 'path';
 
 interface LanguageContribution {
   id: string;
@@ -218,7 +218,7 @@ async function generateLanguageMap(): Promise<void> {
   );
   await fs.writeFile(
     path.resolve(srcPath, 'language-map.json'),
-    stringify(languageMap, { space: '  ' })
+    stringify(languageMap, { space: '  ' }) ?? ''
   );
   console.log('[8/8] Deleting language contribution cache.');
   await fs.remove(vsDataPath);

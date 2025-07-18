@@ -1,7 +1,7 @@
 import {
+  generateManifest,
   IconAssociations,
   IconPackValue,
-  generateManifest,
 } from 'material-icon-theme';
 import { observe } from 'selector-observer';
 import { Provider } from '../models';

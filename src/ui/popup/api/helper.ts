@@ -1,5 +1,5 @@
-import { getGitProvider } from '@/providers';
 import Browser from 'webextension-polyfill';
+import { getGitProvider } from '@/providers';
 
 export function getElementByIdOrThrow<T = HTMLElement>(
   id: string

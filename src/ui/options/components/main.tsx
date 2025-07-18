@@ -1,11 +1,4 @@
-import { removeCustomProvider } from '@/lib/custom-providers';
-import { Domain } from '@/models';
-import { removeGitProvider } from '@/providers';
-import { InfoPopover } from '@/ui/shared/info-popover';
-import { Logo } from '@/ui/shared/logo';
-import { theme } from '@/ui/shared/theme';
 import {
-  Alert,
   AppBar,
   Button,
   CssBaseline,
@@ -15,6 +8,12 @@ import {
 import Box from '@mui/material/Box';
 import { ThemeProvider } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
+import { removeCustomProvider } from '@/lib/custom-providers';
+import { Domain } from '@/models';
+import { removeGitProvider } from '@/providers';
+import { InfoPopover } from '@/ui/shared/info-popover';
+import { Logo } from '@/ui/shared/logo';
+import { theme } from '@/ui/shared/theme';
 import { Footer } from '../../shared/footer';
 import { getDomains } from '../api/domains';
 import { ConfirmDialog } from './confirm-dialog';

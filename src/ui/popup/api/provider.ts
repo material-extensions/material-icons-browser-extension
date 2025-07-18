@@ -1,6 +1,6 @@
+import Browser from 'webextension-polyfill';
 import { ProviderMap } from '@/models';
 import { providerConfig } from '@/providers';
-import Browser from 'webextension-polyfill';
 
 export async function guessProvider(tab: Browser.Tabs.Tab) {
   const possibilities: ProviderMap = {};

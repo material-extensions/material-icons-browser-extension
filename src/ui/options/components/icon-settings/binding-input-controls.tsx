@@ -1,4 +1,5 @@
 import { Autocomplete, TextField } from '@mui/material';
+import { JSX } from 'react';
 import { WithBindingProps } from '../../types/binding-control-props';
 
 type BindingControlsProps = {

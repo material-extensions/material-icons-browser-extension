@@ -6,7 +6,11 @@ export const getCustomProviders = (): Promise<
 > =>
   Browser.storage.sync
     .get('customProviders')
-    .then((data) => data.customProviders || {});
+    .then(
+      (data) =>
+        (data.customProviders as Record<string, (() => Provider) | string>) ??
+        {}
+    );
 
 export const addCustomProvider = (
   name: string,

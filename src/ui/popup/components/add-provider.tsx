@@ -1,5 +1,3 @@
-import { addCustomProvider } from '@/lib/custom-providers';
-import { addGitProvider, providerConfig } from '@/providers';
 import {
   Box,
   Button,
@@ -11,6 +9,8 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import Browser from 'webextension-polyfill';
+import { addCustomProvider } from '@/lib/custom-providers';
+import { addGitProvider, providerConfig } from '@/providers';
 import { getCurrentTab } from '../api/helper';
 
 export function AddProvider(props: {

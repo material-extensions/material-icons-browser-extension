@@ -1,3 +1,5 @@
+import { IconPackValue } from 'material-icon-theme';
+import { CSSProperties, useEffect, useState } from 'react';
 import { IconSize } from '@/lib/icon-sizes';
 import {
   clearConfig,
@@ -6,8 +8,6 @@ import {
   setConfig,
 } from '@/lib/user-config';
 import { Domain } from '@/models';
-import { IconPackValue } from 'material-icon-theme';
-import { CSSProperties, useEffect, useState } from 'react';
 import { DomainSettingsControls } from '../../shared/domain-settings-controls';
 import { DomainActions } from './domain-actions';
 import { DomainName } from './domain-name';
@@ -15,7 +15,10 @@ import { DomainName } from './domain-name';
 export function DomainSettings({
   domain,
   deleteDomain,
-}: { domain: Domain; deleteDomain?: () => void }) {
+}: {
+  domain: Domain;
+  deleteDomain?: () => void;
+}) {
   const [iconSize, setIconSize] = useState<IconSize | undefined>(
     hardDefaults.iconSize
   );

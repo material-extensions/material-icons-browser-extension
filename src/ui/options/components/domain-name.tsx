@@ -1,7 +1,7 @@
-import { Domain } from '@/models';
 import PublicIcon from '@mui/icons-material/Public';
 import { Typography } from '@mui/material';
 import { CSSProperties } from 'react';
+import { Domain } from '@/models';
 
 export function DomainName({ domain }: { domain: Domain }) {
   const styles: CSSProperties = {

@@ -1,7 +1,6 @@
 import InfoIcon from '@mui/icons-material/Info';
-import { Button, IconButton, Popover, Typography } from '@mui/material';
-import { CSSProperties } from '@mui/material/styles/createTypography';
-import { MouseEvent, useState } from 'react';
+import { IconButton, Popover, Typography } from '@mui/material';
+import { CSSProperties, JSX, MouseEvent, useState } from 'react';
 
 export function InfoPopover({
   infoText,

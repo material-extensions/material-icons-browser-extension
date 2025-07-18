@@ -1,8 +1,8 @@
+import { IconPackValue } from 'material-icon-theme';
+import { useEffect, useState } from 'react';
 import { IconSize } from '@/lib/icon-sizes';
 import { getConfig, hardDefaults, setConfig } from '@/lib/user-config';
 import { DomainSettingsControls } from '@/ui/shared/domain-settings-controls';
-import { IconPackValue } from 'material-icon-theme';
-import { useEffect, useState } from 'react';
 
 export function DomainSettings({ domain }: { domain: string }) {
   const [extensionEnabled, setExtensionEnabled] = useState<boolean>(

@@ -12,6 +12,13 @@
       "matchManagers": ["npm"],
       "groupName": "NPM packages",
       "groupSlug": "npm-packages"
+    },
+    {
+      "matchPackageNames": ["@biomejs/biome"],
+      "postUpgradeTasks": {
+        "commands": ["npx biome migrate --write"],
+        "fileFilters": ["**/*"]
+      }
     }
   ]
 }

@@ -1,5 +1,3 @@
-import { Logo } from '@/ui/shared/logo';
-import { theme } from '@/ui/shared/theme';
 import SettingsIcon from '@mui/icons-material/Settings';
 import {
   AppBar,
@@ -11,11 +9,13 @@ import {
 } from '@mui/material';
 import Box from '@mui/material/Box';
 import { SxProps, Theme, ThemeProvider } from '@mui/material/styles';
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import Browser from 'webextension-polyfill';
+import { Logo } from '@/ui/shared/logo';
+import { theme } from '@/ui/shared/theme';
 import { Footer } from '../../shared/footer';
 import { getCurrentTab, getDomainFromCurrentTab } from '../api/helper';
-import { PageState, checkPageState } from '../api/page-state';
+import { checkPageState, PageState } from '../api/page-state';
 import { guessProvider } from '../api/provider';
 import { AddProvider } from './add-provider';
 import { AskForAccess } from './ask-for-access';
@@ -49,7 +49,7 @@ function SettingsPopup() {
           case PageState.HasAccess:
             const tab = await getCurrentTab();
             const match = await guessProvider(tab);
-            setSuggestedProvider(match);
+            setSuggestedProvider(match as SetStateAction<string>);
             if (match) {
               setPageSupported(true);
               setShowAddProvider(true);

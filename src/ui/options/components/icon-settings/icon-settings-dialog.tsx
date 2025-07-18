@@ -1,4 +1,3 @@
-import { Domain } from '@/models';
 import {
   Button,
   Dialog,
@@ -7,6 +6,7 @@ import {
   DialogTitle,
   Typography,
 } from '@mui/material';
+import { Domain } from '@/models';
 import { FileIconBindings } from './file-icon-bindings';
 import { FolderIconBindings } from './folder-icon-bindings';
 import { LanguageIconBindings } from './language-icon-bindings';

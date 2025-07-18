@@ -1,15 +1,18 @@
-import { Domain } from '@/models';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { IconButton, Tooltip } from '@mui/material';
 import { useState } from 'react';
+import { Domain } from '@/models';
 import { ConfirmDialog } from './confirm-dialog';
 import { IconSettingsDialog } from './icon-settings/icon-settings-dialog';
 
 export function DomainActions({
   domain,
   deleteDomain,
-}: { domain: Domain; deleteDomain?: () => void }) {
+}: {
+  domain: Domain;
+  deleteDomain?: () => void;
+}) {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [showSettingsDialog, setShowSettingsDialog] = useState(false);
 

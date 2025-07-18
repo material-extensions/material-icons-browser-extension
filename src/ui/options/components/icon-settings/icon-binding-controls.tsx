@@ -1,6 +1,3 @@
-import { UserConfig, getConfig, setConfig } from '@/lib/user-config';
-import { Domain } from '@/models';
-import { InfoPopover } from '@/ui/shared/info-popover';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
@@ -14,6 +11,9 @@ import {
 } from '@mui/material';
 import { IconAssociations } from 'material-icon-theme';
 import { CSSProperties, useEffect, useState } from 'react';
+import { getConfig, setConfig, UserConfig } from '@/lib/user-config';
+import { Domain } from '@/models';
+import { InfoPopover } from '@/ui/shared/info-popover';
 import { WithBindingProps } from '../../types/binding-control-props';
 import { BindingControls } from './binding-input-controls';
 import { IconPreview } from './icon-preview';

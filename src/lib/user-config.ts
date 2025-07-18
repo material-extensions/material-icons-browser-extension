@@ -36,7 +36,8 @@ export const getConfig = async <T extends keyof UserConfig>(
   const domainSpecificValue = result[`${domain}:${configName}`];
   const defaultValue = result[`default:${configName}`];
 
-  return domainSpecificValue ?? (useDefault ? defaultValue : null);
+  return (domainSpecificValue ??
+    (useDefault ? defaultValue : null)) as ConfigValueType<T>;
 };
 
 export const setConfig = <T extends keyof UserConfig>(

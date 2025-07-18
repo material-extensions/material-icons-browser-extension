@@ -56,28 +56,30 @@ const handlers: Handlers = {
   },
 };
 
-Browser.runtime.onMessage.addListener(
-  (
-    message: { cmd: keyof Handlers; args?: unknown[] },
-    _: Browser.Runtime.MessageSender,
-    sendResponse: (response?: any) => void
-  ) => {
-    if (!handlers[message.cmd]) {
-      return sendResponse(null);
-    }
-
-    if (message.cmd === 'init') {
-      handlers.init();
-      return sendResponse(null);
-    }
-
-    if (message.cmd === 'guessProvider') {
-      const result = handlers[message.cmd](
-        (message.args || [])[0] as unknown as Possibilities
-      );
-      return sendResponse(result);
-    }
+const processExtensionCommand = (
+  message: { cmd: keyof Handlers; args?: unknown[] },
+  _: Browser.Runtime.MessageSender,
+  sendResponse: (response?: any) => void
+) => {
+  if (!handlers[message.cmd]) {
+    return sendResponse(null);
   }
+
+  if (message.cmd === 'init') {
+    handlers.init();
+    return sendResponse(null);
+  }
+
+  if (message.cmd === 'guessProvider') {
+    const result = handlers[message.cmd](
+      (message.args || [])[0] as unknown as Possibilities
+    );
+    return sendResponse(result);
+  }
+};
+
+Browser.runtime.onMessage.addListener(
+  processExtensionCommand as Browser.Runtime.OnMessageListener
 );
 
 init();
