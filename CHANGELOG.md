@@ -1,5 +1,24 @@
 # Changelog
 
+## v1.10.6
+
+[compare changes](https://github.com/material-extensions/material-icons-browser-extension/compare/v1.10.5...v1.10.6)
+
+### 🩹 Fixes
+
+- Missing icons on Github Actions and Workflows ([#125](https://github.com/material-extensions/material-icons-browser-extension/pull/125))
+- Update contributor link in changelog ([37f4215](https://github.com/material-extensions/material-icons-browser-extension/commit/37f4215))
+- Add missing icon for file-diff in GitHub provider ([#127](https://github.com/material-extensions/material-icons-browser-extension/pull/127))
+
+### 🏡 Chore
+
+- Update dependencies ([a14b7d7](https://github.com/material-extensions/material-icons-browser-extension/commit/a14b7d7))
+
+### ❤️ Contributors
+
+- Philipp Kief ([@PKief](https://github.com/PKief))
+- Yen Cheng Lin
+
 ## v1.10.5
 
 [compare changes](https://github.com/material-extensions/material-icons-browser-extension/compare/v1.10.4...v1.10.5)
