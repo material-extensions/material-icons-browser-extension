@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.10.9
+
+[compare changes](https://github.com/material-extensions/material-icons-browser-extension/compare/v1.10.8...v1.10.9)
+
 ## v1.10.8
 
 [compare changes](https://github.com/material-extensions/material-icons-browser-extension/compare/v1.10.7...v1.10.8)
