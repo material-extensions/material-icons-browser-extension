@@ -22,8 +22,12 @@
         "*://sourceforge.net/*",
         "*://codeberg.org/*"
       ],
-      "js": ["./main.js"],
-      "css": ["./injected-styles.css"],
+      "js": [
+        "./main.js"
+      ],
+      "css": [
+        "./injected-styles.css"
+      ],
       "run_at": "document_start"
     }
   ],
@@ -31,11 +35,17 @@
     "page": "options.html",
     "open_in_tab": true
   },
-  "permissions": ["storage", "activeTab", "scripting"],
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
   "manifest_version": 3,
   "web_accessible_resources": [
     {
-      "resources": ["*.svg"],
+      "resources": [
+        "*.svg"
+      ],
       "matches": [
         "*://github.com/*",
         "*://bitbucket.org/*",
