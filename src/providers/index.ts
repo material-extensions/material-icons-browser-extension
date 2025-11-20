@@ -2,6 +2,7 @@ import { getCustomProviders } from '../lib/custom-providers';
 import { Provider } from '../models';
 import azure from './azure';
 import bitbucket from './bitbucket';
+import forgejo from './forgejo';
 import gitea from './gitea';
 import gitee from './gitee';
 import github from './github';
@@ -16,6 +17,7 @@ export const providers: Record<string, () => Provider> = {
   github,
   gitlab,
   sourceforge,
+  forgejo,
 };
 
 export const providerConfig: Record<string, Provider> = {};
