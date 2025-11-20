@@ -56,9 +56,9 @@ export default function github(): Provider {
       icon.classList.contains('octicon-file-directory-open-fill') ||
       icon.classList.contains('icon-directory'),
     getIsSubmodule: ({ icon }) =>
-      icon.getAttribute('aria-label') === 'Submodule',
+      icon.classList.contains('octicon-file-submodule'),
     getIsSymlink: ({ icon }) =>
-      icon.getAttribute('aria-label') === 'Symlink Directory',
+      icon.classList.contains('octicon-file-symlink-file'),
     replaceIcon: (svgEl, newSVG) => {
       svgEl
         .getAttributeNames()
