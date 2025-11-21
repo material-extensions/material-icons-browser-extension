@@ -1,5 +1,23 @@
 # Changelog
 
+## v1.11.0
+
+[compare changes](https://github.com/material-extensions/material-icons-browser-extension/compare/v1.10.9...v1.11.0)
+
+### 🚀 Enhancements
+
+- Add support for forgejo ([#132](https://github.com/material-extensions/material-icons-browser-extension/pull/132))
+- Enhance footer component to display version information ([f8c0ced](https://github.com/material-extensions/material-icons-browser-extension/commit/f8c0ced))
+
+### 🩹 Fixes
+
+- Update getIsSymlink method to use class check for symlink icon (Closes #133) ([#133](https://github.com/material-extensions/material-icons-browser-extension/issues/133))
+
+### ❤️ Contributors
+
+- Philipp Kief ([@PKief](https://github.com/PKief))
+- WitnessMee
+
 ## v1.10.9
 
 [compare changes](https://github.com/material-extensions/material-icons-browser-extension/compare/v1.10.8...v1.10.9)
