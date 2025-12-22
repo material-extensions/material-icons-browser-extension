@@ -29,7 +29,9 @@ export default function github(): Provider {
         .react-directory-filename-column > svg,
         .octicon-package,
         .octicon-file-zip,
-        .octicon-file-diff`,
+        .octicon-file-diff,
+        .octicon-file-added,
+        .octicon-file-removed`,
       // Element by which to detect if the tested domain is github.
       detect: 'body > div[data-turbo-body]',
     },
