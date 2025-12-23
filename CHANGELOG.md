@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.12.0
+
+[compare changes](https://github.com/material-extensions/material-icons-browser-extension/compare/v1.11.0...v1.12.0)
+
+### 🚀 Enhancements
+
+- Support GitHub's improved pull request "Files Changed" experience ([#135](https://github.com/material-extensions/material-icons-browser-extension/pull/135))
+
+### ❤️ Contributors
+
+- Philipp Kief ([@PKief](https://github.com/PKief))
+
 ## v1.11.0
 
 [compare changes](https://github.com/material-extensions/material-icons-browser-extension/compare/v1.10.9...v1.11.0)
