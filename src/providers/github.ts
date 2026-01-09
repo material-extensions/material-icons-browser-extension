@@ -31,6 +31,7 @@ export default function github(): Provider {
         .octicon-file-zip,
         .octicon-file-diff,
         .octicon-file-added,
+        .octicon-file-moved,
         .octicon-file-removed`,
       // Element by which to detect if the tested domain is github.
       detect: 'body > div[data-turbo-body]',
@@ -86,6 +87,22 @@ export default function github(): Provider {
       else {
         svgEl.style.display = 'none';
         svgEl.before(newSVG);
+      }
+
+      // Get the fgColor-* class from the original svg element
+      // and apply it to the link next to the icon.
+      const fgColorClass = Array.from(svgEl.classList).find((className) =>
+        className.startsWith('fgColor-')
+      );
+      // The fgColor-muted is the same as the fgColor-default,
+      // so we don't need to copy that class.
+      if (fgColorClass && fgColorClass !== 'fgColor-muted') {
+        const link =
+          svgEl.parentElement?.nextElementSibling?.querySelector('a');
+        if (link) {
+          // This will overwrite existing fgColor- classes.
+          link.classList.add(fgColorClass);
+        }
       }
     },
     onAdd: () => {},
