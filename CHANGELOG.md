@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.13.0
+
+[compare changes](https://github.com/material-extensions/material-icons-browser-extension/compare/v1.12.0...v1.13.0)
+
+### 🚀 Enhancements
+
+- Enhance "Files Changed" experience ([#137](https://github.com/material-extensions/material-icons-browser-extension/pull/137))
+
+### ❤️ Contributors
+
+- Chillcicada ([@chillcicada](https://github.com/chillcicada))
+
 ## v1.12.0
 
 [compare changes](https://github.com/material-extensions/material-icons-browser-extension/compare/v1.11.0...v1.12.0)
