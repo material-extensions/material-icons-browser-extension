@@ -8,6 +8,7 @@ import gitee from './gitee';
 import github from './github';
 import gitlab from './gitlab';
 import sourceforge from './sourceforge';
+import tangled from './tangled';
 
 export const providers: Record<string, () => Provider> = {
   azure,
@@ -18,6 +19,7 @@ export const providers: Record<string, () => Provider> = {
   gitlab,
   sourceforge,
   forgejo,
+  tangled,
 };
 
 export const providerConfig: Record<string, Provider> = {};
