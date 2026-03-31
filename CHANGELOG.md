@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.14.0
+
+[compare changes](https://github.com/material-extensions/material-icons-browser-extension/compare/v1.13.1...v1.14.0)
+
+### 🚀 Enhancements
+
+- Add tangled support ([#141](https://github.com/material-extensions/material-icons-browser-extension/pull/141))
+
+### ❤️ Contributors
+
+- Philipp Kief ([@PKief](https://github.com/PKief))
+
 ## v1.13.1
 
 [compare changes](https://github.com/material-extensions/material-icons-browser-extension/compare/v1.13.0...v1.13.1)
