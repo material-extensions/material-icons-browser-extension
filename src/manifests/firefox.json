@@ -2,7 +2,8 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "{eac6e624-97fa-4f28-9d24-c06c9b8aa713}"
-    }
+    },
+    "gecko_android": {}
   },
   "optional_permissions": ["activeTab", "<all_urls>"]
 }
