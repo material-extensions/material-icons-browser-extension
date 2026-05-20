@@ -23,19 +23,12 @@ const handleProvider = async (href: string) => {
   const iconPack = await getConfig('iconPack');
   const fileBindings = await getConfig('fileIconBindings');
   const folderBindings = await getConfig('folderIconBindings');
-  const languageBindings = await getConfig('languageIconBindings');
   const extEnabled = await getConfig('extEnabled');
   const globalExtEnabled = await getConfig('extEnabled', 'default');
 
   if (!globalExtEnabled || !extEnabled) return;
 
-  observePage(
-    provider,
-    iconPack,
-    fileBindings,
-    folderBindings,
-    languageBindings
-  );
+  observePage(provider, iconPack, fileBindings, folderBindings);
   addConfigChangeListener('iconPack', () => replaceAllIcons(provider));
 };
 

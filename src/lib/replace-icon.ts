@@ -1,14 +1,9 @@
 import { Manifest } from 'material-icon-theme';
 import Browser from 'webextension-polyfill';
 import iconsList from '../icon-list.json';
-import languageMap from '../language-map.json';
 import { Provider } from '../models';
 
 const iconsListTyped = iconsList as Record<string, string>;
-const languageMapTyped = languageMap as {
-  fileExtensions: Record<string, string>;
-  fileNames: Record<string, string>;
-};
 
 export function replaceIconInRow(
   itemRow: HTMLElement,
@@ -136,15 +131,6 @@ function lookForMatch(
       if (manifest.languageIds?.[ext]) return manifest.languageIds?.[ext];
     }
 
-    const languageIcon = getLanguageIcon(
-      fileName,
-      lowerFileName,
-      fileExtensions
-    );
-
-    if (languageIcon)
-      return manifest.languageIds?.[languageIcon] ?? languageIcon;
-
     return 'file';
   }
 
@@ -153,23 +139,6 @@ function lookForMatch(
     return manifest.folderNames?.[lowerFileName];
 
   return 'folder';
-}
-
-function getLanguageIcon(
-  fileName: string,
-  lowerFileName: string,
-  fileExtensions: string[]
-): string | undefined {
-  if (languageMapTyped.fileNames[fileName])
-    return languageMapTyped.fileNames[fileName];
-  if (languageMapTyped.fileNames[lowerFileName])
-    return languageMapTyped.fileNames[lowerFileName];
-  for (const ext of fileExtensions) {
-    if (languageMapTyped.fileExtensions[ext])
-      return languageMapTyped.fileExtensions[ext];
-  }
-
-  return undefined;
 }
 
 function lookForLightMatch(

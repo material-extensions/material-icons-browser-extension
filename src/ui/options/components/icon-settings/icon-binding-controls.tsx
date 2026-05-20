@@ -22,10 +22,7 @@ type IconBindingControlProps = {
   title: string;
   domain: Domain;
   iconList: string[];
-  configName: keyof Pick<
-    UserConfig,
-    'fileIconBindings' | 'folderIconBindings' | 'languageIconBindings'
-  >;
+  configName: keyof Pick<UserConfig, 'fileIconBindings' | 'folderIconBindings'>;
   placeholder: string;
   label: string;
   iconInfoText: string;

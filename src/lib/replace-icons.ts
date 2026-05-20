@@ -11,16 +11,12 @@ export const observePage = (
   gitProvider: Provider,
   iconPack: IconPackValue,
   fileBindings?: IconAssociations,
-  folderBindings?: IconAssociations,
-  languageBindings?: IconAssociations
+  folderBindings?: IconAssociations
 ): void => {
   const manifest = generateManifest({
     activeIconPack: iconPack || undefined,
     files: { associations: fileBindings },
     folders: { associations: folderBindings },
-    languages: {
-      associations: languageBindings,
-    },
   });
 
   observe(gitProvider.selectors.row, {

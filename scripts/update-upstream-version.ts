@@ -1,6 +1,5 @@
-import 'dotenv/config';
-import * as path from 'path';
 import * as fs from 'fs/promises';
+import * as path from 'path';
 
 /**
  * Gets latest version of the Material Icon Theme Module
