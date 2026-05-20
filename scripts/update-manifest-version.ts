@@ -1,6 +1,5 @@
-import 'dotenv/config';
-import * as path from 'path';
 import * as fs from 'fs/promises';
+import * as path from 'path';
 
 const packageJsonPath: string = path.resolve(__dirname, '..', 'package.json');
 const manifestPath: string = path.resolve(

@@ -35,8 +35,6 @@
     "@types/react": "19.1.8",
     "@types/react-dom": "19.1.6",
     "@types/webextension-polyfill": "0.12.3",
-    "changelogen": "0.6.2",
-    "dotenv": "17.2.0",
     "esbuild": "0.25.6",
     "fs-extra": "11.3.0",
     "husky": "9.1.7",
