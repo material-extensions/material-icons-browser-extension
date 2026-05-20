@@ -50,12 +50,6 @@ Zip `dist` folder for upload to Chrome Web Store and Firefox. _This script needs
 npm run bundle
 ```
 
-Update language-map.json with latest language contributions.
-
-```shell
-npm run build-languages
-```
-
 ---
 
 _Original extension developed with [Richard Lam](https://github.com/rlam108)_

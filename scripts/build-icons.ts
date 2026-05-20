@@ -1,6 +1,5 @@
-import 'dotenv/config';
-import * as path from 'path';
 import * as fs from 'fs-extra';
+import * as path from 'path';
 import sharp from 'sharp';
 
 const svgPath: string = path.resolve(__dirname, '..', 'src', 'logo.svg');
