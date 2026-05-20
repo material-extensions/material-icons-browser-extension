@@ -29,5 +29,3 @@ jobs:
 
       - name: 🛠️ Build extension
         run: npm run build
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

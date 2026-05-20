@@ -1,9 +1,4 @@
-import languageMap from '../../../language-map.json';
-
-const languageMapTyped = languageMap as {
-  fileExtensions: Record<string, string>;
-  fileNames: Record<string, string>;
-};
+import { generateManifest } from 'material-icon-theme';
 
 /**
  * Get list of all supported language ids.
@@ -11,13 +6,6 @@ const languageMapTyped = languageMap as {
  * @returns a list of language ids
  */
 export function getLanguageIds(): string[] {
-  return Object.values(languageMapTyped.fileExtensions)
-    .concat(Object.values(languageMapTyped.fileNames))
-    .reduce((acc, curr) => {
-      if (!acc.includes(curr)) {
-        acc.push(curr);
-      }
-      return acc;
-    }, [] as string[])
-    .sort();
+  const manifest = generateManifest();
+  return Object.keys(manifest.languageIds ?? {}).sort();
 }
