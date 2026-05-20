@@ -9,7 +9,6 @@ import {
 import { Domain } from '@/models';
 import { FileIconBindings } from './file-icon-bindings';
 import { FolderIconBindings } from './folder-icon-bindings';
-import { LanguageIconBindings } from './language-icon-bindings';
 
 type IconSettingsDialogProps = {
   show: boolean;
@@ -32,7 +31,6 @@ export function IconSettingsDialog({
 
         <FileIconBindings domain={domain} />
         <FolderIconBindings domain={domain} />
-        <LanguageIconBindings domain={domain} />
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Close</Button>

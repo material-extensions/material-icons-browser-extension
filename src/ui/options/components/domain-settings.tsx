@@ -69,7 +69,6 @@ export function DomainSettings({
     await clearConfig('iconSize', domain.name);
     await clearConfig('iconPack', domain.name);
     await clearConfig('extEnabled', domain.name);
-    await clearConfig('languageIconBindings', domain.name);
     await clearConfig('fileIconBindings', domain.name);
     await clearConfig('folderIconBindings', domain.name);
 

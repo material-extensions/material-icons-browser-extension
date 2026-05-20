@@ -8,7 +8,6 @@ export type UserConfig = {
   extEnabled: boolean;
   fileIconBindings?: IconAssociations;
   folderIconBindings?: IconAssociations;
-  languageIconBindings?: IconAssociations;
 };
 
 export const hardDefaults: UserConfig = {
@@ -17,7 +16,6 @@ export const hardDefaults: UserConfig = {
   extEnabled: true,
   fileIconBindings: {},
   folderIconBindings: {},
-  languageIconBindings: {},
 };
 
 type ConfigValueType<T extends keyof UserConfig> = UserConfig[T];
