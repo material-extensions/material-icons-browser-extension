@@ -90,10 +90,11 @@ export default function github(): Provider {
       }
       // If neither of the above, prepend the new icon in front of the original icon.
       // If we remove the icon, GitHub code view crashes when you navigate through the
-      // tree view. Instead, we just hide it via `style` attribute (not CSS class)
+      // tree view. Instead, we hide it via CSS (adjacent sibling rule in injected-styles).
+      // Using CSS instead of inline styles ensures cloned nodes don't carry hidden state.
       // https://github.com/material-extensions/material-icons-browser-extension/pull/66
+      // https://github.com/material-extensions/material-icons-browser-extension/issues/142
       else {
-        svgEl.style.display = 'none';
         svgEl.before(newSVG);
       }
 
