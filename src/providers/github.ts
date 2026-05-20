@@ -72,6 +72,14 @@ export default function github(): Provider {
             newSVG.setAttribute(attr, svgEl.getAttribute(attr) ?? '')
         );
 
+      // Remove semantic classes to avoid conflicts with Refined GitHub (#142)
+      newSVG.classList.remove(
+        'octicon-file-added',
+        'octicon-file-removed',
+        'octicon-file-moved',
+        'octicon-file-diff'
+      );
+
       const prevEl = svgEl.previousElementSibling;
       if (prevEl?.getAttribute('data-material-icons-extension') === 'icon') {
         newSVG.replaceWith(prevEl);
