@@ -17,11 +17,6 @@ body[data-material-icons-extension-size="xl"]
   display: none !important;
 }
 
-/* Hide native icons that immediately follow the replaced icon */
-img[data-material-icons-extension="icon"] + svg {
-  display: none !important;
-}
-
 /* github package icon spacing fix */
 .octicon-package[data-material-icons-extension] {
   margin-right: 5px;
