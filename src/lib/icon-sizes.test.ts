@@ -8,7 +8,7 @@ vi.mock('./user-config', () => ({
 }));
 
 import { iconSizes, initIconSizes } from './icon-sizes';
-import { getConfig, addConfigChangeListener } from './user-config';
+import { addConfigChangeListener } from './user-config';
 
 describe('icon-sizes', () => {
   beforeEach(() => {
