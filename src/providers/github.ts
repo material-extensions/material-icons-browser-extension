@@ -69,13 +69,6 @@ export default function github(): Provider {
       const fileName =
         newSVG.getAttribute('data-material-icons-extension-filename') ?? '';
 
-      // If the previous sibling is an old-style <img> icon from this extension,
-      // remove it (migration from the old approach).
-      const prevEl = svgEl.previousElementSibling;
-      if (prevEl?.getAttribute('data-material-icons-extension') === 'icon') {
-        prevEl.remove();
-      }
-
       // Clear the SVG's internal paths/shapes so nothing renders on top
       // of our background icon. This keeps the original element in the DOM
       // (avoiding GitHub SPA crashes) while visually replacing its content.
