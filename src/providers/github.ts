@@ -62,6 +62,8 @@ export default function github(): Provider {
       icon.classList.contains('octicon-file-submodule'),
     getIsSymlink: ({ icon }) =>
       icon.classList.contains('octicon-file-symlink-file'),
+    getIsExpanded: ({ icon }) =>
+      icon.classList.contains('octicon-file-directory-open-fill'),
     replaceIcon: (svgEl, newSVG) => {
       const iconUrl = newSVG.getAttribute('src') ?? '';
       const iconName =
@@ -105,7 +107,30 @@ export default function github(): Provider {
         }
       }
     },
-    onAdd: () => {},
+    onAdd: (row, callback) => {
+      // GitHub's React tree view re-renders folder icons when expanding/collapsing,
+      // replacing the SVG element entirely. The selector-observer won't fire again
+      // for the same row, so we use a MutationObserver to detect these changes.
+      const observer = new MutationObserver((mutationsList) => {
+        // Only re-run if a new SVG was added (GitHub swapping the icon),
+        // not when we modify the existing SVG (setting background-image, attributes).
+        const isNewSvgAdded = mutationsList.some((mutation) =>
+          Array.from(mutation.addedNodes).some(
+            (node) =>
+              node.nodeName === 'svg' &&
+              !(node as Element).hasAttribute('data-material-icons-extension')
+          )
+        );
+
+        if (isNewSvgAdded) {
+          callback();
+        }
+      });
+      observer.observe(row, {
+        childList: true,
+        subtree: true,
+      });
+    },
     transformFileName: (
       rowEl: HTMLElement,
       _iconEl: HTMLElement,

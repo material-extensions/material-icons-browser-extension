@@ -15,6 +15,7 @@ export type Provider = {
   getIsDirectory: (params: { row: HTMLElement; icon: HTMLElement }) => boolean;
   getIsSubmodule: (params: { row: HTMLElement; icon: HTMLElement }) => boolean;
   getIsSymlink: (params: { row: HTMLElement; icon: HTMLElement }) => boolean;
+  getIsExpanded?: (params: { row: HTMLElement; icon: HTMLElement }) => boolean;
   getIsLightTheme: () => boolean;
   replaceIcon: (oldIcon: HTMLElement, newIcon: HTMLElement) => void;
   transformFileName: (

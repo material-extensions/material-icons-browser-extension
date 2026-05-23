@@ -88,8 +88,22 @@ function replaceIcon(
     );
   }
 
+  // If the folder is expanded, use the expanded variant of the icon
+  const isExpanded =
+    isDir && provider.getIsExpanded?.({ row: itemRow, icon: iconEl });
+  if (isExpanded) {
+    const lowerFN = fileName.toLowerCase();
+    const expandedName =
+      manifest.folderNamesExpanded?.[fileName] ??
+      manifest.folderNamesExpanded?.[lowerFN] ??
+      `${iconName}-open`;
+    iconName = expandedName;
+  }
+
   // get correct icon name from icon list
-  iconName = iconsListTyped[iconName] ?? (isDir ? 'folder.svg' : 'file.svg');
+  iconName =
+    iconsListTyped[iconName] ??
+    (isDir ? (isExpanded ? 'folder-open.svg' : 'folder.svg') : 'file.svg');
 
   replaceElementWithIcon(iconEl, iconName, fileName, provider);
 }
