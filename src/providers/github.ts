@@ -95,6 +95,7 @@ export default function github(): Provider {
       // https://github.com/material-extensions/material-icons-browser-extension/pull/66
       // https://github.com/material-extensions/material-icons-browser-extension/issues/142
       else {
+        svgEl.style.display = 'none';
         svgEl.before(newSVG);
       }
 
