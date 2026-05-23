@@ -33,6 +33,13 @@ jobs:
       - name: 🛠️ Build extension
         run: npm run build
 
+      - name: 📤 Upload extension build
+        uses: actions/upload-artifact@v4
+        with:
+          name: extension-build
+          path: dist/chrome-edge/
+          retention-days: 1
+
   e2e:
     runs-on: [ubuntu-latest]
     name: E2E Tests
@@ -46,8 +53,11 @@ jobs:
       - name: 📦 Install dependencies
         run: npm ci
 
-      - name: 🛠️ Build extension
-        run: npm run build
+      - name: 📥 Download extension build
+        uses: actions/download-artifact@v4
+        with:
+          name: extension-build
+          path: dist/chrome-edge/
 
       - name: 🎭 Cache Playwright browsers
         id: playwright-cache
