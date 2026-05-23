@@ -31,7 +31,7 @@ export const observePage = (
 
 export const replaceAllIcons = (provider: Provider) => {
   document
-    .querySelectorAll('img[data-material-icons-extension-iconname]')
+    .querySelectorAll('[data-material-icons-extension-iconname]')
     .forEach((iconEl) => {
       const iconName = iconEl.getAttribute(
         'data-material-icons-extension-iconname'

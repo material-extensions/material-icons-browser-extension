@@ -63,41 +63,39 @@ export default function github(): Provider {
     getIsSymlink: ({ icon }) =>
       icon.classList.contains('octicon-file-symlink-file'),
     replaceIcon: (svgEl, newSVG) => {
-      svgEl
-        .getAttributeNames()
-        .forEach(
-          (attr) =>
-            attr !== 'src' &&
-            !/^data-material-icons-extension/.test(attr) &&
-            newSVG.setAttribute(attr, svgEl.getAttribute(attr) ?? '')
-        );
+      const iconUrl = newSVG.getAttribute('src') ?? '';
+      const iconName =
+        newSVG.getAttribute('data-material-icons-extension-iconname') ?? '';
+      const fileName =
+        newSVG.getAttribute('data-material-icons-extension-filename') ?? '';
 
-      // Remove semantic classes to avoid conflicts with Refined GitHub (#142)
-      newSVG.classList.remove(
-        'octicon-file-added',
-        'octicon-file-removed',
-        'octicon-file-moved',
-        'octicon-file-diff'
-      );
-
+      // If the previous sibling is an old-style <img> icon from this extension,
+      // remove it (migration from the old approach).
       const prevEl = svgEl.previousElementSibling;
       if (prevEl?.getAttribute('data-material-icons-extension') === 'icon') {
-        newSVG.replaceWith(prevEl);
+        prevEl.remove();
       }
-      // If the icon to replace is an icon from this extension, replace it with the new icon
-      else if (svgEl.getAttribute('data-material-icons-extension') === 'icon') {
-        svgEl.replaceWith(newSVG);
-      }
-      // If neither of the above, prepend the new icon in front of the original icon.
-      // If we remove the icon, GitHub code view crashes when you navigate through the
-      // tree view. Instead, we hide it via CSS (adjacent sibling rule in injected-styles).
-      // Using CSS instead of inline styles ensures cloned nodes don't carry hidden state.
-      // https://github.com/material-extensions/material-icons-browser-extension/pull/66
+
+      // Clear the SVG's internal paths/shapes so nothing renders on top
+      // of our background icon. This keeps the original element in the DOM
+      // (avoiding GitHub SPA crashes) while visually replacing its content.
+      svgEl.innerHTML = '';
+
+      // Apply the material icon as a background image on the existing SVG.
+      // This avoids adding new elements, copying classes, or conflicting
+      // with other extensions like Refined GitHub.
+      // https://github.com/material-extensions/material-icons-browser-extension/issues/65#issuecomment-1538427263
       // https://github.com/material-extensions/material-icons-browser-extension/issues/142
-      else {
-        svgEl.style.display = 'none';
-        svgEl.before(newSVG);
-      }
+      svgEl.style.backgroundImage = `url("${iconUrl}")`;
+      svgEl.style.backgroundSize = 'contain';
+      svgEl.style.backgroundRepeat = 'no-repeat';
+      svgEl.style.backgroundPosition = 'center';
+      svgEl.style.display = '';
+
+      // Mark as replaced by this extension
+      svgEl.setAttribute('data-material-icons-extension', 'icon');
+      svgEl.setAttribute('data-material-icons-extension-iconname', iconName);
+      svgEl.setAttribute('data-material-icons-extension-filename', fileName);
 
       // Get the fgColor-* class from the original svg element
       // and apply it to the link next to the icon.
@@ -110,7 +108,6 @@ export default function github(): Provider {
         const link =
           svgEl.parentElement?.nextElementSibling?.querySelector('a');
         if (link) {
-          // This will overwrite existing fgColor- classes.
           link.classList.add(fgColorClass);
         }
       }
