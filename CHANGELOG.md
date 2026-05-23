@@ -1,5 +1,22 @@
 # Changelog
 
+## v1.16.0
+
+[compare changes](https://github.com/material-extensions/material-icons-browser-extension/compare/v1.15.0...v1.16.0)
+
+### 🚀 Enhancements
+
+- Support auto-i18n for AMO links ([#146](https://github.com/material-extensions/material-icons-browser-extension/pull/146))
+
+### 🩹 Fixes
+
+- Conflict with Refined GitHub ([#148](https://github.com/material-extensions/material-icons-browser-extension/pull/148))
+
+### ❤️ Contributors
+
+- Fregante ([@fregante](https://github.com/fregante))
+- Gitoffthelawn ([@Gitoffthelawn](https://github.com/Gitoffthelawn))
+
 ## v1.15.0
 
 [compare changes](https://github.com/material-extensions/material-icons-browser-extension/compare/v1.14.1...v1.15.0)
