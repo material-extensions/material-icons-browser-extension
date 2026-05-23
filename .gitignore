@@ -16,3 +16,4 @@ node_modules
 Thumbs.db
 
 .env
+test-results/

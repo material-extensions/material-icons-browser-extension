@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.1.2",
+    "@playwright/test": "1.60.0",
     "@testing-library/dom": "10.4.1",
     "@types/fs-extra": "11.0.4",
     "@types/node": "24.0.14",
@@ -68,6 +69,7 @@
     "format": "npx @biomejs/biome format --write ./src",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:e2e": "playwright test",
     "prepare": "husky"
   },
   "lint-staged": {
