@@ -50,6 +50,18 @@ Zip `dist` folder for upload to Chrome Web Store and Firefox. _This script needs
 npm run bundle
 ```
 
+Build a Safari Web Extension bundle in `dist/safari`:
+
+```shell
+npm run build-src
+```
+
+Package the Safari bundle into an Xcode project for local Safari testing or App Store distribution. This requires Xcode with `safari-web-extension-packager` available on PATH.
+
+```shell
+npm run package-safari
+```
+
 ---
 
 _Original extension developed with [Richard Lam](https://github.com/rlam108)_

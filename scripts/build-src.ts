@@ -69,7 +69,7 @@ async function bundleInjectedStyles(outDir: string): Promise<void> {
 }
 
 /**
- * Build the extension for a specific browser target (firefox / chrome-edge).
+ * Build the extension for a specific browser target.
  * Copies icons, bundles JS, copies static assets, and assembles the manifest.
  */
 async function buildBrowserTarget(
@@ -127,11 +127,24 @@ async function main(): Promise<void> {
   console.log('Generating icon list...');
   await generateIconList();
 
-  console.log('Building Firefox target...');
-  await buildBrowserTarget('firefox', 'firefox.json');
+  const targets = [
+    {
+      displayName: 'Firefox',
+      outputDir: 'firefox',
+      manifestFile: 'firefox.json',
+    },
+    {
+      displayName: 'Chrome/Edge',
+      outputDir: 'chrome-edge',
+      manifestFile: 'chrome-edge.json',
+    },
+    { displayName: 'Safari', outputDir: 'safari', manifestFile: 'safari.json' },
+  ];
 
-  console.log('Building Chrome/Edge target...');
-  await buildBrowserTarget('chrome-edge', 'chrome-edge.json');
+  for (const target of targets) {
+    console.log(`Building ${target.displayName} target...`);
+    await buildBrowserTarget(target.outputDir, target.manifestFile);
+  }
 
   console.log('Build complete.');
 }
