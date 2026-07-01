@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import gitlab from './gitlab';
 
 // left-to-right mark GitLab wraps truncation spans in, kept explicit instead of embedded raw
