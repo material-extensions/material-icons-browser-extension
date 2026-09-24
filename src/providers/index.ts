@@ -76,9 +76,9 @@ export const getGitProviders = () =>
  */
 export const getGitProvider = (domain: string) => {
   if (!domain.startsWith('http')) {
-    domain = new URL(`http://${domain}`).host;
+    domain = new URL(`http://${domain}`).hostname;
   } else {
-    domain = new URL(domain).host;
+    domain = new URL(domain).hostname;
   }
 
   return getGitProviders().then((p) => {
