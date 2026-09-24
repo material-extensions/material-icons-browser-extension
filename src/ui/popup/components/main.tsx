@@ -49,13 +49,9 @@ function SettingsPopup() {
           case PageState.HasAccess:
             const tab = await getCurrentTab();
             const match = await guessProvider(tab);
-            setSuggestedProvider(match as SetStateAction<string>);
-            if (match) {
-              setPageSupported(true);
-              setShowAddProvider(true);
-            } else {
-              setPageSupported(false);
-            }
+            setSuggestedProvider((match || '') as SetStateAction<string>);
+            setPageSupported(true);
+            setShowAddProvider(true);
             break;
         }
         setIsLoading(false);

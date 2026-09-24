@@ -28,7 +28,11 @@ export function AddProvider(props: {
       .map((provider) => provider.name);
 
     setProviders(providers);
-  }, []);
+
+    if (!selectedProvider && providers.length > 0) {
+      setSelectedProvider(providers[0]);
+    }
+  }, [selectedProvider]);
 
   const addProvider = () => {
     if (!selectedProvider) return;
@@ -50,7 +54,9 @@ export function AddProvider(props: {
   return (
     <Box sx={{ p: 2 }}>
       <Typography variant='body1'>
-        Select a provider configuration to add to the domain.
+        {suggestedProvider
+          ? 'Select a provider configuration to add to the domain.'
+          : 'Auto-detection failed. Select a provider configuration for this domain.'}
       </Typography>
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
         <FormControl fullWidth size='small'>
