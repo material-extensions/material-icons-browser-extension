@@ -1,4 +1,6 @@
+import Browser from 'webextension-polyfill';
 import { getCustomProviders } from '../lib/custom-providers';
+import { registerContentScriptForHost } from '../lib/content-script-registration';
 import { Provider } from '../models';
 import azure from './azure';
 import bitbucket from './bitbucket';
@@ -70,6 +72,17 @@ export const getGitProviders = () =>
 
     return providerConfig;
   });
+
+export const restoreRegisteredCustomProviderScripts = async () => {
+  const customProviders = await getCustomProviders();
+  if (!Browser.scripting?.registerContentScripts) return;
+
+  await Promise.all(
+    Object.keys(customProviders).map((domain) =>
+      registerContentScriptForHost(domain).catch(() => undefined)
+    )
+  );
+};
 
 /**
  * Get all selectors and functions specific to the Git provider
