@@ -4,7 +4,10 @@ import { initIconSizes } from './lib/icon-sizes';
 import { observePage, replaceAllIcons } from './lib/replace-icons';
 import { addConfigChangeListener, getConfig } from './lib/user-config';
 import { Provider } from './models';
-import { getGitProvider } from './providers';
+import {
+  getGitProvider,
+  restoreRegisteredCustomProviderScripts,
+} from './providers';
 
 interface Possibilities {
   [key: string]: string;
@@ -12,6 +15,7 @@ interface Possibilities {
 
 const init = async () => {
   initIconSizes();
+  await restoreRegisteredCustomProviderScripts();
   const { href } = window.location;
   await handleProvider(href);
 };
