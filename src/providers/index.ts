@@ -19,12 +19,12 @@ import tangled from './tangled';
 export const providers: Record<string, () => Provider> = {
   azure,
   bitbucket,
+  forgejo,
   gitea,
   gitee,
   github,
   gitlab,
   sourceforge,
-  forgejo,
   tangled,
 };
 

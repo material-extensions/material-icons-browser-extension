@@ -14,8 +14,9 @@ export default function forgejo(): Provider {
       row: '#repo-files-table .entry, #repo-files-table .repo-file-item',
       filename: '.name a, .repo-file-cell.name a',
       icon: '.name svg, .repo-file-cell.name svg',
-      // Element by which to detect if the tested domain is forgejs.
-      detect: 'body > .full.height > .page-content[role=main]',
+      // Element by which to detect if the tested domain is Forgejo.
+      detect:
+        'html[data-theme^="forgejo"], link[href*="theme-forgejo"], meta[name="keywords"][content*="forgejo"]',
     },
     canSelfHost: true,
     isCustom: false,

@@ -26,6 +26,12 @@ describe('Forgejo provider', () => {
     expect(provider.canSelfHost).toBe(true);
   });
 
+  it('should detect Forgejo-specific markup before Gitea-compatible markup', () => {
+    expect(provider.selectors.detect).toBe(
+      'html[data-theme^="forgejo"], link[href*="theme-forgejo"], meta[name="keywords"][content*="forgejo"]'
+    );
+  });
+
   describe('getIsLightTheme', () => {
     it('should always return false', () => {
       expect(provider.getIsLightTheme()).toBe(false);
