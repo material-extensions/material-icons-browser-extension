@@ -19,6 +19,11 @@ vi.mock('webextension-polyfill', () => ({
       registerContentScripts: vi.fn().mockResolvedValue(undefined),
       updateContentScripts: vi.fn().mockResolvedValue(undefined),
       executeScript: vi.fn().mockResolvedValue(undefined),
+      insertCSS: vi.fn().mockResolvedValue(undefined),
+    },
+    tabs: {
+      query: vi.fn().mockResolvedValue([]),
+      sendMessage: vi.fn().mockResolvedValue(true),
     },
   },
 }));
@@ -32,6 +37,7 @@ describe('providers', () => {
     vi.clearAllMocks();
     mockGet.mockResolvedValue({ customProviders: {} });
     delete providerConfig['192.168.1.10'];
+    delete providerConfig['192.168.1.10:3000'];
     delete providerConfig['git.example.local'];
   });
 
@@ -41,6 +47,15 @@ describe('providers', () => {
     const provider = await getGitProvider('http://192.168.1.10:3000/user/repo');
 
     expect(provider?.name).toBe('192.168.1.10');
+  });
+
+  it('prefers port-specific custom providers', async () => {
+    addGitProvider('192.168.1.10', 'forgejo');
+    addGitProvider('192.168.1.10:3000', 'gitea');
+
+    const provider = await getGitProvider('http://192.168.1.10:3000/user/repo');
+
+    expect(provider?.name).toBe('192.168.1.10:3000');
   });
 
   it('restores dynamic content scripts for stored custom providers', async () => {

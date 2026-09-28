@@ -4,10 +4,7 @@ import { initIconSizes } from './lib/icon-sizes';
 import { observePage, replaceAllIcons } from './lib/replace-icons';
 import { addConfigChangeListener, getConfig } from './lib/user-config';
 import { Provider } from './models';
-import {
-  getGitProvider,
-  restoreRegisteredCustomProviderScripts,
-} from './providers';
+import { getGitProvider } from './providers';
 
 interface Possibilities {
   [key: string]: string;
@@ -15,7 +12,6 @@ interface Possibilities {
 
 const init = async () => {
   initIconSizes();
-  await restoreRegisteredCustomProviderScripts();
   const { href } = window.location;
   await handleProvider(href);
 };
@@ -38,11 +34,13 @@ const handleProvider = async (href: string) => {
 
 type Handlers = {
   init: () => void;
+  contentScriptReady: () => true;
   guessProvider: (possibilities: Possibilities) => string | null;
 };
 
 const handlers: Handlers = {
   init,
+  contentScriptReady: () => true,
   guessProvider: (possibilities: Possibilities): string | null => {
     for (const [name, selector] of Object.entries(possibilities)) {
       if (document.querySelector(selector)) {
@@ -65,6 +63,10 @@ const processExtensionCommand = (
   if (message.cmd === 'init') {
     handlers.init();
     return sendResponse(null);
+  }
+
+  if (message.cmd === 'contentScriptReady') {
+    return sendResponse(handlers.contentScriptReady());
   }
 
   if (message.cmd === 'guessProvider') {

@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import sourceforge from './sourceforge';
 
 describe('SourceForge provider', () => {
@@ -53,8 +53,7 @@ describe('SourceForge provider', () => {
     });
 
     it('should return false when icon is an I element without "fa-folder" class', () => {
-      document.body.innerHTML =
-        '<tr><td><i class="fa fa-file"></i></td></tr>';
+      document.body.innerHTML = '<tr><td><i class="fa fa-file"></i></td></tr>';
       const row = document.querySelector('tr') as HTMLElement;
       const icon = document.querySelector('i') as HTMLElement;
       expect(provider.getIsDirectory({ row, icon })).toBe(false);
@@ -186,8 +185,7 @@ describe('SourceForge provider', () => {
       });
 
       it('should prepend the new icon if no SVG exists inside anchor', () => {
-        document.body.innerHTML =
-          '<th><a href="#">File.txt</a></th>';
+        document.body.innerHTML = '<th><a href="#">File.txt</a></th>';
         const anchor = document.querySelector('a') as HTMLElement;
         const newSVG = document.createElement('img') as unknown as HTMLElement;
 

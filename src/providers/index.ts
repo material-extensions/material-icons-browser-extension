@@ -1,6 +1,10 @@
 import Browser from 'webextension-polyfill';
+import {
+  ensureContentScriptInjectedInTab,
+  registerContentScriptForHost,
+} from '../lib/content-script-registration';
 import { getCustomProviders } from '../lib/custom-providers';
-import { registerContentScriptForHost } from '../lib/content-script-registration';
+import { getProviderMatchDomains } from '../lib/url-patterns';
 import { Provider } from '../models';
 import azure from './azure';
 import bitbucket from './bitbucket';
@@ -62,6 +66,14 @@ export const removeGitProvider = (name: string) => {
   delete providerConfig[name];
 };
 
+export const getSelfHostableProviders = () =>
+  Object.values(providerConfig).filter(
+    (provider) => !provider.isCustom && provider.canSelfHost
+  );
+
+export const getSelfHostableProviderNames = () =>
+  getSelfHostableProviders().map((provider) => provider.name);
+
 export const getGitProviders = () =>
   getCustomProviders().then((customProviders) => {
     for (const [domain, handler] of Object.entries(customProviders)) {
@@ -77,28 +89,34 @@ export const restoreRegisteredCustomProviderScripts = async () => {
   const customProviders = await getCustomProviders();
   if (!Browser.scripting?.registerContentScripts) return;
 
-  await Promise.all(
-    Object.keys(customProviders).map((domain) =>
-      registerContentScriptForHost(domain).catch(() => undefined)
-    )
-  );
+  for (const domain of Object.keys(customProviders)) {
+    await registerContentScriptForHost(domain).catch(() => undefined);
+  }
+
+  const tabs = await Browser.tabs.query({});
+  for (const tab of tabs) {
+    if (!tab.url?.startsWith('http')) continue;
+
+    const provider = await getGitProvider(tab.url);
+    if (provider?.isCustom && tab.id) {
+      await ensureContentScriptInjectedInTab(tab.id).catch(() => undefined);
+    }
+  }
 };
 
 /**
  * Get all selectors and functions specific to the Git provider
  */
 export const getGitProvider = (domain: string) => {
-  if (!domain.startsWith('http')) {
-    domain = new URL(`http://${domain}`).hostname;
-  } else {
-    domain = new URL(domain).hostname;
-  }
+  const domains = getProviderMatchDomains(domain);
 
   return getGitProviders().then((p) => {
-    for (const provider of Object.values(p)) {
-      for (const d of provider.domains) {
-        if (d.test.test(domain)) {
-          return provider;
+    for (const domain of domains) {
+      for (const provider of Object.values(p)) {
+        for (const d of provider.domains) {
+          if (d.test.test(domain)) {
+            return provider;
+          }
         }
       }
     }

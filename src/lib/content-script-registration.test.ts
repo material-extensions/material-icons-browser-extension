@@ -14,6 +14,10 @@ vi.mock('webextension-polyfill', () => ({
       registerContentScripts: vi.fn(),
       updateContentScripts: vi.fn(),
       executeScript: vi.fn(),
+      insertCSS: vi.fn(),
+    },
+    tabs: {
+      sendMessage: vi.fn(),
     },
   },
 }));
@@ -23,6 +27,7 @@ const scripting = Browser.scripting as unknown as {
   registerContentScripts: ReturnType<typeof vi.fn>;
   updateContentScripts: ReturnType<typeof vi.fn>;
   executeScript: ReturnType<typeof vi.fn>;
+  insertCSS: ReturnType<typeof vi.fn>;
 };
 
 describe('content-script-registration', () => {
@@ -32,6 +37,8 @@ describe('content-script-registration', () => {
     scripting.registerContentScripts.mockResolvedValue(undefined);
     scripting.updateContentScripts.mockResolvedValue(undefined);
     scripting.executeScript.mockResolvedValue(undefined);
+    scripting.insertCSS.mockResolvedValue(undefined);
+    Browser.tabs.sendMessage = vi.fn().mockRejectedValue(new Error('missing'));
   });
 
   it('builds a host permission match pattern', () => {
@@ -93,6 +100,10 @@ describe('content-script-registration', () => {
       incognito: false,
     } as Browser.Tabs.Tab);
 
+    expect(scripting.insertCSS).toHaveBeenCalledWith({
+      files: ['./injected-styles.css'],
+      target: { tabId: 123 },
+    });
     expect(scripting.executeScript).toHaveBeenCalledWith({
       files: ['./main.js'],
       target: { tabId: 123 },
@@ -100,10 +111,11 @@ describe('content-script-registration', () => {
     expect(scripting.registerContentScripts).toHaveBeenCalled();
   });
 
-  it('does not execute the content script again when the current tab is already registered', async () => {
+  it('does not execute the content script again when the current tab already has it', async () => {
     scripting.getRegisteredContentScripts.mockResolvedValue([
       { id: CONTENT_SCRIPT_ID, matches: ['*://git.example.local/*'] },
     ]);
+    Browser.tabs.sendMessage = vi.fn().mockResolvedValue(true);
 
     await ensureContentScriptRegisteredForTab({
       id: 123,

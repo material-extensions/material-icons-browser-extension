@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import forgejo from './forgejo';
 
 describe('Forgejo provider', () => {
@@ -43,9 +43,7 @@ describe('Forgejo provider', () => {
     it('should return false when icon lacks directory class', () => {
       document.body.innerHTML = '<svg class="octicon-file"></svg>';
       const icon = document.querySelector('svg') as unknown as HTMLElement;
-      expect(provider.getIsDirectory({ row: document.body, icon })).toBe(
-        false
-      );
+      expect(provider.getIsDirectory({ row: document.body, icon })).toBe(false);
     });
   });
 
@@ -59,16 +57,13 @@ describe('Forgejo provider', () => {
     it('should return false when icon lacks submodule class', () => {
       document.body.innerHTML = '<svg class="octicon-file"></svg>';
       const icon = document.querySelector('svg') as unknown as HTMLElement;
-      expect(provider.getIsSubmodule({ row: document.body, icon })).toBe(
-        false
-      );
+      expect(provider.getIsSubmodule({ row: document.body, icon })).toBe(false);
     });
   });
 
   describe('getIsSymlink', () => {
     it('should return true when icon has octicon-file-symlink-file class', () => {
-      document.body.innerHTML =
-        '<svg class="octicon-file-symlink-file"></svg>';
+      document.body.innerHTML = '<svg class="octicon-file-symlink-file"></svg>';
       const icon = document.querySelector('svg') as unknown as HTMLElement;
       expect(provider.getIsSymlink({ row: document.body, icon })).toBe(true);
     });
@@ -158,17 +153,17 @@ describe('Forgejo provider', () => {
       const row = document.createElement('div');
       row.innerHTML = '<a class="archive-link" href="#"></a>';
       const icon = document.createElement('svg');
-      expect(
-        provider.transformFileName(row, icon, 'Source code (zip)')
-      ).toBe('Source code.zip');
+      expect(provider.transformFileName(row, icon, 'Source code (zip)')).toBe(
+        'Source code.zip'
+      );
     });
 
     it('should not transform Source code names without .archive-link', () => {
       const row = document.createElement('div');
       const icon = document.createElement('svg');
-      expect(
-        provider.transformFileName(row, icon, 'Source code (zip)')
-      ).toBe('Source code (zip)');
+      expect(provider.transformFileName(row, icon, 'Source code (zip)')).toBe(
+        'Source code (zip)'
+      );
     });
   });
 });

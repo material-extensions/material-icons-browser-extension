@@ -1,10 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-  getConfig,
-  setConfig,
-  clearConfig,
   addConfigChangeListener,
+  clearConfig,
+  getConfig,
   hardDefaults,
+  setConfig,
 } from './user-config';
 
 const mockGet = vi.fn();

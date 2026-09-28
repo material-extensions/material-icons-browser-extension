@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from 'react';
 import Browser from 'webextension-polyfill';
 import { addCustomProvider } from '@/lib/custom-providers';
-import { addGitProvider, providerConfig } from '@/providers';
+import { addGitProvider, getSelfHostableProviderNames } from '@/providers';
 import { getCurrentTab } from '../api/helper';
 
 export function AddProvider(props: {
@@ -23,9 +23,7 @@ export function AddProvider(props: {
     useState<string>(suggestedProvider);
 
   useEffect(() => {
-    const providers = Object.values(providerConfig)
-      .filter((provider) => !provider.isCustom && provider.canSelfHost)
-      .map((provider) => provider.name);
+    const providers = getSelfHostableProviderNames();
 
     setProviders(providers);
 

@@ -1,10 +1,13 @@
 import Browser from 'webextension-polyfill';
+import { getExtensionOriginPattern } from './url-patterns';
 
 export const CONTENT_SCRIPT_ID = 'material-icons';
 
-export const getContentScriptPattern = (host: string): string => `*://${host}/*`;
+export const getContentScriptPattern = getExtensionOriginPattern;
 
-export async function registerContentScriptForHost(host: string): Promise<void> {
+export async function registerContentScriptForHost(
+  host: string
+): Promise<void> {
   const pattern = getContentScriptPattern(host);
   const scripts = await Browser.scripting.getRegisteredContentScripts({
     ids: [CONTENT_SCRIPT_ID],
@@ -35,10 +38,25 @@ export async function registerContentScriptForHost(host: string): Promise<void> 
 }
 
 export async function executeContentScriptInTab(tabId: number): Promise<void> {
+  await Browser.scripting.insertCSS({
+    files: ['./injected-styles.css'],
+    target: { tabId },
+  });
+
   await Browser.scripting.executeScript({
     files: ['./main.js'],
     target: { tabId },
   });
+}
+
+export async function ensureContentScriptInjectedInTab(
+  tabId: number
+): Promise<void> {
+  try {
+    await Browser.tabs.sendMessage(tabId, { cmd: 'contentScriptReady' });
+  } catch {
+    await executeContentScriptInTab(tabId);
+  }
 }
 
 export async function ensureContentScriptRegisteredForTab(
@@ -46,16 +64,6 @@ export async function ensureContentScriptRegisteredForTab(
 ): Promise<void> {
   if (!tab.id || !tab.url) return;
 
-  const { host } = new URL(tab.url);
-  const pattern = getContentScriptPattern(host);
-  const scripts = await Browser.scripting.getRegisteredContentScripts({
-    ids: [CONTENT_SCRIPT_ID],
-  });
-  const matches = scripts[0]?.matches ?? [];
-
-  if (!matches.includes(pattern)) {
-    await executeContentScriptInTab(tab.id);
-  }
-
-  await registerContentScriptForHost(host);
+  await registerContentScriptForHost(tab.url);
+  await ensureContentScriptInjectedInTab(tab.id);
 }

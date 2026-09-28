@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import gitee from './gitee';
 
 describe('Gitee provider', () => {
@@ -114,9 +114,7 @@ describe('Gitee provider', () => {
 
       provider.replaceIcon(svgEl, newSVG);
 
-      expect(
-        newSVG.getAttribute('data-material-icons-extension')
-      ).toBeNull();
+      expect(newSVG.getAttribute('data-material-icons-extension')).toBeNull();
       expect(
         newSVG.getAttribute('data-material-icons-extension-iconname')
       ).toBeNull();
@@ -169,9 +167,9 @@ describe('Gitee provider', () => {
       const row = document.createElement('div');
       row.classList.add('item');
       const icon = document.createElement('i');
-      expect(
-        provider.transformFileName(row, icon, 'Source code (zip)')
-      ).toBe('Source code.zip');
+      expect(provider.transformFileName(row, icon, 'Source code (zip)')).toBe(
+        'Source code.zip'
+      );
     });
 
     it('should transform "Source code (tar.gz)" to "Source code.tar.gz" when row has "item" class', () => {
@@ -186,9 +184,9 @@ describe('Gitee provider', () => {
     it('should NOT transform "Source code (zip)" when row does not have "item" class', () => {
       const row = document.createElement('div');
       const icon = document.createElement('i');
-      expect(
-        provider.transformFileName(row, icon, 'Source code (zip)')
-      ).toBe('Source code (zip)');
+      expect(provider.transformFileName(row, icon, 'Source code (zip)')).toBe(
+        'Source code (zip)'
+      );
     });
 
     it('should NOT transform a filename that does not include "Source code"', () => {

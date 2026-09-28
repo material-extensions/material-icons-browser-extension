@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import gitlab from './gitlab';
 
 describe('GitLab provider', () => {
@@ -50,9 +50,7 @@ describe('GitLab provider', () => {
     it('should return false for file icons', () => {
       document.body.innerHTML = '<svg data-testid="doc-code-icon"></svg>';
       const icon = document.querySelector('svg') as unknown as HTMLElement;
-      expect(provider.getIsDirectory({ row: document.body, icon })).toBe(
-        false
-      );
+      expect(provider.getIsDirectory({ row: document.body, icon })).toBe(false);
     });
   });
 
@@ -125,9 +123,7 @@ describe('GitLab provider', () => {
 
       provider.replaceIcon(svgEl, newSVG);
 
-      expect(
-        newSVG.getAttribute('data-material-icons-extension')
-      ).toBeNull();
+      expect(newSVG.getAttribute('data-material-icons-extension')).toBeNull();
       expect(
         newSVG.getAttribute('data-material-icons-extension-iconname')
       ).toBeNull();
@@ -177,9 +173,9 @@ describe('GitLab provider', () => {
       `;
       const li = document.querySelector('li') as HTMLElement;
       const icon = document.createElement('svg') as unknown as HTMLElement;
-      expect(
-        provider.transformFileName(li, icon, 'Source code (zip)')
-      ).toBe('Source code.zip');
+      expect(provider.transformFileName(li, icon, 'Source code (zip)')).toBe(
+        'Source code.zip'
+      );
     });
 
     it('should transform "Source code (tar.gz)" on release asset rows', () => {
@@ -192,9 +188,9 @@ describe('GitLab provider', () => {
       `;
       const li = document.querySelector('li') as HTMLElement;
       const icon = document.createElement('svg') as unknown as HTMLElement;
-      expect(
-        provider.transformFileName(li, icon, 'Source code (tar.gz)')
-      ).toBe('Source code.tar.gz');
+      expect(provider.transformFileName(li, icon, 'Source code (tar.gz)')).toBe(
+        'Source code.tar.gz'
+      );
     });
   });
 });

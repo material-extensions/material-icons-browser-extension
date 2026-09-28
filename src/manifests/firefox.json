@@ -5,5 +5,8 @@
     },
     "gecko_android": {}
   },
+  "background": {
+    "scripts": ["background.js"]
+  },
   "optional_permissions": ["activeTab", "<all_urls>"]
 }

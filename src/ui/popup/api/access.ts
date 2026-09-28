@@ -1,12 +1,11 @@
 import Browser from 'webextension-polyfill';
 import { ensureContentScriptRegisteredForTab } from '@/lib/content-script-registration';
+import { getExtensionOriginPattern } from '@/lib/url-patterns';
 
 export function checkAccess(tab: Browser.Tabs.Tab) {
-  const { host } = new URL(tab.url ?? '');
-
   const perm = {
     permissions: ['activeTab'],
-    origins: [`*://${host}/*`],
+    origins: [getExtensionOriginPattern(tab.url ?? '')],
   };
 
   return Browser.permissions.contains(perm).then(async (r) => {
@@ -21,24 +20,18 @@ export function checkAccess(tab: Browser.Tabs.Tab) {
 }
 
 export function requestAccess(tab: Browser.Tabs.Tab) {
-  const { host } = new URL(tab.url ?? '');
-
   const perm: Browser.Permissions.Permissions = {
     permissions: ['activeTab'],
-    origins: [`*://${host}/*`],
+    origins: [getExtensionOriginPattern(tab.url ?? '')],
   };
 
-  // request the permission
-  Browser.permissions.request(perm).then(async (granted: boolean) => {
+  return Browser.permissions.request(perm).then(async (granted: boolean) => {
     if (!granted) {
-      return;
+      return false;
     }
 
-    // when granted reload the popup to show ui changes
-    window.location.reload();
+    await ensureContentScriptRegisteredForTab(tab);
+
+    return true;
   });
-
-  // close the popup, in firefox it stays open for some reason.
-  window.close();
 }
-

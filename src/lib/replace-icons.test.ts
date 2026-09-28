@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { replaceAllIcons } from './replace-icons';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Provider } from '../models';
+import { replaceAllIcons } from './replace-icons';
 
 // Mock webextension-polyfill
 vi.mock('webextension-polyfill', () => ({

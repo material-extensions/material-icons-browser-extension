@@ -64,6 +64,7 @@ async function buildBrowserTarget(
 
     // JS bundles
     bundle(outDir, path.resolve(srcDir, 'main.ts')),
+    bundle(outDir, path.resolve(srcDir, 'background.ts')),
     bundle(outDir, path.resolve(srcDir, 'ui', 'popup', 'settings-popup.tsx')),
     bundle(outDir, path.resolve(srcDir, 'ui', 'options', 'options.tsx')),
 
