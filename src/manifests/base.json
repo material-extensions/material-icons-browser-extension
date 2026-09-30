@@ -24,7 +24,7 @@
         "*://tangled.org/*"
       ],
       "js": ["./main.js"],
-      "css": ["./injected-styles.css"],
+      "css": ["./injected-startup.css", "./injected-styles.css"],
       "run_at": "document_start"
     }
   ],

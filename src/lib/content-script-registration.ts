@@ -18,7 +18,7 @@ export async function registerContentScriptForHost(
       {
         id: CONTENT_SCRIPT_ID,
         js: ['./main.js'],
-        css: ['./injected-styles.css'],
+        css: ['./injected-startup.css', './injected-styles.css'],
         matches: [pattern],
         runAt: 'document_start',
       },
@@ -39,7 +39,7 @@ export async function registerContentScriptForHost(
 
 export async function executeContentScriptInTab(tabId: number): Promise<void> {
   await Browser.scripting.insertCSS({
-    files: ['./injected-styles.css'],
+    files: ['./injected-startup.css', './injected-styles.css'],
     target: { tabId },
   });
 

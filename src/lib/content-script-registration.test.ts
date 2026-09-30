@@ -54,7 +54,7 @@ describe('content-script-registration', () => {
       {
         id: CONTENT_SCRIPT_ID,
         js: ['./main.js'],
-        css: ['./injected-styles.css'],
+        css: ['./injected-startup.css', './injected-styles.css'],
         matches: ['*://git.example.local/*'],
         runAt: 'document_start',
       },
@@ -101,7 +101,7 @@ describe('content-script-registration', () => {
     } as Browser.Tabs.Tab);
 
     expect(scripting.insertCSS).toHaveBeenCalledWith({
-      files: ['./injected-styles.css'],
+      files: ['./injected-startup.css', './injected-styles.css'],
       target: { tabId: 123 },
     });
     expect(scripting.executeScript).toHaveBeenCalledWith({

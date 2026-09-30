@@ -1,0 +1,49 @@
+/* Early placeholders for Forgejo server-rendered repository file tables.
+ *
+ * Forgejo emits its file/folder octicons in the initial HTML. These rules are
+ * intentionally tiny and tied to Forgejo's own html[data-theme] marker so they
+ * can run before the content script finishes provider/config initialization.
+ */
+html[data-theme^="forgejo"][data-material-icons-extension-status="loading"]
+  #repo-files-table
+  :is(.entry, .repo-file-item)
+  :is(.name, .repo-file-cell.name)
+  svg:not([data-material-icons-extension]) {
+  background-color: currentColor;
+  background-image: var(--material-icons-extension-placeholder-icon);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  color: transparent;
+}
+
+html[data-theme^="forgejo"][data-material-icons-extension-status="loading"]
+  #repo-files-table
+  :is(.entry, .repo-file-item)
+  :is(.name, .repo-file-cell.name)
+  svg:is(.octicon-file-directory-fill, .octicon-file-directory-open-fill):not(
+    [data-material-icons-extension]
+  ) {
+  --material-icons-extension-placeholder-icon: url("folder.svg");
+}
+
+html[data-theme^="forgejo"][data-material-icons-extension-status="loading"]
+  #repo-files-table
+  :is(.entry, .repo-file-item)
+  :is(.name, .repo-file-cell.name)
+  svg:not(
+    .octicon-file-directory-fill,
+    .octicon-file-directory-open-fill,
+    [data-material-icons-extension]
+  ) {
+  --material-icons-extension-placeholder-icon: url("file.svg");
+}
+
+html[data-theme^="forgejo"][data-material-icons-extension-status="loading"]
+  #repo-files-table
+  :is(.entry, .repo-file-item)
+  :is(.name, .repo-file-cell.name)
+  svg:not([data-material-icons-extension])
+  > * {
+  visibility: hidden;
+}

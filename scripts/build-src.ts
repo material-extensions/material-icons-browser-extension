@@ -13,6 +13,16 @@ const upstreamIconsDir = path.resolve(
 );
 const customIconsDir = path.resolve(srcDir, 'custom');
 
+const startupStyleFiles = [
+  path.resolve(srcDir, 'styles', 'startup', 'providers', 'forgejo.css'),
+];
+
+const runtimeStyleFiles = [
+  path.resolve(srcDir, 'styles', 'runtime', 'base.css'),
+  path.resolve(srcDir, 'styles', 'runtime', 'icon-size.css'),
+  path.resolve(srcDir, 'styles', 'runtime', 'providers', 'github.css'),
+];
+
 /**
  * Merge upstream icons with custom overrides and generate the icon lookup map.
  * The lookup map maps icon names (without extension) to their filenames.
@@ -44,6 +54,18 @@ function bundle(
     outdir: outDir,
     loader: { '.svg': 'dataurl' },
   });
+}
+
+async function bundleCss(files: string[], outFile: string): Promise<void> {
+  const contents = await Promise.all(files.map((file) => fs.readFile(file)));
+  await fs.outputFile(outFile, contents.join('\n'));
+}
+
+async function bundleInjectedStyles(outDir: string): Promise<void> {
+  await Promise.all([
+    bundleCss(startupStyleFiles, path.resolve(outDir, 'injected-startup.css')),
+    bundleCss(runtimeStyleFiles, path.resolve(outDir, 'injected-styles.css')),
+  ]);
 }
 
 /**
@@ -85,10 +107,7 @@ async function buildBrowserTarget(
       path.resolve(srcDir, 'ui', 'options', 'options.css'),
       path.resolve(outDir, 'options.css')
     ),
-    fs.copy(
-      path.resolve(srcDir, 'injected-styles.css'),
-      path.resolve(outDir, 'injected-styles.css')
-    ),
+    bundleInjectedStyles(outDir),
     fs.copy(path.resolve(srcDir, 'extensionIcons'), outDir),
   ]);
 

@@ -25,7 +25,6 @@
     "material-icon-theme": "5.38.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "selector-observer": "2.1.6",
     "webextension-polyfill": "0.12.0"
   },
   "devDependencies": {

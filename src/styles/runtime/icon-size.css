@@ -12,20 +12,3 @@ body[data-material-icons-extension-size="xl"]
   [data-material-icons-extension="icon"] {
   transform: scale(1.25);
 }
-
-.material-icons-exension-hide-pseudo::before {
-  display: none !important;
-}
-
-/* github package icon spacing fix */
-.octicon-package[data-material-icons-extension] {
-  margin-right: 5px;
-}
-.octicon-file-zip[data-material-icons-extension] {
-  margin-right: 5px;
-}
-
-.releases-download-list .item a {
-  display: flex;
-  align-items: center;
-}
