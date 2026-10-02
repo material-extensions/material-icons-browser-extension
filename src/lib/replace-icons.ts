@@ -33,6 +33,7 @@ export const observePage = (
 
   const processNode = (node: Node) => {
     if (!(node instanceof Element)) return;
+    if (node.hasAttribute('data-material-icons-extension')) return;
 
     const closestRow = node.closest(gitProvider.selectors.row);
     if (closestRow) {

@@ -117,6 +117,32 @@ describe('observePage', () => {
 
     expect(onAdd).toHaveBeenCalledTimes(1);
   });
+
+  it('should not reprocess a row because of its own inserted icon', async () => {
+    // Azure keeps the original icon element and puts the new <img> inside it.
+    // The cap stops the test from hanging if the loop comes back.
+    let calls = 0;
+    const provider = createMockProvider({
+      replaceIcon: vi.fn((iconEl: HTMLElement, newIcon: HTMLElement) => {
+        calls++;
+        if (calls < 20) iconEl.replaceChildren(newIcon);
+      }),
+    });
+
+    document.body.innerHTML = `
+      <div class="row">
+        <span class="filename">index.ts</span>
+        <span class="icon"></span>
+      </div>
+    `;
+
+    observePage(provider, 'react');
+
+    document.querySelector('.row')?.classList.add('selected');
+    for (let i = 0; i < 5; i++) await waitForMutationObserver();
+
+    expect(calls).toBeLessThan(5);
+  });
 });
 
 describe('replaceAllIcons', () => {
