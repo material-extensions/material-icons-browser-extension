@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.17.1
+
+[compare changes](https://github.com/material-extensions/material-icons-browser-extension/compare/v1.17.0...v1.17.1)
+
+### 🩹 Fixes
+
+- Ignore our own icons in the page observer ([#160](https://github.com/material-extensions/material-icons-browser-extension/pull/160))
+
+### ❤️ Contributors
+
+- PianoNic
+
 ## v1.17.0
 
 [compare changes](https://github.com/material-extensions/material-icons-browser-extension/compare/v1.16.4...v1.17.0)
