@@ -1,5 +1,25 @@
 # Changelog
 
+## v1.17.0
+
+[compare changes](https://github.com/material-extensions/material-icons-browser-extension/compare/v1.16.4...v1.17.0)
+
+### 🚀 Enhancements
+
+- Improve content script registration ([#158](https://github.com/material-extensions/material-icons-browser-extension/pull/158))
+- Enhance content script management and add background script for provider restoration ([8c441a0](https://github.com/material-extensions/material-icons-browser-extension/commit/8c441a0))
+- Add Forgejo-specific markup detection and update provider registration ([975d36f](https://github.com/material-extensions/material-icons-browser-extension/commit/975d36f))
+- Refactor styles and improve content script management for Forgejo support ([b64b792](https://github.com/material-extensions/material-icons-browser-extension/commit/b64b792))
+
+### 🩹 Fixes
+
+- Use hostname instead of host for URL parsing in getGitProvider (Closes #157) ([#157](https://github.com/material-extensions/material-icons-browser-extension/issues/157))
+- Improve provider selection logic and fallback messaging in add-provider component ([8dbdb0a](https://github.com/material-extensions/material-icons-browser-extension/commit/8dbdb0a))
+
+### ❤️ Contributors
+
+- Philipp Kief ([@PKief](https://github.com/PKief))
+
 ## v1.16.4
 
 [compare changes](https://github.com/material-extensions/material-icons-browser-extension/compare/v1.16.3...v1.16.4)
