@@ -33,6 +33,8 @@ export const observePage = (
 
   const processNode = (node: Node) => {
     if (!(node instanceof Element)) return;
+    // Our own <img> insertions must not re-trigger the row, or Azure loops forever.
+    if (node.hasAttribute('data-material-icons-extension')) return;
 
     const closestRow = node.closest(gitProvider.selectors.row);
     if (closestRow) {
