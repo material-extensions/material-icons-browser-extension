@@ -118,9 +118,43 @@ export function replaceElementWithIcon(
   newSVG.setAttribute('data-material-icons-extension', 'icon');
   newSVG.setAttribute('data-material-icons-extension-iconname', iconName ?? '');
   newSVG.setAttribute('data-material-icons-extension-filename', fileName);
-  newSVG.src = Browser.runtime.getURL(iconName);
 
-  provider.replaceIcon(iconEl, newSVG);
+  if (!isSafari) {
+    newSVG.src = Browser.runtime.getURL(iconName);
+    provider.replaceIcon(iconEl, newSVG);
+    return;
+  }
+
+  iconEl.setAttribute('data-material-icons-extension-pending', iconName);
+  getIconDataUrl(iconName).then((url) => {
+    // a newer icon may have been requested for this element in the meantime
+    const pending = iconEl.getAttribute(
+      'data-material-icons-extension-pending'
+    );
+    if (!url || pending !== iconName) return;
+    newSVG.src = url;
+    provider.replaceIcon(iconEl, newSVG);
+  });
+}
+
+// Safari applies the page's CSP (img-src) to extension URLs, so icons are
+// inlined as data: URLs read by the background script.
+const isSafari = Browser.runtime.getURL('').startsWith('safari-web-extension:');
+const dataUrls = new Map<string, Promise<string | undefined>>();
+
+function getIconDataUrl(iconName: string): Promise<string | undefined> {
+  let url = dataUrls.get(iconName);
+  if (!url) {
+    url = Browser.runtime.sendMessage({ cmd: 'getIconDataUrl', iconName }).then(
+      (res) => res as string | undefined,
+      () => {
+        dataUrls.delete(iconName); // retry on the next row; the original icon stays meanwhile
+        return undefined;
+      }
+    );
+    dataUrls.set(iconName, url);
+  }
+  return url;
 }
 
 function lookForMatch(
