@@ -39,27 +39,63 @@ export default function gitlab(): Provider {
     getIsLightTheme: () =>
       !document.querySelector('body')?.classList.contains('gl-dark'),
     getIsDirectory: ({ icon }) =>
-      icon.getAttribute('data-testid') === 'folder-icon',
+      ['folder-icon', 'folder-open-icon'].includes(
+        icon.getAttribute('data-testid') ?? ''
+      ),
     getIsSubmodule: ({ row }) =>
       row.querySelector('a')?.classList.contains('is-submodule') || false,
     getIsSymlink: ({ icon }) =>
       icon.getAttribute('data-testid') === 'symlink-icon',
+    getIsExpanded: ({ row, icon }) =>
+      icon.getAttribute('data-testid') === 'folder-open-icon' ||
+      row.getAttribute('aria-expanded') === 'true' ||
+      row.classList.contains('is-open'),
     replaceIcon: (svgEl, newSVG) => {
-      svgEl
-        .getAttributeNames()
-        .forEach(
-          (attr) =>
-            attr !== 'src' &&
-            !/^data-material-icons-extension/.test(attr) &&
-            newSVG.setAttribute(attr, svgEl.getAttribute(attr) ?? '')
-        );
+      const iconUrl = newSVG.getAttribute('src') ?? '';
 
-      newSVG.style.height = '16px';
-      newSVG.style.width = '16px';
-
-      svgEl.parentNode?.replaceChild(newSVG, svgEl);
+      // Keep GitLab's SVG in place, but remove its rendered <use>. Replacing a
+      // Vue-managed SVG causes duplicate icons; leaving <use> overlays both icons.
+      svgEl.replaceChildren();
+      svgEl.style.backgroundImage = `url("${iconUrl}")`;
+      svgEl.style.backgroundPosition = 'center';
+      svgEl.style.backgroundRepeat = 'no-repeat';
+      svgEl.style.backgroundSize = 'contain';
+      svgEl.style.color = 'transparent';
+      svgEl.style.fill = 'transparent';
+      svgEl.style.height = '16px';
+      svgEl.style.width = '16px';
+      svgEl.setAttribute('data-material-icons-extension', 'icon');
+      svgEl.setAttribute(
+        'data-material-icons-extension-iconname',
+        newSVG.getAttribute('data-material-icons-extension-iconname') ?? ''
+      );
+      svgEl.setAttribute(
+        'data-material-icons-extension-filename',
+        newSVG.getAttribute('data-material-icons-extension-filename') ?? ''
+      );
     },
-    onAdd: () => {},
+    onAdd: (row, callback) => {
+      const observer = new MutationObserver((mutations) => {
+        const stateChanged = mutations.some(
+          (mutation) =>
+            mutation.type === 'attributes' &&
+            (mutation.attributeName === 'aria-expanded' ||
+              mutation.attributeName === 'data-testid' ||
+              mutation.attributeName === 'class')
+        );
+        if (!stateChanged) return;
+
+        row
+          .querySelector('[data-material-icons-extension="icon"]')
+          ?.removeAttribute('data-material-icons-extension');
+        callback();
+      });
+      observer.observe(row, {
+        attributeFilter: ['aria-expanded', 'class', 'data-testid'],
+        attributes: true,
+        subtree: true,
+      });
+    },
     transformFileName: (
       rowEl: HTMLElement,
       _iconEl: HTMLElement,
