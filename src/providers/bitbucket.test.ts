@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import bitbucket from './bitbucket';
 
 describe('Bitbucket provider', () => {
@@ -49,9 +49,7 @@ describe('Bitbucket provider', () => {
       document.body.innerHTML =
         '<a aria-label="File,"><svg class="icon"></svg></a>';
       const icon = document.querySelector('svg') as unknown as HTMLElement;
-      expect(provider.getIsDirectory({ row: document.body, icon })).toBe(
-        false
-      );
+      expect(provider.getIsDirectory({ row: document.body, icon })).toBe(false);
     });
   });
 
@@ -67,9 +65,7 @@ describe('Bitbucket provider', () => {
       document.body.innerHTML =
         '<a aria-label="File,"><svg class="icon"></svg></a>';
       const icon = document.querySelector('svg') as unknown as HTMLElement;
-      expect(provider.getIsSubmodule({ row: document.body, icon })).toBe(
-        false
-      );
+      expect(provider.getIsSubmodule({ row: document.body, icon })).toBe(false);
     });
   });
 
@@ -124,9 +120,7 @@ describe('Bitbucket provider', () => {
       expect(newSVG.getAttribute('viewBox')).toBe('0 0 16 16');
       expect(newSVG.getAttribute('aria-hidden')).toBe('true');
       expect(newSVG.getAttribute('src')).toBeNull();
-      expect(
-        newSVG.getAttribute('data-material-icons-extension')
-      ).toBeNull();
+      expect(newSVG.getAttribute('data-material-icons-extension')).toBeNull();
     });
 
     it('should replace the element in DOM', () => {

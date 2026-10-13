@@ -1,6 +1,6 @@
 {
   "name": "material-icons-browser-extension",
-  "version": "1.16.2",
+  "version": "1.17.1",
   "description": "Browser Addon that enhances file browsers of version controls with material icons.",
   "main": "src/main.ts",
   "author": {
@@ -20,36 +20,35 @@
   "dependencies": {
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.1",
-    "@mui/icons-material": "7.2.0",
-    "@mui/material": "7.2.0",
-    "material-icon-theme": "5.36.1",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "selector-observer": "2.1.6",
+    "@mui/icons-material": "9.4.0",
+    "@mui/material": "9.4.0",
+    "material-icon-theme": "5.39.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
     "webextension-polyfill": "0.12.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.1.2",
-    "@playwright/test": "1.60.0",
+    "@biomejs/biome": "2.5.14",
+    "@playwright/test": "1.63.0",
     "@testing-library/dom": "10.4.1",
     "@types/fs-extra": "11.0.4",
     "@types/node": "24.0.14",
-    "@types/react": "19.1.8",
-    "@types/react-dom": "19.1.6",
-    "@types/webextension-polyfill": "0.12.3",
-    "esbuild": "0.25.6",
-    "fs-extra": "11.3.0",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@types/webextension-polyfill": "0.12.6",
+    "esbuild": "0.28.2",
+    "fs-extra": "11.4.1",
     "husky": "9.1.7",
-    "jsdom": "29.1.1",
-    "lint-staged": "16.1.2",
-    "nodemon": "3.1.10",
+    "jsdom": "30.1.1",
+    "lint-staged": "17.6.0",
+    "nodemon": "3.1.14",
     "npm-run-all": "4.1.5",
-    "rimraf": "6.0.1",
-    "sharp": "0.34.3",
-    "tsx": "4.22.3",
-    "typescript": "5.8.3",
-    "vitest": "4.1.7",
-    "web-ext": "8.9.0"
+    "rimraf": "6.1.3",
+    "sharp": "0.35.5",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "vitest": "5.0.2",
+    "web-ext": "10.7.0"
   },
   "scripts": {
     "prebuild": "rimraf --glob *.zip ./dist",
@@ -58,10 +57,13 @@
     "build-src-watch": "nodemon --watch ./src --ext ts,tsx,css,html --exec npm run build-src",
     "check-type-safety": "tsc -p ./",
     "rebuild-logos": "tsx ./scripts/build-icons.ts",
-    "bundle": "run-p bundle-edge bundle-chrome bundle-firefox",
+    "bundle": "run-p bundle-edge bundle-chrome bundle-firefox bundle-safari",
     "bundle-edge": "zip -r -j github-material-icons-edge-extension.zip dist/chrome-edge",
     "bundle-chrome": "zip -r -j github-material-icons-chrome-extension.zip dist/chrome-edge",
     "bundle-firefox": "web-ext -s ./dist/firefox/ -n github-material-icons-firefox-extension.zip -a . build --overwrite-dest",
+    "bundle-safari": "zip -r -j github-material-icons-safari-extension.zip dist/safari",
+    "package-safari": "run-s build-src package-safari-xcode",
+    "package-safari-xcode": "xcrun safari-web-extension-packager --project-location ./out/safari --app-name \"Material Icons for GitHub\" --bundle-identifier com.material-extensions.Material-Icons-for-GitHub --copy-resources --no-open --no-prompt --force ./dist/safari",
     "update-manifest-version": "tsx ./scripts/update-manifest-version.ts",
     "update-upstream-version": "tsx ./scripts/update-upstream-version.ts",
     "update-versions": "run-s update-upstream-version update-manifest-version",
@@ -75,5 +77,8 @@
   "lint-staged": {
     "*.ts": "npm run lint",
     "*": "npm run format"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true
   }
 }

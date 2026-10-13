@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import Box from '@mui/material/Box';
 import { SxProps, Theme, ThemeProvider } from '@mui/material/styles';
-import { SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Browser from 'webextension-polyfill';
 import { Logo } from '@/ui/shared/logo';
 import { theme } from '@/ui/shared/theme';
@@ -35,7 +35,11 @@ function SettingsPopup() {
     getDomainFromCurrentTab().then((domain) => setDomain(domain));
   }, []);
 
-  useEffect(() => {
+  const updatePageState = () => {
+    setIsLoading(true);
+    setShowAskForAccess(false);
+    setShowAddProvider(false);
+
     getCurrentTab()
       .then(checkPageState)
       .then(async (state) => {
@@ -49,13 +53,9 @@ function SettingsPopup() {
           case PageState.HasAccess:
             const tab = await getCurrentTab();
             const match = await guessProvider(tab);
-            setSuggestedProvider(match as SetStateAction<string>);
-            if (match) {
-              setPageSupported(true);
-              setShowAddProvider(true);
-            } else {
-              setPageSupported(false);
-            }
+            setSuggestedProvider((match || '') as string);
+            setPageSupported(true);
+            setShowAddProvider(true);
             break;
         }
         setIsLoading(false);
@@ -65,6 +65,10 @@ function SettingsPopup() {
         setPageSupported(false);
         setIsLoading(false);
       });
+  };
+
+  useEffect(() => {
+    updatePageState();
   }, [domain]);
 
   const openOptions = () => {
@@ -110,7 +114,9 @@ function SettingsPopup() {
 
       {shouldShowDomainSettings && <DomainSettings domain={domain} />}
       {shouldShowNotSupported && <NotSupported />}
-      {showAskForAccess && <AskForAccess />}
+      {showAskForAccess && (
+        <AskForAccess onAccessGranted={() => updatePageState()} />
+      )}
       {showAddProvider && (
         <AddProvider domain={domain} suggestedProvider={suggestedProvider} />
       )}

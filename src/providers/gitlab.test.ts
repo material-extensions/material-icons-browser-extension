@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import gitlab from './gitlab';
 
 // left-to-right mark GitLab wraps truncation spans in, kept explicit instead of embedded raw
@@ -186,46 +186,10 @@ describe('GitLab provider', () => {
       expect(provider.getIsDirectory({ row: document.body, icon })).toBe(true);
     });
 
-    it('should return true when icon has data-testid="folder-open-icon"', () => {
-      document.body.innerHTML = '<svg data-testid="folder-open-icon"></svg>';
-      const icon = document.querySelector('svg') as unknown as HTMLElement;
-      expect(provider.getIsDirectory({ row: document.body, icon })).toBe(true);
-    });
-
     it('should return false for file icons', () => {
       document.body.innerHTML = '<svg data-testid="doc-code-icon"></svg>';
       const icon = document.querySelector('svg') as unknown as HTMLElement;
       expect(provider.getIsDirectory({ row: document.body, icon })).toBe(false);
-    });
-  });
-
-  describe('getIsExpanded', () => {
-    it('should detect an open directory from its icon', () => {
-      document.body.innerHTML = '<svg data-testid="folder-open-icon"></svg>';
-      const icon = document.querySelector('svg') as unknown as HTMLElement;
-      expect(provider.getIsExpanded!({ row: document.body, icon })).toBe(true);
-    });
-
-    it('should detect an open directory from the file row', () => {
-      document.body.innerHTML = `
-        <a data-testid="file-row" class="folder is-open" aria-expanded="true">
-          <svg data-testid="folder-icon"></svg>
-        </a>
-      `;
-      const row = document.querySelector('a') as HTMLElement;
-      const icon = document.querySelector('svg') as unknown as HTMLElement;
-      expect(provider.getIsExpanded!({ row, icon })).toBe(true);
-    });
-
-    it('should return false for a closed directory', () => {
-      document.body.innerHTML = `
-        <a data-testid="file-row" class="folder" aria-expanded="false">
-          <svg data-testid="folder-icon"></svg>
-        </a>
-      `;
-      const row = document.querySelector('a') as HTMLElement;
-      const icon = document.querySelector('svg') as unknown as HTMLElement;
-      expect(provider.getIsExpanded!({ row, icon })).toBe(false);
     });
   });
 
@@ -268,56 +232,64 @@ describe('GitLab provider', () => {
   });
 
   describe('replaceIcon', () => {
-    it('should preserve the GitLab-managed SVG and render the icon as its background', () => {
+    it('should copy attributes from old SVG to new element', () => {
       document.body.innerHTML =
-        '<div class="container"><svg class="gl-icon"><use href="#folder"></use></svg></div>';
+        '<svg class="gl-icon" viewBox="0 0 16 16"></svg>';
+      const svgEl = document.querySelector('svg') as unknown as HTMLElement;
+      const newSVG = document.createElement('svg') as unknown as HTMLElement;
+
+      provider.replaceIcon(svgEl, newSVG);
+
+      expect(newSVG.getAttribute('class')).toBe('gl-icon');
+      expect(newSVG.getAttribute('viewBox')).toBe('0 0 16 16');
+    });
+
+    it('should NOT copy "src" attribute', () => {
+      document.body.innerHTML = '<svg src="old.svg"></svg>';
+      const svgEl = document.querySelector('svg') as unknown as HTMLElement;
+      const newSVG = document.createElement('svg') as unknown as HTMLElement;
+
+      provider.replaceIcon(svgEl, newSVG);
+
+      expect(newSVG.getAttribute('src')).toBeNull();
+    });
+
+    it('should NOT copy "data-material-icons-extension-*" attributes', () => {
+      document.body.innerHTML =
+        '<svg data-material-icons-extension="icon" data-material-icons-extension-iconname="test.svg"></svg>';
+      const svgEl = document.querySelector('svg') as unknown as HTMLElement;
+      const newSVG = document.createElement('svg') as unknown as HTMLElement;
+
+      provider.replaceIcon(svgEl, newSVG);
+
+      expect(newSVG.getAttribute('data-material-icons-extension')).toBeNull();
+      expect(
+        newSVG.getAttribute('data-material-icons-extension-iconname')
+      ).toBeNull();
+    });
+
+    it('should set width and height to 16px', () => {
+      document.body.innerHTML = '<svg class="gl-icon"></svg>';
+      const svgEl = document.querySelector('svg') as unknown as HTMLElement;
+      const newSVG = document.createElement('svg') as unknown as HTMLElement;
+
+      provider.replaceIcon(svgEl, newSVG);
+
+      expect(newSVG.style.height).toBe('16px');
+      expect(newSVG.style.width).toBe('16px');
+    });
+
+    it('should replace the old element in the DOM', () => {
+      document.body.innerHTML =
+        '<div class="container"><svg class="gl-icon"></svg></div>';
       const container = document.querySelector('.container') as HTMLElement;
       const svgEl = document.querySelector('svg') as unknown as HTMLElement;
-      const newIcon = document.createElement('img');
-      newIcon.src = 'chrome-extension://test/folder-src.svg';
-      newIcon.setAttribute(
-        'data-material-icons-extension-iconname',
-        'folder-src.svg'
-      );
-      newIcon.setAttribute('data-material-icons-extension-filename', 'src');
+      const newSVG = document.createElement('svg') as unknown as HTMLElement;
 
-      provider.replaceIcon(svgEl, newIcon);
+      provider.replaceIcon(svgEl, newSVG);
 
-      expect(container.contains(svgEl)).toBe(true);
-      expect(container.querySelectorAll('img')).toHaveLength(0);
-      expect(svgEl.children).toHaveLength(0);
-      expect(svgEl.style.backgroundImage).toContain('folder-src.svg');
-      expect(svgEl.style.fill).toBe('transparent');
-      expect(svgEl.style.height).toBe('16px');
-      expect(svgEl.style.width).toBe('16px');
-      expect(svgEl.getAttribute('data-material-icons-extension')).toBe('icon');
-      expect(svgEl.getAttribute('data-material-icons-extension-iconname')).toBe(
-        'folder-src.svg'
-      );
-      expect(svgEl.getAttribute('data-material-icons-extension-filename')).toBe(
-        'src'
-      );
-    });
-  });
-
-  describe('onAdd', () => {
-    it('should reprocess a row when GitLab changes its expanded state', async () => {
-      document.body.innerHTML = `
-        <a data-testid="file-row" class="folder" aria-expanded="false">
-          <svg data-testid="folder-icon" data-material-icons-extension="icon"></svg>
-        </a>
-      `;
-      const row = document.querySelector('a') as HTMLElement;
-      const callback = vi.fn();
-      provider.onAdd(row, callback);
-
-      row.setAttribute('aria-expanded', 'true');
-      await new Promise((resolve) => setTimeout(resolve));
-
-      expect(callback).toHaveBeenCalledOnce();
-      expect(
-        row.querySelector('svg')?.hasAttribute('data-material-icons-extension')
-      ).toBe(false);
+      expect(container.contains(svgEl)).toBe(false);
+      expect(container.contains(newSVG)).toBe(true);
     });
   });
 

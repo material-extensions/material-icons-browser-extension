@@ -1,7 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { replaceIconInRow, replaceElementWithIcon } from './replace-icon';
-import { Provider } from '../models';
 import { Manifest } from 'material-icon-theme';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { Provider } from '../models';
+import { replaceElementWithIcon, replaceIconInRow } from './replace-icon';
 
 // Mock webextension-polyfill
 vi.mock('webextension-polyfill', () => ({

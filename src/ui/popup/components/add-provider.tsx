@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from 'react';
 import Browser from 'webextension-polyfill';
 import { addCustomProvider } from '@/lib/custom-providers';
-import { addGitProvider, providerConfig } from '@/providers';
+import { addGitProvider, getSelfHostableProviderNames } from '@/providers';
 import { getCurrentTab } from '../api/helper';
 
 export function AddProvider(props: {
@@ -23,12 +23,14 @@ export function AddProvider(props: {
     useState<string>(suggestedProvider);
 
   useEffect(() => {
-    const providers = Object.values(providerConfig)
-      .filter((provider) => !provider.isCustom && provider.canSelfHost)
-      .map((provider) => provider.name);
+    const providers = getSelfHostableProviderNames();
 
     setProviders(providers);
-  }, []);
+
+    if (!selectedProvider && providers.length > 0) {
+      setSelectedProvider(providers[0]);
+    }
+  }, [selectedProvider]);
 
   const addProvider = () => {
     if (!selectedProvider) return;
@@ -50,7 +52,9 @@ export function AddProvider(props: {
   return (
     <Box sx={{ p: 2 }}>
       <Typography variant='body1'>
-        Select a provider configuration to add to the domain.
+        {suggestedProvider
+          ? 'Select a provider configuration to add to the domain.'
+          : 'Auto-detection failed. Select a provider configuration for this domain.'}
       </Typography>
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
         <FormControl fullWidth size='small'>

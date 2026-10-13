@@ -163,7 +163,7 @@ export function IconBindingControls({
                   {...params}
                   slotProps={{
                     input: {
-                      ...params.InputProps,
+                      ...params.slotProps.input,
                       startAdornment: (
                         <InputAdornment
                           position='start'

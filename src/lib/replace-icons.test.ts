@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { replaceAllIcons } from './replace-icons';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Provider } from '../models';
+import { observePage, replaceAllIcons } from './replace-icons';
 
 // Mock webextension-polyfill
 vi.mock('webextension-polyfill', () => ({
@@ -14,14 +14,10 @@ vi.mock('webextension-polyfill', () => ({
 // Mock icon-list.json
 vi.mock('../icon-list.json', () => ({
   default: {
-    typescript: 'typescript.svg',
+    file: 'file.svg',
     folder: 'folder.svg',
+    typescript: 'typescript.svg',
   },
-}));
-
-// Mock selector-observer (not needed for replaceAllIcons but imported in module)
-vi.mock('selector-observer', () => ({
-  observe: vi.fn(),
 }));
 
 function createMockProvider(overrides: Partial<Provider> = {}): Provider {
@@ -46,6 +42,108 @@ function createMockProvider(overrides: Partial<Provider> = {}): Provider {
     ...overrides,
   };
 }
+
+const waitForMutationObserver = () =>
+  new Promise((resolve) => setTimeout(resolve, 0));
+
+describe('observePage', () => {
+  beforeEach(() => {
+    document.body.innerHTML = '';
+  });
+
+  it('should replace icons in rows that already exist when observation starts', () => {
+    document.body.innerHTML = `
+      <div class="row">
+        <span class="filename">src</span>
+        <svg class="icon octicon-file-directory-fill"></svg>
+      </div>
+    `;
+    const provider = createMockProvider({
+      getIsDirectory: () => true,
+    });
+
+    observePage(provider, 'react');
+
+    expect(provider.replaceIcon).toHaveBeenCalledTimes(1);
+    const newIcon = (provider.replaceIcon as ReturnType<typeof vi.fn>).mock
+      .calls[0][1] as HTMLElement;
+    expect(newIcon.getAttribute('data-material-icons-extension-iconname')).toBe(
+      'folder.svg'
+    );
+    expect(newIcon.getAttribute('data-material-icons-extension-filename')).toBe(
+      'src'
+    );
+  });
+
+  it('should replace icons in rows that are added dynamically', async () => {
+    const provider = createMockProvider();
+
+    observePage(provider, 'react');
+
+    document.body.insertAdjacentHTML(
+      'beforeend',
+      `
+        <div class="row">
+          <span class="filename">index.ts</span>
+          <svg class="icon octicon-file"></svg>
+        </div>
+      `
+    );
+    await waitForMutationObserver();
+
+    expect(provider.replaceIcon).toHaveBeenCalledTimes(1);
+    const newIcon = (provider.replaceIcon as ReturnType<typeof vi.fn>).mock
+      .calls[0][1] as HTMLElement;
+    expect(newIcon.getAttribute('data-material-icons-extension-filename')).toBe(
+      'index.ts'
+    );
+  });
+
+  it('should not register provider onAdd callbacks multiple times for the same row', async () => {
+    const onAdd = vi.fn();
+    const provider = createMockProvider({ onAdd });
+
+    document.body.innerHTML = `
+      <div class="row">
+        <span class="filename">index.ts</span>
+        <svg class="icon octicon-file"></svg>
+      </div>
+    `;
+
+    observePage(provider, 'react');
+
+    document.querySelector('.row')?.append(document.createElement('span'));
+    await waitForMutationObserver();
+
+    expect(onAdd).toHaveBeenCalledTimes(1);
+  });
+
+  it('should not reprocess a row because of its own inserted icon', async () => {
+    // Azure keeps the original icon element and puts the new <img> inside it.
+    // The cap stops the test from hanging if the loop comes back.
+    let calls = 0;
+    const provider = createMockProvider({
+      replaceIcon: vi.fn((iconEl: HTMLElement, newIcon: HTMLElement) => {
+        calls++;
+        if (calls < 20) iconEl.replaceChildren(newIcon);
+      }),
+    });
+
+    document.body.innerHTML = `
+      <div class="row">
+        <span class="filename">index.ts</span>
+        <span class="icon"></span>
+      </div>
+    `;
+
+    observePage(provider, 'react');
+
+    document.querySelector('.row')?.classList.add('selected');
+    for (let i = 0; i < 5; i++) await waitForMutationObserver();
+
+    expect(calls).toBeLessThan(5);
+  });
+});
 
 describe('replaceAllIcons', () => {
   beforeEach(() => {

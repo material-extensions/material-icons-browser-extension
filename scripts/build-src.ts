@@ -13,6 +13,16 @@ const upstreamIconsDir = path.resolve(
 );
 const customIconsDir = path.resolve(srcDir, 'custom');
 
+const startupStyleFiles = [
+  path.resolve(srcDir, 'styles', 'startup', 'providers', 'forgejo.css'),
+];
+
+const runtimeStyleFiles = [
+  path.resolve(srcDir, 'styles', 'runtime', 'base.css'),
+  path.resolve(srcDir, 'styles', 'runtime', 'icon-size.css'),
+  path.resolve(srcDir, 'styles', 'runtime', 'providers', 'github.css'),
+];
+
 /**
  * Merge upstream icons with custom overrides and generate the icon lookup map.
  * The lookup map maps icon names (without extension) to their filenames.
@@ -46,8 +56,20 @@ function bundle(
   });
 }
 
+async function bundleCss(files: string[], outFile: string): Promise<void> {
+  const contents = await Promise.all(files.map((file) => fs.readFile(file)));
+  await fs.outputFile(outFile, contents.join('\n'));
+}
+
+async function bundleInjectedStyles(outDir: string): Promise<void> {
+  await Promise.all([
+    bundleCss(startupStyleFiles, path.resolve(outDir, 'injected-startup.css')),
+    bundleCss(runtimeStyleFiles, path.resolve(outDir, 'injected-styles.css')),
+  ]);
+}
+
 /**
- * Build the extension for a specific browser target (firefox / chrome-edge).
+ * Build the extension for a specific browser target.
  * Copies icons, bundles JS, copies static assets, and assembles the manifest.
  */
 async function buildBrowserTarget(
@@ -64,6 +86,7 @@ async function buildBrowserTarget(
 
     // JS bundles
     bundle(outDir, path.resolve(srcDir, 'main.ts')),
+    bundle(outDir, path.resolve(srcDir, 'background.ts')),
     bundle(outDir, path.resolve(srcDir, 'ui', 'popup', 'settings-popup.tsx')),
     bundle(outDir, path.resolve(srcDir, 'ui', 'options', 'options.tsx')),
 
@@ -84,10 +107,7 @@ async function buildBrowserTarget(
       path.resolve(srcDir, 'ui', 'options', 'options.css'),
       path.resolve(outDir, 'options.css')
     ),
-    fs.copy(
-      path.resolve(srcDir, 'injected-styles.css'),
-      path.resolve(outDir, 'injected-styles.css')
-    ),
+    bundleInjectedStyles(outDir),
     fs.copy(path.resolve(srcDir, 'extensionIcons'), outDir),
   ]);
 
@@ -107,11 +127,24 @@ async function main(): Promise<void> {
   console.log('Generating icon list...');
   await generateIconList();
 
-  console.log('Building Firefox target...');
-  await buildBrowserTarget('firefox', 'firefox.json');
+  const targets = [
+    {
+      displayName: 'Firefox',
+      outputDir: 'firefox',
+      manifestFile: 'firefox.json',
+    },
+    {
+      displayName: 'Chrome/Edge',
+      outputDir: 'chrome-edge',
+      manifestFile: 'chrome-edge.json',
+    },
+    { displayName: 'Safari', outputDir: 'safari', manifestFile: 'safari.json' },
+  ];
 
-  console.log('Building Chrome/Edge target...');
-  await buildBrowserTarget('chrome-edge', 'chrome-edge.json');
+  for (const target of targets) {
+    console.log(`Building ${target.displayName} target...`);
+    await buildBrowserTarget(target.outputDir, target.manifestFile);
+  }
 
   console.log('Build complete.');
 }

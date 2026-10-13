@@ -156,13 +156,15 @@ jobs:
           name: extension-builds
 
       - name: 🌐 Upload to Chrome Web Store
-        uses: trmcnvn/chrome-addon@7fc5a5ad3ff597dc64d6a13de7dcaa8515328be7 # v2
-        with:
-          extension: bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc
-          zip: github-material-icons-chrome-extension.zip
-          client-id: ${{ secrets.CHROME_CLIENT_ID }}
-          client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
-          refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
+        run: |
+          npx --yes --package chrome-webstore-upload-cli@4.0.1 chrome-webstore-upload \
+            --source github-material-icons-chrome-extension.zip \
+            --extension-id bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc
+        env:
+          CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
+          PUBLISHER_ID: ${{ secrets.CHROME_PUBLISHER_ID }}
 
   deploy-edge:
     runs-on: ubuntu-latest

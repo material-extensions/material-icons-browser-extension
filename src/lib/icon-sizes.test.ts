@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 let mockIconSize = 'md';
 
@@ -57,7 +57,9 @@ describe('icon-sizes', () => {
 
     // Wait for the promise returned by getConfig to resolve
     await vi.waitFor(() => {
-      expect(document.body.getAttribute('data-material-icons-extension-size')).toBe('lg');
+      expect(
+        document.body.getAttribute('data-material-icons-extension-size')
+      ).toBe('lg');
     });
   });
 
@@ -70,14 +72,18 @@ describe('icon-sizes', () => {
     document.dispatchEvent(event);
 
     await vi.waitFor(() => {
-      expect(document.body.getAttribute('data-material-icons-extension-size')).toBe('xl');
+      expect(
+        document.body.getAttribute('data-material-icons-extension-size')
+      ).toBe('xl');
     });
 
     // Remove the attribute to trigger the MutationObserver
     document.body.removeAttribute('data-material-icons-extension-size');
 
     await vi.waitFor(() => {
-      expect(document.body.getAttribute('data-material-icons-extension-size')).toBe('xl');
+      expect(
+        document.body.getAttribute('data-material-icons-extension-size')
+      ).toBe('xl');
     });
   });
 });

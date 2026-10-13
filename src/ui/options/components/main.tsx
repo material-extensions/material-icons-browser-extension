@@ -83,7 +83,7 @@ function Options() {
           </Toolbar>
         </AppBar>
 
-        <Box p={4}>
+        <Box sx={{ p: 4 }}>
           <div style={{ width: 'fit-content' }}>
             <InfoPopover
               infoText='The settings of the default domain will be applied to all other domains unless they are overridden.'
