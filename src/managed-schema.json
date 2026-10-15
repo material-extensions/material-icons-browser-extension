@@ -9,7 +9,7 @@
     },
     "folderIconBindings": {
       "title": "Folder icon bindings",
-      "description": "Maps folder names to icon names. User bindings take precedence.",
+      "description": "Maps folder names to folder icon names without the folder- prefix (e.g. \"docs\"). User bindings take precedence.",
       "type": "object",
       "additionalProperties": { "type": "string" }
     }

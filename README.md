@@ -34,7 +34,7 @@ Administrators can preset file and folder icon bindings through browser policy. 
     "extensions": {
       "bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc": {
         "fileIconBindings": { "*.foo": "typescript" },
-        "folderIconBindings": { "docs": "folder-docs" }
+        "folderIconBindings": { "notes": "docs" }
       }
     }
   }

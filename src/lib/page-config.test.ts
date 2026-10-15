@@ -79,13 +79,13 @@ describe('page-config', () => {
     mockGet.mockResolvedValue({
       'default:iconPack': 'react',
       'default:fileIconBindings': { '*.foo': 'javascript' },
-      'git.example.local:folderIconBindings': { lib: 'folder-lib' },
+      'git.example.local:folderIconBindings': { lib: 'lib' },
       'default:folderIconBindings': {},
       'default:extEnabled': true,
     });
     mockManagedGet.mockResolvedValue({
       fileIconBindings: { '*.foo': 'typescript', '*.bar': 'yaml' },
-      folderIconBindings: { docs: 'folder-docs' },
+      folderIconBindings: { notes: 'docs' },
     });
 
     const config = await getResolvedPageConfig('git.example.local');
@@ -95,8 +95,8 @@ describe('page-config', () => {
       '*.bar': 'yaml',
     });
     expect(config.folderBindings).toEqual({
-      docs: 'folder-docs',
-      lib: 'folder-lib',
+      notes: 'docs',
+      lib: 'lib',
     });
     expect(mockManagedGet).toHaveBeenCalledWith([
       'fileIconBindings',
