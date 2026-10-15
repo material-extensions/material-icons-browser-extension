@@ -109,6 +109,10 @@ async function buildBrowserTarget(
     ),
     bundleInjectedStyles(outDir),
     fs.copy(path.resolve(srcDir, 'extensionIcons'), outDir),
+    fs.copy(
+      path.resolve(srcDir, 'managed-schema.json'),
+      path.resolve(outDir, 'managed-schema.json')
+    ),
   ]);
 
   // Assemble browser-specific manifest

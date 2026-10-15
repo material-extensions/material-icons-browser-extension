@@ -1,3 +1,6 @@
 {
-  "optional_host_permissions": ["*://*/*"]
+  "optional_host_permissions": ["*://*/*"],
+  "storage": {
+    "managed_schema": "managed-schema.json"
+  }
 }

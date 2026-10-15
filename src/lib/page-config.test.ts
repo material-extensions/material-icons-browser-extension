@@ -2,12 +2,16 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { getResolvedPageConfig } from './page-config';
 
 const mockGet = vi.fn();
+const mockManagedGet = vi.fn();
 
 vi.mock('webextension-polyfill', () => ({
   default: {
     storage: {
       sync: {
         get: (...args: unknown[]) => mockGet(...args),
+      },
+      managed: {
+        get: (...args: unknown[]) => mockManagedGet(...args),
       },
     },
   },
@@ -16,6 +20,7 @@ vi.mock('webextension-polyfill', () => ({
 describe('page-config', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockManagedGet.mockRejectedValue(new Error('Managed storage not set'));
     Object.defineProperty(window, 'location', {
       value: { hostname: 'git.example.local' },
       writable: true,
@@ -68,5 +73,34 @@ describe('page-config', () => {
       folderBindings: {},
       enabled: false,
     });
+  });
+
+  it('merges policy bindings under user bindings', async () => {
+    mockGet.mockResolvedValue({
+      'default:iconPack': 'react',
+      'default:fileIconBindings': { '*.foo': 'javascript' },
+      'git.example.local:folderIconBindings': { lib: 'lib' },
+      'default:folderIconBindings': {},
+      'default:extEnabled': true,
+    });
+    mockManagedGet.mockResolvedValue({
+      fileIconBindings: { '*.foo': 'typescript', '*.bar': 'yaml' },
+      folderIconBindings: { notes: 'docs' },
+    });
+
+    const config = await getResolvedPageConfig('git.example.local');
+
+    expect(config.fileBindings).toEqual({
+      '*.foo': 'javascript',
+      '*.bar': 'yaml',
+    });
+    expect(config.folderBindings).toEqual({
+      notes: 'docs',
+      lib: 'lib',
+    });
+    expect(mockManagedGet).toHaveBeenCalledWith([
+      'fileIconBindings',
+      'folderIconBindings',
+    ]);
   });
 });

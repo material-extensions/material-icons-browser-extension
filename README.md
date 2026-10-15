@@ -24,6 +24,25 @@ Material Icons for GitHub is a browser Extension that enhances repositories file
 
 Based and dependent on the popular [Material Icon Theme](https://github.com/material-extensions/vscode-material-icon-theme) extension for Visual Studio Code. All icons and file assignments on this project are pulled directly from that project, so any praise or design issues should be raised on the original repository.
 
+### Managed icon bindings (Chrome/Edge)
+
+Administrators can preset file and folder icon bindings through browser policy. Policy bindings apply to every domain, and bindings set in the extension options take precedence. For example, on Linux save this as `/etc/opt/chrome/policies/managed/material-icons.json`:
+
+```json
+{
+  "3rdparty": {
+    "extensions": {
+      "bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc": {
+        "fileIconBindings": { "*.foo": "typescript" },
+        "folderIconBindings": { "notes": "docs" }
+      }
+    }
+  }
+}
+```
+
+Check `chrome://policy` to confirm the browser loaded it.
+
 ### Safari (macOS)
 
 There is no App Store release yet, but you can build and install it yourself with Xcode, Node.js 24.15+ and a free Apple account.
