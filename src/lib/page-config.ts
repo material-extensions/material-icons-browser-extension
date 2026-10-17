@@ -1,11 +1,16 @@
 import { IconAssociations, IconPackValue } from 'material-icon-theme';
 import Browser from 'webextension-polyfill';
+import { normalizeFolderColor } from './folder-color';
+import { FolderTheme, normalizeFolderTheme } from './folder-theme';
 import { hardDefaults } from './user-config';
 
 export type ResolvedPageConfig = {
   iconPack: IconPackValue;
   fileBindings?: IconAssociations;
   folderBindings?: IconAssociations;
+  folderColor: string;
+  fileColor: string;
+  folderTheme: FolderTheme;
   enabled: boolean;
 };
 
@@ -19,6 +24,12 @@ export async function getResolvedPageConfig(
     'default:fileIconBindings': hardDefaults.fileIconBindings,
     [`${domain}:folderIconBindings`]: null,
     'default:folderIconBindings': hardDefaults.folderIconBindings,
+    [`${domain}:folderColor`]: null,
+    'default:folderColor': hardDefaults.folderColor,
+    [`${domain}:fileColor`]: null,
+    'default:fileColor': hardDefaults.fileColor,
+    [`${domain}:folderTheme`]: null,
+    'default:folderTheme': hardDefaults.folderTheme,
     [`${domain}:extEnabled`]: null,
     'default:extEnabled': hardDefaults.extEnabled,
   });
@@ -30,6 +41,15 @@ export async function getResolvedPageConfig(
       result['default:fileIconBindings']) as IconAssociations | undefined,
     folderBindings: (result[`${domain}:folderIconBindings`] ??
       result['default:folderIconBindings']) as IconAssociations | undefined,
+    folderColor: normalizeFolderColor(
+      result[`${domain}:folderColor`] ?? result['default:folderColor']
+    ),
+    fileColor: normalizeFolderColor(
+      result[`${domain}:fileColor`] ?? result['default:fileColor']
+    ),
+    folderTheme: normalizeFolderTheme(
+      result[`${domain}:folderTheme`] ?? result['default:folderTheme']
+    ),
     enabled: Boolean(
       result[`${domain}:extEnabled`] ?? result['default:extEnabled']
     ),

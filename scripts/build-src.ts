@@ -107,6 +107,10 @@ async function buildBrowserTarget(
       path.resolve(srcDir, 'ui', 'options', 'options.css'),
       path.resolve(outDir, 'options.css')
     ),
+    fs.copy(
+      path.resolve(srcDir, 'ui', 'shared', 'appearance-controls.css'),
+      path.resolve(outDir, 'appearance-controls.css')
+    ),
     bundleInjectedStyles(outDir),
     fs.copy(path.resolve(srcDir, 'extensionIcons'), outDir),
   ]);

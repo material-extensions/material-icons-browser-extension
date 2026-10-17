@@ -37,7 +37,7 @@ exports[`GitHub provider - DOM snapshots > folder icon replacement (closed) > sh
 "
           <div class="PRIVATE_TreeView-item-visual" aria-hidden="true">
             <div class="PRIVATE_TreeView-directory-icon">
-              <svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-file-directory-fill" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align: text-bottom; background-image: url(&quot;chrome-extension://material-icons-ext-id/folder-node.svg&quot;); background-size: contain; background-repeat: no-repeat; background-position: center center;" data-material-icons-extension="icon" data-material-icons-extension-iconname="folder-node.svg" data-material-icons-extension-filename="node_modules"></svg>
+              <svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-file-directory-fill" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align: text-bottom; background-image: url(&quot;chrome-extension://material-icons-ext-id/folder-node.svg&quot;); background-size: contain; background-repeat: no-repeat; background-position: center center;" data-material-icons-extension="icon" data-material-icons-extension-iconname="folder-node.svg" data-material-icons-extension-filename="node_modules" data-material-icons-extension-directory="true" data-material-icons-extension-specific-iconname="folder-node.svg" data-material-icons-extension-expanded="false" data-material-icons-extension-special-folder="false"></svg>
             </div>
           </div>
           <span class="PRIVATE_TreeView-item-content-text">
@@ -50,7 +50,7 @@ exports[`GitHub provider - DOM snapshots > folder icon replacement (closed) > sh
 "
           <div class="PRIVATE_TreeView-item-visual" aria-hidden="true">
             <div class="PRIVATE_TreeView-directory-icon">
-              <svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-file-directory-fill" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align: text-bottom; background-image: url(&quot;chrome-extension://material-icons-ext-id/folder-src.svg&quot;); background-size: contain; background-repeat: no-repeat; background-position: center center;" data-material-icons-extension="icon" data-material-icons-extension-iconname="folder-src.svg" data-material-icons-extension-filename="src"></svg>
+              <svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-file-directory-fill" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align: text-bottom; background-image: url(&quot;chrome-extension://material-icons-ext-id/folder-src.svg&quot;); background-size: contain; background-repeat: no-repeat; background-position: center center;" data-material-icons-extension="icon" data-material-icons-extension-iconname="folder-src.svg" data-material-icons-extension-filename="src" data-material-icons-extension-directory="true" data-material-icons-extension-specific-iconname="folder-src.svg" data-material-icons-extension-expanded="false" data-material-icons-extension-special-folder="false"></svg>
             </div>
           </div>
           <span class="PRIVATE_TreeView-item-content-text">
@@ -63,7 +63,7 @@ exports[`GitHub provider - DOM snapshots > folder icon replacement (expanded) > 
 "
           <div class="PRIVATE_TreeView-item-visual" aria-hidden="true">
             <div class="PRIVATE_TreeView-directory-icon">
-              <svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-file-directory-open-fill" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align: text-bottom; background-image: url(&quot;chrome-extension://material-icons-ext-id/folder-github-open.svg&quot;); background-size: contain; background-repeat: no-repeat; background-position: center center;" data-material-icons-extension="icon" data-material-icons-extension-iconname="folder-github-open.svg" data-material-icons-extension-filename=".github"></svg>
+              <svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-file-directory-open-fill" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align: text-bottom; background-image: url(&quot;chrome-extension://material-icons-ext-id/folder-github-open.svg&quot;); background-size: contain; background-repeat: no-repeat; background-position: center center;" data-material-icons-extension="icon" data-material-icons-extension-iconname="folder-github-open.svg" data-material-icons-extension-filename=".github" data-material-icons-extension-directory="true" data-material-icons-extension-specific-iconname="folder-github-open.svg" data-material-icons-extension-expanded="true" data-material-icons-extension-special-folder="false"></svg>
             </div>
           </div>
           <span class="PRIVATE_TreeView-item-content-text">
@@ -76,7 +76,7 @@ exports[`GitHub provider - DOM snapshots > folder icon replacement (expanded) > 
 "
           <div class="PRIVATE_TreeView-item-visual" aria-hidden="true">
             <div class="PRIVATE_TreeView-directory-icon">
-              <svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-file-directory-open-fill" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align: text-bottom; background-image: url(&quot;chrome-extension://material-icons-ext-id/folder-src-open.svg&quot;); background-size: contain; background-repeat: no-repeat; background-position: center center;" data-material-icons-extension="icon" data-material-icons-extension-iconname="folder-src-open.svg" data-material-icons-extension-filename="src"></svg>
+              <svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-file-directory-open-fill" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align: text-bottom; background-image: url(&quot;chrome-extension://material-icons-ext-id/folder-src-open.svg&quot;); background-size: contain; background-repeat: no-repeat; background-position: center center;" data-material-icons-extension="icon" data-material-icons-extension-iconname="folder-src-open.svg" data-material-icons-extension-filename="src" data-material-icons-extension-directory="true" data-material-icons-extension-specific-iconname="folder-src-open.svg" data-material-icons-extension-expanded="true" data-material-icons-extension-special-folder="false"></svg>
             </div>
           </div>
           <span class="PRIVATE_TreeView-item-content-text">
@@ -91,7 +91,7 @@ exports[`GitHub provider - DOM snapshots > full tree view structure > should pro
             <div class="PRIVATE_TreeView-item-content">
               <div class="PRIVATE_TreeView-item-visual" aria-hidden="true">
                 <div class="PRIVATE_TreeView-directory-icon">
-                  <svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-file-directory-open-fill" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align: text-bottom; background-image: url(&quot;chrome-extension://material-icons-ext-id/folder-src-open.svg&quot;); background-size: contain; background-repeat: no-repeat; background-position: center center;" data-material-icons-extension="icon" data-material-icons-extension-iconname="folder-src-open.svg" data-material-icons-extension-filename="src"></svg>
+                  <svg data-component="Octicon" aria-hidden="true" focusable="false" class="octicon octicon-file-directory-open-fill" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align: text-bottom; background-image: url(&quot;chrome-extension://material-icons-ext-id/folder-src-open.svg&quot;); background-size: contain; background-repeat: no-repeat; background-position: center center;" data-material-icons-extension="icon" data-material-icons-extension-iconname="folder-src-open.svg" data-material-icons-extension-filename="src" data-material-icons-extension-directory="true" data-material-icons-extension-specific-iconname="folder-src-open.svg" data-material-icons-extension-expanded="true" data-material-icons-extension-special-folder="false"></svg>
                 </div>
               </div>
               <span class="PRIVATE_TreeView-item-content-text">

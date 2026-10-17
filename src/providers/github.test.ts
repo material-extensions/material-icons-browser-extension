@@ -90,6 +90,37 @@ describe('GitHub provider', () => {
       );
     });
 
+    it('should synchronize folder metadata and remove stale values', () => {
+      document.body.innerHTML = `
+        <svg data-material-icons-extension-folder-hidden></svg>
+      `;
+      const svgEl = document.querySelector('svg') as unknown as HTMLElement;
+      const newIcon = document.createElement('img');
+      newIcon.setAttribute('src', 'chrome-extension://id/folder-src.svg');
+      newIcon.setAttribute('data-material-icons-extension', 'icon');
+      newIcon.setAttribute(
+        'data-material-icons-extension-iconname',
+        'folder-src.svg'
+      );
+      newIcon.setAttribute('data-material-icons-extension-directory', 'true');
+      newIcon.setAttribute(
+        'data-material-icons-extension-specific-iconname',
+        'folder-src.svg'
+      );
+
+      provider.replaceIcon(svgEl, newIcon);
+
+      expect(
+        svgEl.getAttribute('data-material-icons-extension-directory')
+      ).toBe('true');
+      expect(
+        svgEl.getAttribute('data-material-icons-extension-specific-iconname')
+      ).toBe('folder-src.svg');
+      expect(
+        svgEl.hasAttribute('data-material-icons-extension-folder-hidden')
+      ).toBe(false);
+    });
+
     it('should reset display style (in case it was previously hidden)', () => {
       document.body.innerHTML = `
         <svg class="octicon octicon-file" style="display: none;">
@@ -233,6 +264,24 @@ describe('GitHub provider', () => {
       // Should only have the original SVG, no img element added
       expect(container.querySelectorAll('img').length).toBe(0);
       expect(container.querySelectorAll('svg').length).toBe(1);
+    });
+  });
+
+  describe('parent directory row', () => {
+    it('matches the up-tree link and its folder icon', () => {
+      document.body.innerHTML = `
+        <a aria-label="Parent directory" data-testid="up-tree">
+          <div><svg class="octicon octicon-file-directory-fill"></svg>..</div>
+        </a>
+      `;
+
+      const row = document.querySelector(provider.selectors.row) as HTMLElement;
+      expect(row).not.toBeNull();
+      expect(
+        row.querySelector(provider.selectors.filename)?.textContent
+      ).toContain('..');
+      const icon = row.querySelector(provider.selectors.icon) as HTMLElement;
+      expect(provider.getIsDirectory({ row, icon })).toBe(true);
     });
   });
 

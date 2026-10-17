@@ -42,7 +42,12 @@ describe('user-config', () => {
       expect(hardDefaults).toEqual({
         iconPack: 'react',
         iconSize: 'md',
+        iconSaturation: 100,
+        iconOpacity: 100,
         extEnabled: true,
+        folderColor: '#90a4ae',
+        fileColor: '#90a4ae',
+        folderTheme: 'specific',
         fileIconBindings: {},
         folderIconBindings: {},
       });

@@ -1,3 +1,4 @@
+import { syncIconMetadata } from '../lib/icon-metadata';
 import { Provider } from '../models';
 
 export default function gitlab(): Provider {
@@ -64,15 +65,14 @@ export default function gitlab(): Provider {
       svgEl.style.fill = 'transparent';
       svgEl.style.height = '16px';
       svgEl.style.width = '16px';
-      svgEl.setAttribute('data-material-icons-extension', 'icon');
-      svgEl.setAttribute(
-        'data-material-icons-extension-iconname',
-        newSVG.getAttribute('data-material-icons-extension-iconname') ?? ''
-      );
-      svgEl.setAttribute(
-        'data-material-icons-extension-filename',
-        newSVG.getAttribute('data-material-icons-extension-filename') ?? ''
-      );
+      syncIconMetadata(newSVG, svgEl);
+      const colorFilterProperty = '--material-icons-extension-color-filter';
+      const colorFilter = newSVG.style.getPropertyValue(colorFilterProperty);
+      if (colorFilter) {
+        svgEl.style.setProperty(colorFilterProperty, colorFilter);
+      } else {
+        svgEl.style.removeProperty(colorFilterProperty);
+      }
     },
     onAdd: (row, callback) => {
       const observer = new MutationObserver((mutations) => {

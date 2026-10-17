@@ -38,6 +38,9 @@ describe('page-config', () => {
       iconPack: 'angular',
       fileBindings: {},
       folderBindings: {},
+      folderColor: '#90a4ae',
+      fileColor: '#90a4ae',
+      folderTheme: 'specific',
       enabled: true,
     });
     expect(mockGet).toHaveBeenCalledTimes(1);
@@ -48,6 +51,12 @@ describe('page-config', () => {
       'default:fileIconBindings': {},
       'git.example.local:folderIconBindings': null,
       'default:folderIconBindings': {},
+      'git.example.local:folderColor': null,
+      'default:folderColor': '#90a4ae',
+      'git.example.local:fileColor': null,
+      'default:fileColor': '#90a4ae',
+      'git.example.local:folderTheme': null,
+      'default:folderTheme': 'specific',
       'git.example.local:extEnabled': null,
       'default:extEnabled': true,
     });
@@ -66,6 +75,9 @@ describe('page-config', () => {
       iconPack: 'react',
       fileBindings: {},
       folderBindings: {},
+      folderColor: '#90a4ae',
+      fileColor: '#90a4ae',
+      folderTheme: 'specific',
       enabled: false,
     });
   });

@@ -2,13 +2,18 @@ import { Manifest } from 'material-icon-theme';
 import Browser from 'webextension-polyfill';
 import iconsList from '../icon-list.json';
 import { Provider } from '../models';
+import { decorateGenericIcon } from './folder-color';
+import { FolderTheme } from './folder-theme';
 
 const iconsListTyped = iconsList as Record<string, string>;
 
 export function replaceIconInRow(
   itemRow: HTMLElement,
   provider: Provider,
-  manifest: Manifest
+  manifest: Manifest,
+  folderColor?: string,
+  fileColor?: string,
+  folderTheme: FolderTheme = 'specific'
 ): void {
   let fileName = itemRow
     .querySelector(provider.selectors.filename)
@@ -31,7 +36,16 @@ export function replaceIconInRow(
 
   fileName = provider.transformFileName(itemRow, iconEl, fileName);
 
-  replaceIcon(iconEl, fileName, itemRow, provider, manifest);
+  replaceIcon(
+    iconEl,
+    fileName,
+    itemRow,
+    provider,
+    manifest,
+    folderColor,
+    fileColor,
+    folderTheme
+  );
 }
 
 function replaceIcon(
@@ -39,7 +53,10 @@ function replaceIcon(
   fileName: string,
   itemRow: HTMLElement,
   provider: Provider,
-  manifest: Manifest
+  manifest: Manifest,
+  folderColor?: string,
+  fileColor?: string,
+  folderTheme: FolderTheme = 'specific'
 ): void {
   const isDir = provider.getIsDirectory({ row: itemRow, icon: iconEl });
   const isSubmodule = provider.getIsSubmodule({ row: itemRow, icon: iconEl });
@@ -105,19 +122,64 @@ function replaceIcon(
     iconsListTyped[iconName] ??
     (isDir ? (isExpanded ? 'folder-open.svg' : 'folder.svg') : 'file.svg');
 
-  replaceElementWithIcon(iconEl, iconName, fileName, provider);
+  const specificIconName = iconName;
+  const isSpecialFolder = isSubmodule || isSymlink;
+  if (isDir && folderTheme === 'classic' && !isSpecialFolder) {
+    iconName = isExpanded ? 'folder-open.svg' : 'folder.svg';
+  }
+
+  replaceElementWithIcon(
+    iconEl,
+    iconName,
+    fileName,
+    provider,
+    folderColor,
+    fileColor,
+    isDir
+      ? {
+          specificIconName,
+          isExpanded: Boolean(isExpanded),
+          isSpecialFolder,
+        }
+      : undefined
+  );
 }
+
+export type FolderIconMetadata = {
+  specificIconName: string;
+  isExpanded: boolean;
+  isSpecialFolder: boolean;
+};
 
 export function replaceElementWithIcon(
   iconEl: HTMLElement,
   iconName: string,
   fileName: string,
-  provider: Provider
+  provider: Provider,
+  folderColor?: string,
+  fileColor?: string,
+  folderMetadata?: FolderIconMetadata
 ): void {
   const newSVG = document.createElement('img');
   newSVG.setAttribute('data-material-icons-extension', 'icon');
   newSVG.setAttribute('data-material-icons-extension-iconname', iconName ?? '');
   newSVG.setAttribute('data-material-icons-extension-filename', fileName);
+  if (folderMetadata) {
+    newSVG.setAttribute('data-material-icons-extension-directory', 'true');
+    newSVG.setAttribute(
+      'data-material-icons-extension-specific-iconname',
+      folderMetadata.specificIconName
+    );
+    newSVG.setAttribute(
+      'data-material-icons-extension-expanded',
+      String(folderMetadata.isExpanded)
+    );
+    newSVG.setAttribute(
+      'data-material-icons-extension-special-folder',
+      String(folderMetadata.isSpecialFolder)
+    );
+  }
+  decorateGenericIcon(newSVG, iconName, folderColor, fileColor);
 
   if (!isSafari) {
     newSVG.src = Browser.runtime.getURL(iconName);

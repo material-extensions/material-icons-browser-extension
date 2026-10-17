@@ -269,6 +269,7 @@ describe('GitLab provider', () => {
       const svgEl = document.querySelector('svg') as unknown as HTMLElement;
       const newIcon = document.createElement('img');
       newIcon.src = 'chrome-extension://test/folder-src.svg';
+      newIcon.setAttribute('data-material-icons-extension', 'icon');
       newIcon.setAttribute(
         'data-material-icons-extension-iconname',
         'folder-src.svg'
@@ -291,6 +292,32 @@ describe('GitLab provider', () => {
       expect(svgEl.getAttribute('data-material-icons-extension-filename')).toBe(
         'src'
       );
+    });
+
+    it('should synchronize folder metadata and remove stale values', () => {
+      document.body.innerHTML =
+        '<svg data-material-icons-extension-folder-hidden></svg>';
+      const svgEl = document.querySelector('svg') as unknown as HTMLElement;
+      const newIcon = document.createElement('img');
+      newIcon.src = 'chrome-extension://test/folder-src.svg';
+      newIcon.setAttribute('data-material-icons-extension', 'icon');
+      newIcon.setAttribute('data-material-icons-extension-directory', 'true');
+      newIcon.setAttribute(
+        'data-material-icons-extension-specific-iconname',
+        'folder-src.svg'
+      );
+
+      provider.replaceIcon(svgEl, newIcon);
+
+      expect(
+        svgEl.getAttribute('data-material-icons-extension-directory')
+      ).toBe('true');
+      expect(
+        svgEl.getAttribute('data-material-icons-extension-specific-iconname')
+      ).toBe('folder-src.svg');
+      expect(
+        svgEl.hasAttribute('data-material-icons-extension-folder-hidden')
+      ).toBe(false);
     });
   });
 

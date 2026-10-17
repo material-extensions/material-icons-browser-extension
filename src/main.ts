@@ -1,4 +1,5 @@
 import Browser from 'webextension-polyfill';
+import { initIconAppearance } from './lib/icon-appearance';
 import { initIconSizes } from './lib/icon-sizes';
 import { getResolvedPageConfig } from './lib/page-config';
 import { setExtensionProvider, setExtensionStatus } from './lib/page-status';
@@ -13,6 +14,7 @@ interface Possibilities {
 
 const init = async () => {
   initIconSizes();
+  initIconAppearance();
   setExtensionStatus('loading');
   setExtensionProvider(null);
 
@@ -34,13 +36,44 @@ const init = async () => {
       return;
     }
 
-    observePage(
+    const iconColorController = observePage(
       provider,
       config.iconPack,
       config.fileBindings,
-      config.folderBindings
+      config.folderBindings,
+      config.folderColor,
+      config.fileColor,
+      config.folderTheme
     );
-    addConfigChangeListener('iconPack', () => replaceAllIcons(provider));
+    const refreshIcons = async () => {
+      const { folderColor, fileColor, folderTheme } =
+        await getResolvedPageConfig();
+      const settings = { folderColor, fileColor, folderTheme };
+      iconColorController.setSettings(settings);
+      replaceAllIcons(provider, settings);
+    };
+    addConfigChangeListener('iconPack', refreshIcons);
+    addConfigChangeListener('folderColor', refreshIcons);
+    addConfigChangeListener('folderColor', refreshIcons, 'default');
+    addConfigChangeListener('fileColor', refreshIcons);
+    addConfigChangeListener('fileColor', refreshIcons, 'default');
+    addConfigChangeListener('folderTheme', refreshIcons);
+    addConfigChangeListener('folderTheme', refreshIcons, 'default');
+    // Removal of a domain override has an undefined newValue, which the shared
+    // listener intentionally ignores. Refresh so the inherited color takes effect.
+    Browser.storage.onChanged.addListener((changes, areaName) => {
+      if (
+        areaName === 'sync' &&
+        ['folderColor', 'fileColor', 'folderTheme'].some(
+          (name) =>
+            Object.hasOwn(changes, `${window.location.hostname}:${name}`) &&
+            changes[`${window.location.hostname}:${name}`]?.newValue ===
+              undefined
+        )
+      ) {
+        refreshIcons();
+      }
+    });
     setExtensionStatus('active');
   } catch (error) {
     setExtensionStatus('error');

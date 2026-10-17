@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Provider } from '../models';
+import { folderColorFilter } from './folder-color';
 import { observePage, replaceAllIcons } from './replace-icons';
 
 // Mock webextension-polyfill
@@ -73,6 +74,47 @@ describe('observePage', () => {
     expect(newIcon.getAttribute('data-material-icons-extension-filename')).toBe(
       'src'
     );
+  });
+
+  it('uses updated colors for icons replaced by provider callbacks', () => {
+    let callback: (() => void) | undefined;
+    const provider = createMockProvider({
+      getIsDirectory: () => true,
+      onAdd: (_row, nextCallback) => {
+        callback = nextCallback;
+      },
+    });
+    document.body.innerHTML = `
+      <div class="row">
+        <span class="filename">unknown</span>
+        <svg class="icon"></svg>
+      </div>
+    `;
+
+    const controller = observePage(
+      provider,
+      'react',
+      undefined,
+      undefined,
+      '#ff0000',
+      '#00ff00'
+    );
+    controller.setSettings({
+      folderColor: '#0000ff',
+      fileColor: '#ffff00',
+      folderTheme: 'specific',
+    });
+    (provider.replaceIcon as ReturnType<typeof vi.fn>).mockClear();
+    document
+      .querySelector('.icon')
+      ?.removeAttribute('data-material-icons-extension');
+    callback?.();
+
+    const newIcon = (provider.replaceIcon as ReturnType<typeof vi.fn>).mock
+      .calls[0][1] as HTMLElement;
+    expect(
+      newIcon.style.getPropertyValue('--material-icons-extension-color-filter')
+    ).toBe(folderColorFilter('#0000ff'));
   });
 
   it('should replace icons in rows that are added dynamically', async () => {
