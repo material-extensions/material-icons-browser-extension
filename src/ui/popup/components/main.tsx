@@ -76,7 +76,7 @@ function SettingsPopup() {
   };
 
   const containerStyles: SxProps<Theme> = {
-    width: '20rem',
+    width: '22.5rem',
     color: 'text.primary',
     borderRadius: 0,
     bgcolor: 'background.default',
@@ -85,8 +85,9 @@ function SettingsPopup() {
 
   const toolbarStyles: SxProps<Theme> = {
     display: 'flex',
-    justifyContent: 'space-between',
+    gap: 1.25,
     width: '100%',
+    minHeight: '3.5rem',
     alignItems: 'center',
     boxSizing: 'border-box',
   };
@@ -98,14 +99,18 @@ function SettingsPopup() {
 
   return (
     <Box sx={containerStyles}>
-      <AppBar position='static'>
+      <AppBar position='sticky' sx={{ top: 0, zIndex: 'appBar' }}>
         <Toolbar sx={toolbarStyles}>
           <Logo />
-          <Typography variant='h6' component='div'>
+          <Typography
+            variant='subtitle1'
+            component='div'
+            sx={{ flex: 1, fontWeight: 600 }}
+          >
             Material Icons
           </Typography>
-          <Tooltip title='Configure Domains'>
-            <IconButton aria-label='Open options' onClick={openOptions}>
+          <Tooltip title='Manage sites'>
+            <IconButton aria-label='Manage sites' onClick={openOptions}>
               <SettingsIcon style={{ color: 'white' }} />
             </IconButton>
           </Tooltip>
@@ -129,8 +134,13 @@ function SettingsPopup() {
 
 export default function Main() {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <ThemeProvider
+      theme={theme}
+      defaultMode='system'
+      storageManager={null}
+      noSsr
+    >
+      <CssBaseline enableColorScheme />
       <SettingsPopup />
     </ThemeProvider>
   );

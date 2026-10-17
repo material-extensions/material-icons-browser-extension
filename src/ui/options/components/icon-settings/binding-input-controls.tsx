@@ -28,6 +28,7 @@ export function BindingControls({
         }
       }}
       options={bindings}
+      disablePortal
       sx={{ width: '100%' }}
       renderInput={(params) => <TextField {...params} label={bindingsLabel} />}
     />
