@@ -1,5 +1,16 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { generateManifest } from 'material-icon-theme';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { replaceIconInRow } from '../lib/replace-icon';
+import { replaceAllIcons } from '../lib/replace-icons';
 import cnb from './cnb';
+
+vi.mock('webextension-polyfill', () => ({
+  default: {
+    runtime: {
+      getURL: (name: string) => `chrome-extension://test-id/${name}`,
+    },
+  },
+}));
 
 describe('CNB provider', () => {
   const provider = cnb();
@@ -247,5 +258,133 @@ describe('CNB provider', () => {
           ?.classList.contains('ruyi-icon')
       ).toBe(true);
     });
+  });
+});
+const manifest = generateManifest();
+const iconSelector = '[data-cnb-tree-icon]';
+
+// Representative CNB commit tree, including its CSS-module names and diff counts.
+const tree = `
+  <div class="font-primary" style="position: relative; overflow: auto; height: 677px;">
+    <div style="height: 110px; width: 100%;">
+      <div class="directory_tree-item__4gUzH flex items-center" style="position: absolute; top: 0px; height: 22px; --level: 0;">
+        <span class="directory_tree-item__line__Swnan tree-item__first"></span>
+        <div class="flex items-center truncate">
+          <svg id="chevron-down" class="ruyi-icon cursor-pointer ruyi-icon-chevron-down"></svg>
+          <span class="flex-1 inline-block w-full pr-2 text-sm truncate">src</span>
+        </div>
+      </div>
+      <a class="directory_tree-item__4gUzH JS-tree-item flex items-center" href="/dbxio.com/dbx/-/commit/239183#diff-125" data-diff-id="diff-125" style="position: absolute; top: 22px; height: 22px; --level: 1;">
+        <span class="directory_tree-item__line__Swnan tree-item__last"></span>
+        <div class="pr-2 JS-tree-item_content w-full flex justify-between">
+          <span class="text-sm truncate">ssh_proxy_command.rs</span>
+          <div class="inline-flex gap-1 text-xs"><span class="text-success-400">+11</span><span class="text-brand-500">-2</span></div>
+        </div>
+      </a>
+    </div>
+  </div>`;
+
+describe('CNB commit directory tree', () => {
+  const provider = cnb();
+  const replace = (row: HTMLElement) =>
+    replaceIconInRow(row, provider, manifest);
+  const getRows = () =>
+    Array.from(document.querySelectorAll<HTMLElement>(provider.selectors.row));
+
+  beforeEach(() => {
+    document.body.innerHTML = tree;
+    document.documentElement.classList.remove('dark');
+  });
+
+  it('selects rows and filenames without selecting indentation guides or diff counts', () => {
+    const rows = getRows();
+    expect(rows).toHaveLength(2);
+    expect(
+      rows.map(
+        (row) => row.querySelector(provider.selectors.filename)?.textContent
+      )
+    ).toEqual(['src', 'ssh_proxy_command.rs']);
+  });
+
+  it('inserts folder and Rust icons while preserving labels, links, counts and chevron handlers', () => {
+    const [folder, file] = getRows();
+    const chevron = folder.querySelector('svg')!;
+    const onClick = vi.fn();
+    chevron.addEventListener('click', onClick);
+    const label = file.querySelector('span.truncate');
+    getRows().forEach(replace);
+
+    expect(
+      folder
+        .querySelector(iconSelector)
+        ?.getAttribute('data-material-icons-extension-iconname')
+    ).toBe('folder-src-open.svg');
+    expect(
+      file
+        .querySelector(iconSelector)
+        ?.getAttribute('data-material-icons-extension-iconname')
+    ).toBe('rust.svg');
+    expect(file.querySelector('span.truncate')).toBe(label);
+    expect(file.getAttribute('href')).toContain('#diff-125');
+    expect(file.querySelector('.text-success-400')?.textContent).toBe('+11');
+    expect(file.querySelector('.text-brand-500')?.textContent).toBe('-2');
+    expect(folder.querySelector('svg')).toBe(chevron);
+    chevron.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(onClick).toHaveBeenCalledOnce();
+  });
+
+  it('does not duplicate inserted icons, including when appearance settings change', () => {
+    getRows().forEach(replace);
+    getRows().forEach(replace);
+    replaceAllIcons(provider, { folderTheme: 'classic' });
+    getRows().forEach(replace);
+    expect(document.querySelectorAll(iconSelector)).toHaveLength(2);
+    expect(
+      getRows()[0]
+        .querySelector(iconSelector)
+        ?.getAttribute('data-material-icons-extension-iconname')
+    ).toBe('folder-open.svg');
+  });
+
+  it('supports different CSS-module hashes and collapsed folders', () => {
+    const folder = getRows()[0];
+    folder.className = 'flex directory_tree-item__NewHash';
+    folder
+      .querySelector('svg')!
+      .setAttribute('class', 'ruyi-icon ruyi-icon-chevron-right');
+    expect(getRows()).toHaveLength(2);
+    replace(folder);
+    expect(
+      folder
+        .querySelector(iconSelector)
+        ?.getAttribute('data-material-icons-extension-iconname')
+    ).toBe('folder-src.svg');
+  });
+
+  it('refreshes icons when virtualized rows change filenames or expansion state', async () => {
+    const [folder, file] = getRows();
+    for (const row of getRows()) {
+      replace(row);
+      provider.onAdd(row, () => replace(row));
+    }
+    // React can update a text node in place rather than inserting a new element.
+    file.querySelector('span.truncate')!.firstChild!.textContent =
+      'package.json';
+    folder
+      .querySelector('svg')!
+      .setAttribute('class', 'ruyi-icon ruyi-icon-chevron-right');
+    await vi.waitFor(() => {
+      expect(
+        file
+          .querySelector(iconSelector)
+          ?.getAttribute('data-material-icons-extension-filename')
+      ).toBe('package.json');
+      expect(
+        folder
+          .querySelector(iconSelector)
+          ?.getAttribute('data-material-icons-extension-iconname')
+      ).toBe('folder-src.svg');
+    });
+    expect(document.querySelectorAll(iconSelector)).toHaveLength(2);
   });
 });
