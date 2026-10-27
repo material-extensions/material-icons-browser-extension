@@ -8,6 +8,7 @@ import { getProviderMatchDomains } from '../lib/url-patterns';
 import { Provider } from '../models';
 import azure from './azure';
 import bitbucket from './bitbucket';
+import cnb from './cnb';
 import forgejo from './forgejo';
 import gitea from './gitea';
 import gitee from './gitee';
@@ -19,6 +20,7 @@ import tangled from './tangled';
 export const providers: Record<string, () => Provider> = {
   azure,
   bitbucket,
+  cnb,
   forgejo,
   gitea,
   gitee,
