@@ -12,6 +12,19 @@ vi.mock('webextension-polyfill', () => ({
   },
 }));
 
+// Generated during the build, but CI runs tests before building.
+vi.mock('../icon-list.json', () => ({
+  default: {
+    file: 'file.svg',
+    folder: 'folder.svg',
+    'folder-open': 'folder-open.svg',
+    'folder-src': 'folder-src.svg',
+    'folder-src-open': 'folder-src-open.svg',
+    rust: 'rust.svg',
+    nodejs: 'nodejs.svg',
+  },
+}));
+
 describe('CNB provider', () => {
   const provider = cnb();
 
