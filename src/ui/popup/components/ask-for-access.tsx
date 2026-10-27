@@ -4,7 +4,11 @@ import Browser from 'webextension-polyfill';
 import { requestAccess } from '../api/access';
 import { getCurrentTab } from '../api/helper';
 
-export function AskForAccess() {
+export function AskForAccess({
+  onAccessGranted,
+}: {
+  onAccessGranted: () => void;
+}) {
   const [currentTab, setCurrentTab] = useState<Browser.Tabs.Tab | null>(null);
 
   useEffect(() => {
@@ -22,7 +26,9 @@ export function AskForAccess() {
           variant='contained'
           onClick={() => {
             if (currentTab) {
-              requestAccess(currentTab);
+              requestAccess(currentTab).then((granted) => {
+                if (granted) onAccessGranted();
+              });
             }
           }}
         >

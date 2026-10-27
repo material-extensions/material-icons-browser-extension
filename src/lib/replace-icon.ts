@@ -2,13 +2,18 @@ import { Manifest } from 'material-icon-theme';
 import Browser from 'webextension-polyfill';
 import iconsList from '../icon-list.json';
 import { Provider } from '../models';
+import { decorateGenericIcon } from './folder-color';
+import { FolderTheme } from './folder-theme';
 
 const iconsListTyped = iconsList as Record<string, string>;
 
 export function replaceIconInRow(
   itemRow: HTMLElement,
   provider: Provider,
-  manifest: Manifest
+  manifest: Manifest,
+  folderColor?: string,
+  fileColor?: string,
+  folderTheme: FolderTheme = 'specific'
 ): void {
   let fileName = itemRow
     .querySelector(provider.selectors.filename)
@@ -31,7 +36,16 @@ export function replaceIconInRow(
 
   fileName = provider.transformFileName(itemRow, iconEl, fileName);
 
-  replaceIcon(iconEl, fileName, itemRow, provider, manifest);
+  replaceIcon(
+    iconEl,
+    fileName,
+    itemRow,
+    provider,
+    manifest,
+    folderColor,
+    fileColor,
+    folderTheme
+  );
 }
 
 function replaceIcon(
@@ -39,7 +53,10 @@ function replaceIcon(
   fileName: string,
   itemRow: HTMLElement,
   provider: Provider,
-  manifest: Manifest
+  manifest: Manifest,
+  folderColor?: string,
+  fileColor?: string,
+  folderTheme: FolderTheme = 'specific'
 ): void {
   const isDir = provider.getIsDirectory({ row: itemRow, icon: iconEl });
   const isSubmodule = provider.getIsSubmodule({ row: itemRow, icon: iconEl });
@@ -105,22 +122,101 @@ function replaceIcon(
     iconsListTyped[iconName] ??
     (isDir ? (isExpanded ? 'folder-open.svg' : 'folder.svg') : 'file.svg');
 
-  replaceElementWithIcon(iconEl, iconName, fileName, provider);
+  const specificIconName = iconName;
+  const isSpecialFolder = isSubmodule || isSymlink;
+  if (isDir && folderTheme === 'classic' && !isSpecialFolder) {
+    iconName = isExpanded ? 'folder-open.svg' : 'folder.svg';
+  }
+
+  replaceElementWithIcon(
+    iconEl,
+    iconName,
+    fileName,
+    provider,
+    folderColor,
+    fileColor,
+    isDir
+      ? {
+          specificIconName,
+          isExpanded: Boolean(isExpanded),
+          isSpecialFolder,
+        }
+      : undefined
+  );
 }
+
+export type FolderIconMetadata = {
+  specificIconName: string;
+  isExpanded: boolean;
+  isSpecialFolder: boolean;
+};
 
 export function replaceElementWithIcon(
   iconEl: HTMLElement,
   iconName: string,
   fileName: string,
-  provider: Provider
+  provider: Provider,
+  folderColor?: string,
+  fileColor?: string,
+  folderMetadata?: FolderIconMetadata
 ): void {
   const newSVG = document.createElement('img');
   newSVG.setAttribute('data-material-icons-extension', 'icon');
   newSVG.setAttribute('data-material-icons-extension-iconname', iconName ?? '');
   newSVG.setAttribute('data-material-icons-extension-filename', fileName);
-  newSVG.src = Browser.runtime.getURL(iconName);
+  if (folderMetadata) {
+    newSVG.setAttribute('data-material-icons-extension-directory', 'true');
+    newSVG.setAttribute(
+      'data-material-icons-extension-specific-iconname',
+      folderMetadata.specificIconName
+    );
+    newSVG.setAttribute(
+      'data-material-icons-extension-expanded',
+      String(folderMetadata.isExpanded)
+    );
+    newSVG.setAttribute(
+      'data-material-icons-extension-special-folder',
+      String(folderMetadata.isSpecialFolder)
+    );
+  }
+  decorateGenericIcon(newSVG, iconName, folderColor, fileColor);
 
-  provider.replaceIcon(iconEl, newSVG);
+  if (!isSafari) {
+    newSVG.src = Browser.runtime.getURL(iconName);
+    provider.replaceIcon(iconEl, newSVG);
+    return;
+  }
+
+  iconEl.setAttribute('data-material-icons-extension-pending', iconName);
+  getIconDataUrl(iconName).then((url) => {
+    // a newer icon may have been requested for this element in the meantime
+    const pending = iconEl.getAttribute(
+      'data-material-icons-extension-pending'
+    );
+    if (!url || pending !== iconName) return;
+    newSVG.src = url;
+    provider.replaceIcon(iconEl, newSVG);
+  });
+}
+
+// Safari applies the page's CSP (img-src) to extension URLs, so icons are
+// inlined as data: URLs read by the background script.
+const isSafari = Browser.runtime.getURL('').startsWith('safari-web-extension:');
+const dataUrls = new Map<string, Promise<string | undefined>>();
+
+function getIconDataUrl(iconName: string): Promise<string | undefined> {
+  let url = dataUrls.get(iconName);
+  if (!url) {
+    url = Browser.runtime.sendMessage({ cmd: 'getIconDataUrl', iconName }).then(
+      (res) => res as string | undefined,
+      () => {
+        dataUrls.delete(iconName); // retry on the next row; the original icon stays meanwhile
+        return undefined;
+      }
+    );
+    dataUrls.set(iconName, url);
+  }
+  return url;
 }
 
 function lookForMatch(

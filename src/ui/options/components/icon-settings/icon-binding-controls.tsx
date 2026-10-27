@@ -1,22 +1,14 @@
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {
-  Autocomplete,
-  Box,
-  Button,
-  IconButton,
-  InputAdornment,
-  TextField,
-  Tooltip,
-} from '@mui/material';
+import { Button, IconButton, Tooltip } from '@mui/material';
 import { IconAssociations } from 'material-icon-theme';
-import { CSSProperties, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getConfig, setConfig, UserConfig } from '@/lib/user-config';
 import { Domain } from '@/models';
-import { InfoPopover } from '@/ui/shared/info-popover';
+import { InfoButton } from '@/ui/shared/info-popover';
 import { WithBindingProps } from '../../types/binding-control-props';
 import { BindingControls } from './binding-input-controls';
-import { IconPreview } from './icon-preview';
+import { IconPicker } from './icon-picker';
 
 type IconBindingControlProps = {
   title: string;
@@ -62,21 +54,6 @@ export function IconBindingControls({
     });
   }, []);
 
-  const iconBindingStyle: CSSProperties = {
-    width: '100%',
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr 2rem',
-    alignItems: 'center',
-    gap: '1rem',
-    marginBottom: '1rem',
-  };
-
-  const controlStyling: CSSProperties = {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '0.5rem',
-  };
-
   const transformIconBindings = (bindings: IconBinding[]): IconAssociations => {
     return bindings.reduce((acc, { binding: fileBinding, iconName }) => {
       if (iconName === null) {
@@ -120,66 +97,24 @@ export function IconBindingControls({
   return (
     <div>
       <h3>{title}</h3>
-      <div style={controlStyling}>
+      <div className='icon-binding-list'>
         {iconBindings.map(({ binding, iconName }, index) => (
-          <div key={index} style={iconBindingStyle}>
-            <InfoPopover
-              renderContent={() => (
-                <BindingControls
-                  binding={binding}
-                  index={index}
-                  placeholder={placeholder}
-                  label={label}
-                  changeBinding={changeBinding}
-                  bindings={bindings}
-                  bindingsLabel={bindingsLabel}
-                />
-              )}
-              infoText={iconInfoText}
+          <div key={index} className='icon-binding-row'>
+            <BindingControls
+              binding={binding}
+              index={index}
+              placeholder={placeholder}
+              label={label}
+              changeBinding={changeBinding}
+              bindings={bindings}
+              bindingsLabel={bindingsLabel}
             />
-            <Autocomplete
+            <InfoButton infoText={iconInfoText} />
+            <IconPicker
               value={iconName}
-              onChange={(_, value) => {
-                onChangeIconName(index, value);
-              }}
-              renderOption={(props, option) => {
-                const { key, ...optionProps } = props;
-                return (
-                  <Box
-                    key={key}
-                    component='li'
-                    sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
-                    {...optionProps}
-                  >
-                    <IconPreview configName={configName} iconName={option} />
-                    {option}
-                  </Box>
-                );
-              }}
               options={iconList}
-              sx={{ width: '100%' }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  slotProps={{
-                    input: {
-                      ...params.InputProps,
-                      startAdornment: (
-                        <InputAdornment
-                          position='start'
-                          style={{ paddingLeft: '0.5rem' }}
-                        >
-                          <IconPreview
-                            configName={configName}
-                            iconName={iconName ?? undefined}
-                          />
-                        </InputAdornment>
-                      ),
-                    },
-                  }}
-                  label='Icon'
-                />
-              )}
+              configName={configName}
+              onChange={(value) => onChangeIconName(index, value)}
             />
             <div>
               <Tooltip title='Remove binding'>

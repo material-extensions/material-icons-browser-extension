@@ -1,8 +1,10 @@
-import { IconPackValue } from 'material-icon-theme';
 import Browser from 'webextension-polyfill';
+import { initIconAppearance } from './lib/icon-appearance';
 import { initIconSizes } from './lib/icon-sizes';
+import { getResolvedPageConfig } from './lib/page-config';
+import { setExtensionProvider, setExtensionStatus } from './lib/page-status';
 import { observePage, replaceAllIcons } from './lib/replace-icons';
-import { addConfigChangeListener, getConfig } from './lib/user-config';
+import { addConfigChangeListener } from './lib/user-config';
 import { Provider } from './models';
 import { getGitProvider } from './providers';
 
@@ -12,33 +14,82 @@ interface Possibilities {
 
 const init = async () => {
   initIconSizes();
-  const { href } = window.location;
-  await handleProvider(href);
-};
+  initIconAppearance();
+  setExtensionStatus('loading');
+  setExtensionProvider(null);
 
-const handleProvider = async (href: string) => {
-  const provider: Provider | null = await getGitProvider(href);
-  if (!provider) return;
+  try {
+    const { href } = window.location;
+    const provider = await getGitProvider(href);
 
-  const iconPack = await getConfig('iconPack');
-  const fileBindings = await getConfig('fileIconBindings');
-  const folderBindings = await getConfig('folderIconBindings');
-  const extEnabled = await getConfig('extEnabled');
-  const globalExtEnabled = await getConfig('extEnabled', 'default');
+    if (!provider) {
+      setExtensionStatus('unsupported');
+      return;
+    }
 
-  if (!globalExtEnabled || !extEnabled) return;
+    setExtensionProvider(provider.name);
 
-  observePage(provider, iconPack, fileBindings, folderBindings);
-  addConfigChangeListener('iconPack', () => replaceAllIcons(provider));
+    const config = await getResolvedPageConfig();
+
+    if (!config.enabled) {
+      setExtensionStatus('disabled');
+      return;
+    }
+
+    const iconColorController = observePage(
+      provider,
+      config.iconPack,
+      config.fileBindings,
+      config.folderBindings,
+      config.folderColor,
+      config.fileColor,
+      config.folderTheme
+    );
+    const refreshIcons = async () => {
+      const { folderColor, fileColor, folderTheme } =
+        await getResolvedPageConfig();
+      const settings = { folderColor, fileColor, folderTheme };
+      iconColorController.setSettings(settings);
+      replaceAllIcons(provider, settings);
+    };
+    addConfigChangeListener('iconPack', refreshIcons);
+    addConfigChangeListener('folderColor', refreshIcons);
+    addConfigChangeListener('folderColor', refreshIcons, 'default');
+    addConfigChangeListener('fileColor', refreshIcons);
+    addConfigChangeListener('fileColor', refreshIcons, 'default');
+    addConfigChangeListener('folderTheme', refreshIcons);
+    addConfigChangeListener('folderTheme', refreshIcons, 'default');
+    // Removal of a domain override has an undefined newValue, which the shared
+    // listener intentionally ignores. Refresh so the inherited color takes effect.
+    Browser.storage.onChanged.addListener((changes, areaName) => {
+      if (
+        areaName === 'sync' &&
+        ['folderColor', 'fileColor', 'folderTheme'].some(
+          (name) =>
+            Object.hasOwn(changes, `${window.location.hostname}:${name}`) &&
+            changes[`${window.location.hostname}:${name}`]?.newValue ===
+              undefined
+        )
+      ) {
+        refreshIcons();
+      }
+    });
+    setExtensionStatus('active');
+  } catch (error) {
+    setExtensionStatus('error');
+    throw error;
+  }
 };
 
 type Handlers = {
   init: () => void;
+  contentScriptReady: () => true;
   guessProvider: (possibilities: Possibilities) => string | null;
 };
 
 const handlers: Handlers = {
   init,
+  contentScriptReady: () => true,
   guessProvider: (possibilities: Possibilities): string | null => {
     for (const [name, selector] of Object.entries(possibilities)) {
       if (document.querySelector(selector)) {
@@ -61,6 +112,10 @@ const processExtensionCommand = (
   if (message.cmd === 'init') {
     handlers.init();
     return sendResponse(null);
+  }
+
+  if (message.cmd === 'contentScriptReady') {
+    return sendResponse(handlers.contentScriptReady());
   }
 
   if (message.cmd === 'guessProvider') {

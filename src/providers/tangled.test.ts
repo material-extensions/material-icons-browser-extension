@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import tangled from './tangled';
 
 describe('Tangled provider', () => {
@@ -24,9 +24,7 @@ describe('Tangled provider', () => {
 
     it('should not match other domains', () => {
       expect(provider.domains[0].test.test('nottangled.org')).toBe(false);
-      expect(provider.domains[0].test.test('tangled.org.evil.com')).toBe(
-        false
-      );
+      expect(provider.domains[0].test.test('tangled.org.evil.com')).toBe(false);
     });
 
     it('should not be able to self host', () => {
@@ -94,8 +92,7 @@ describe('Tangled provider', () => {
     });
 
     it('should return true when row has "tree-directory" class', () => {
-      document.body.innerHTML =
-        '<div class="tree-directory"><svg></svg></div>';
+      document.body.innerHTML = '<div class="tree-directory"><svg></svg></div>';
       const row = document.querySelector('.tree-directory') as HTMLElement;
       const icon = document.querySelector('svg') as unknown as HTMLElement;
       expect(provider.getIsDirectory({ row, icon })).toBe(true);
@@ -167,9 +164,7 @@ describe('Tangled provider', () => {
 
       provider.replaceIcon(svgEl, newSVG);
 
-      expect(
-        newSVG.getAttribute('data-material-icons-extension')
-      ).toBeNull();
+      expect(newSVG.getAttribute('data-material-icons-extension')).toBeNull();
       expect(
         newSVG.getAttribute('data-material-icons-extension-iconname')
       ).toBeNull();
@@ -187,8 +182,7 @@ describe('Tangled provider', () => {
     });
 
     it('should strip "hidden" class from newSVG', () => {
-      document.body.innerHTML =
-        '<div><svg class="w-4 h-4 hidden"></svg></div>';
+      document.body.innerHTML = '<div><svg class="w-4 h-4 hidden"></svg></div>';
       const svgEl = document.querySelector('svg') as unknown as HTMLElement;
       const newSVG = document.createElement('svg') as unknown as HTMLElement;
 

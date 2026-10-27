@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import github from './github';
 
 describe('GitHub provider', () => {
@@ -82,12 +82,43 @@ describe('GitHub provider', () => {
       provider.replaceIcon(svgEl, newIcon);
 
       expect(svgEl.getAttribute('data-material-icons-extension')).toBe('icon');
+      expect(svgEl.getAttribute('data-material-icons-extension-iconname')).toBe(
+        'folder-src.svg'
+      );
+      expect(svgEl.getAttribute('data-material-icons-extension-filename')).toBe(
+        'src'
+      );
+    });
+
+    it('should synchronize folder metadata and remove stale values', () => {
+      document.body.innerHTML = `
+        <svg data-material-icons-extension-folder-hidden></svg>
+      `;
+      const svgEl = document.querySelector('svg') as unknown as HTMLElement;
+      const newIcon = document.createElement('img');
+      newIcon.setAttribute('src', 'chrome-extension://id/folder-src.svg');
+      newIcon.setAttribute('data-material-icons-extension', 'icon');
+      newIcon.setAttribute(
+        'data-material-icons-extension-iconname',
+        'folder-src.svg'
+      );
+      newIcon.setAttribute('data-material-icons-extension-directory', 'true');
+      newIcon.setAttribute(
+        'data-material-icons-extension-specific-iconname',
+        'folder-src.svg'
+      );
+
+      provider.replaceIcon(svgEl, newIcon);
+
       expect(
-        svgEl.getAttribute('data-material-icons-extension-iconname')
+        svgEl.getAttribute('data-material-icons-extension-directory')
+      ).toBe('true');
+      expect(
+        svgEl.getAttribute('data-material-icons-extension-specific-iconname')
       ).toBe('folder-src.svg');
       expect(
-        svgEl.getAttribute('data-material-icons-extension-filename')
-      ).toBe('src');
+        svgEl.hasAttribute('data-material-icons-extension-folder-hidden')
+      ).toBe(false);
     });
 
     it('should reset display style (in case it was previously hidden)', () => {
@@ -135,10 +166,7 @@ describe('GitHub provider', () => {
 
       // Second call (simulating expand)
       const newIcon2 = document.createElement('img');
-      newIcon2.setAttribute(
-        'src',
-        'chrome-extension://id/folder-src-open.svg'
-      );
+      newIcon2.setAttribute('src', 'chrome-extension://id/folder-src-open.svg');
       newIcon2.setAttribute('data-material-icons-extension', 'icon');
       newIcon2.setAttribute(
         'data-material-icons-extension-iconname',
@@ -150,9 +178,9 @@ describe('GitHub provider', () => {
       expect(svgEl.style.backgroundImage).toBe(
         'url("chrome-extension://id/folder-src-open.svg")'
       );
-      expect(
-        svgEl.getAttribute('data-material-icons-extension-iconname')
-      ).toBe('folder-src-open.svg');
+      expect(svgEl.getAttribute('data-material-icons-extension-iconname')).toBe(
+        'folder-src-open.svg'
+      );
     });
 
     it('should copy fgColor class to adjacent link', () => {
@@ -174,10 +202,7 @@ describe('GitHub provider', () => {
         'data-material-icons-extension-iconname',
         'typescript.svg'
       );
-      newIcon.setAttribute(
-        'data-material-icons-extension-filename',
-        'file.ts'
-      );
+      newIcon.setAttribute('data-material-icons-extension-filename', 'file.ts');
 
       provider.replaceIcon(svgEl, newIcon);
 
@@ -204,10 +229,7 @@ describe('GitHub provider', () => {
         'data-material-icons-extension-iconname',
         'typescript.svg'
       );
-      newIcon.setAttribute(
-        'data-material-icons-extension-filename',
-        'file.ts'
-      );
+      newIcon.setAttribute('data-material-icons-extension-filename', 'file.ts');
 
       provider.replaceIcon(svgEl, newIcon);
 
@@ -245,40 +267,50 @@ describe('GitHub provider', () => {
     });
   });
 
+  describe('parent directory row', () => {
+    it('matches the up-tree link and its folder icon', () => {
+      document.body.innerHTML = `
+        <a aria-label="Parent directory" data-testid="up-tree">
+          <div><svg class="octicon octicon-file-directory-fill"></svg>..</div>
+        </a>
+      `;
+
+      const row = document.querySelector(provider.selectors.row) as HTMLElement;
+      expect(row).not.toBeNull();
+      expect(
+        row.querySelector(provider.selectors.filename)?.textContent
+      ).toContain('..');
+      const icon = row.querySelector(provider.selectors.icon) as HTMLElement;
+      expect(provider.getIsDirectory({ row, icon })).toBe(true);
+    });
+  });
+
   describe('getIsDirectory', () => {
     it('should detect directory from aria-label', () => {
       document.body.innerHTML =
         '<svg aria-label="Directory" class="octicon"></svg>';
       const icon = document.querySelector('svg') as unknown as HTMLElement;
-      expect(
-        provider.getIsDirectory({ row: document.body, icon })
-      ).toBe(true);
+      expect(provider.getIsDirectory({ row: document.body, icon })).toBe(true);
     });
 
     it('should detect directory from octicon-file-directory-fill class', () => {
       document.body.innerHTML =
         '<svg class="octicon octicon-file-directory-fill"></svg>';
       const icon = document.querySelector('svg') as unknown as HTMLElement;
-      expect(
-        provider.getIsDirectory({ row: document.body, icon })
-      ).toBe(true);
+      expect(provider.getIsDirectory({ row: document.body, icon })).toBe(true);
     });
 
     it('should detect directory from octicon-file-directory-open-fill class', () => {
       document.body.innerHTML =
         '<svg class="octicon octicon-file-directory-open-fill"></svg>';
       const icon = document.querySelector('svg') as unknown as HTMLElement;
-      expect(
-        provider.getIsDirectory({ row: document.body, icon })
-      ).toBe(true);
+      expect(provider.getIsDirectory({ row: document.body, icon })).toBe(true);
     });
 
     it('should return false for file icons', () => {
       document.body.innerHTML = '<svg class="octicon octicon-file"></svg>';
       const icon = document.querySelector('svg') as unknown as HTMLElement;
-      expect(
-        provider.getIsDirectory({ row: document.body, icon })
-      ).toBe(false);
+      expect(provider.getIsDirectory({ row: document.body, icon })).toBe(false);
     });
   });
 
@@ -287,18 +319,14 @@ describe('GitHub provider', () => {
       document.body.innerHTML =
         '<svg class="octicon octicon-file-directory-open-fill"></svg>';
       const icon = document.querySelector('svg') as unknown as HTMLElement;
-      expect(
-        provider.getIsExpanded!({ row: document.body, icon })
-      ).toBe(true);
+      expect(provider.getIsExpanded!({ row: document.body, icon })).toBe(true);
     });
 
     it('should return false for closed directory icon', () => {
       document.body.innerHTML =
         '<svg class="octicon octicon-file-directory-fill"></svg>';
       const icon = document.querySelector('svg') as unknown as HTMLElement;
-      expect(
-        provider.getIsExpanded!({ row: document.body, icon })
-      ).toBe(false);
+      expect(provider.getIsExpanded!({ row: document.body, icon })).toBe(false);
     });
   });
 
@@ -307,9 +335,7 @@ describe('GitHub provider', () => {
       document.body.innerHTML =
         '<svg class="octicon octicon-file-submodule"></svg>';
       const icon = document.querySelector('svg') as unknown as HTMLElement;
-      expect(
-        provider.getIsSubmodule({ row: document.body, icon })
-      ).toBe(true);
+      expect(provider.getIsSubmodule({ row: document.body, icon })).toBe(true);
     });
   });
 
@@ -317,18 +343,18 @@ describe('GitHub provider', () => {
     it('should strip submodule SHA from filename', () => {
       const row = document.createElement('div');
       const icon = document.createElement('svg');
-      expect(
-        provider.transformFileName(row, icon, 'my-module @ abc1234')
-      ).toBe('my-module');
+      expect(provider.transformFileName(row, icon, 'my-module @ abc1234')).toBe(
+        'my-module'
+      );
     });
 
     it('should transform Source code archive names', () => {
       const row = document.createElement('div');
       row.classList.add('Box-row');
       const icon = document.createElement('svg');
-      expect(
-        provider.transformFileName(row, icon, 'Source code (zip)')
-      ).toBe('Source code.zip');
+      expect(provider.transformFileName(row, icon, 'Source code (zip)')).toBe(
+        'Source code.zip'
+      );
     });
 
     it('should pass through normal filenames', () => {

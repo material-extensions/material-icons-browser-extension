@@ -1,6 +1,6 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { IconButton, Tooltip } from '@mui/material';
+import { Button } from '@mui/material';
 import { useState } from 'react';
 import { Domain } from '@/models';
 import { ConfirmDialog } from './confirm-dialog';
@@ -17,26 +17,22 @@ export function DomainActions({
   const [showSettingsDialog, setShowSettingsDialog] = useState(false);
 
   return (
-    <div>
-      <Tooltip title='Configure icon bindings'>
-        <IconButton
-          onClick={() => {
-            setShowSettingsDialog(true);
-          }}
-        >
-          <SettingsIcon />
-        </IconButton>
-      </Tooltip>
+    <div className='domain-action-buttons'>
+      <Button
+        variant='outlined'
+        startIcon={<SettingsIcon />}
+        onClick={() => setShowSettingsDialog(true)}
+      >
+        Configure icons
+      </Button>
       {domain.isCustom ? (
-        <Tooltip title='Delete custom domain'>
-          <IconButton
-            onClick={() => {
-              setShowConfirmDialog(true);
-            }}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
+        <Button
+          color='error'
+          startIcon={<DeleteIcon />}
+          onClick={() => setShowConfirmDialog(true)}
+        >
+          Delete site
+        </Button>
       ) : null}
 
       <ConfirmDialog

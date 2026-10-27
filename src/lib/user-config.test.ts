@@ -1,10 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-  getConfig,
-  setConfig,
-  clearConfig,
   addConfigChangeListener,
+  clearConfig,
+  getConfig,
   hardDefaults,
+  setConfig,
 } from './user-config';
 
 const mockGet = vi.fn();
@@ -42,7 +42,12 @@ describe('user-config', () => {
       expect(hardDefaults).toEqual({
         iconPack: 'react',
         iconSize: 'md',
+        iconSaturation: 100,
+        iconOpacity: 100,
         extEnabled: true,
+        folderColor: '#90a4ae',
+        fileColor: '#90a4ae',
+        folderTheme: 'specific',
         fileIconBindings: {},
         folderIconBindings: {},
       });

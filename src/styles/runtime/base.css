@@ -1,0 +1,9 @@
+.material-icons-exension-hide-pseudo::before {
+  display: none !important;
+}
+
+[data-material-icons-extension="icon"] {
+  opacity: var(--material-icons-extension-opacity, 1);
+  filter: var(--material-icons-extension-color-filter,)
+    saturate(var(--material-icons-extension-saturation, 1));
+}

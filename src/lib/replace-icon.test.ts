@@ -1,7 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { replaceIconInRow, replaceElementWithIcon } from './replace-icon';
-import { Provider } from '../models';
 import { Manifest } from 'material-icon-theme';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { Provider } from '../models';
+import { replaceElementWithIcon, replaceIconInRow } from './replace-icon';
 
 // Mock webextension-polyfill
 vi.mock('webextension-polyfill', () => ({
@@ -159,6 +159,94 @@ describe('replaceIconInRow', () => {
     expect(newIcon.getAttribute('data-material-icons-extension-iconname')).toBe(
       'folder-src.svg'
     );
+  });
+
+  it('uses the generic folder icon in classic mode', () => {
+    const provider = createMockProvider({ getIsDirectory: () => true });
+    const manifest = createMockManifest();
+    document.body.innerHTML = `
+      <div class="row">
+        <span class="filename">src</span>
+        <svg class="icon"></svg>
+      </div>
+    `;
+
+    replaceIconInRow(
+      document.querySelector('.row') as HTMLElement,
+      provider,
+      manifest,
+      undefined,
+      undefined,
+      'classic'
+    );
+
+    const newIcon = (provider.replaceIcon as ReturnType<typeof vi.fn>).mock
+      .calls[0][1] as HTMLElement;
+    expect(newIcon.getAttribute('data-material-icons-extension-iconname')).toBe(
+      'folder.svg'
+    );
+    expect(
+      newIcon.getAttribute('data-material-icons-extension-specific-iconname')
+    ).toBe('folder-src.svg');
+  });
+
+  it('keeps special folder icons in classic mode', () => {
+    const provider = createMockProvider({
+      getIsDirectory: () => true,
+      getIsSymlink: () => true,
+    });
+    const manifest = createMockManifest();
+    document.body.innerHTML = `
+      <div class="row">
+        <span class="filename">src</span>
+        <svg class="icon"></svg>
+      </div>
+    `;
+
+    replaceIconInRow(
+      document.querySelector('.row') as HTMLElement,
+      provider,
+      manifest,
+      undefined,
+      undefined,
+      'classic'
+    );
+
+    const newIcon = (provider.replaceIcon as ReturnType<typeof vi.fn>).mock
+      .calls[0][1] as HTMLElement;
+    expect(newIcon.getAttribute('data-material-icons-extension-iconname')).toBe(
+      'folder-symlink.svg'
+    );
+  });
+
+  it('should color only generic fallback folders', () => {
+    const provider = createMockProvider({ getIsDirectory: () => true });
+    const manifest = createMockManifest({ folderNames: {} });
+    document.body.innerHTML = `
+      <div class="row">
+        <span class="filename">unknown</span>
+        <svg class="icon"></svg>
+      </div>
+    `;
+
+    replaceIconInRow(
+      document.querySelector('.row') as HTMLElement,
+      provider,
+      manifest,
+      '#ff0000'
+    );
+
+    const newIcon = (provider.replaceIcon as ReturnType<typeof vi.fn>).mock
+      .calls[0][1] as HTMLElement;
+    expect(newIcon.getAttribute('data-material-icons-extension-iconname')).toBe(
+      'folder.svg'
+    );
+    expect(
+      newIcon.hasAttribute('data-material-icons-extension-generic-folder')
+    ).toBe(true);
+    expect(
+      newIcon.style.getPropertyValue('--material-icons-extension-color-filter')
+    ).not.toBe('');
   });
 
   it('should use expanded folder icon when folder is expanded', () => {
@@ -490,6 +578,37 @@ describe('replaceIconInRow - edge cases', () => {
     expect(newIcon.getAttribute('data-material-icons-extension-iconname')).toBe(
       'file.svg'
     );
+  });
+
+  it('should color only the generic fallback file', () => {
+    const provider = createMockProvider();
+    const manifest = createMockManifest({ fileNames: {}, fileExtensions: {} });
+    document.body.innerHTML = `
+      <div class="row">
+        <span class="filename">unknown</span>
+        <svg class="icon"></svg>
+      </div>
+    `;
+
+    replaceIconInRow(
+      document.querySelector('.row') as HTMLElement,
+      provider,
+      manifest,
+      '#ff0000',
+      '#00ff00'
+    );
+
+    const newIcon = (provider.replaceIcon as ReturnType<typeof vi.fn>).mock
+      .calls[0][1] as HTMLElement;
+    expect(newIcon.getAttribute('data-material-icons-extension-iconname')).toBe(
+      'file.svg'
+    );
+    expect(
+      newIcon.hasAttribute('data-material-icons-extension-generic-file')
+    ).toBe(true);
+    expect(
+      newIcon.style.getPropertyValue('--material-icons-extension-color-filter')
+    ).not.toBe('');
   });
 
   it('should fall back to file.svg for filename with dots but no matching extension', () => {

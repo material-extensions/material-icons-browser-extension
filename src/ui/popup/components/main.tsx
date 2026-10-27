@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import Box from '@mui/material/Box';
 import { SxProps, Theme, ThemeProvider } from '@mui/material/styles';
-import { SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Browser from 'webextension-polyfill';
 import { Logo } from '@/ui/shared/logo';
 import { theme } from '@/ui/shared/theme';
@@ -35,7 +35,11 @@ function SettingsPopup() {
     getDomainFromCurrentTab().then((domain) => setDomain(domain));
   }, []);
 
-  useEffect(() => {
+  const updatePageState = () => {
+    setIsLoading(true);
+    setShowAskForAccess(false);
+    setShowAddProvider(false);
+
     getCurrentTab()
       .then(checkPageState)
       .then(async (state) => {
@@ -49,13 +53,9 @@ function SettingsPopup() {
           case PageState.HasAccess:
             const tab = await getCurrentTab();
             const match = await guessProvider(tab);
-            setSuggestedProvider(match as SetStateAction<string>);
-            if (match) {
-              setPageSupported(true);
-              setShowAddProvider(true);
-            } else {
-              setPageSupported(false);
-            }
+            setSuggestedProvider((match || '') as string);
+            setPageSupported(true);
+            setShowAddProvider(true);
             break;
         }
         setIsLoading(false);
@@ -65,6 +65,10 @@ function SettingsPopup() {
         setPageSupported(false);
         setIsLoading(false);
       });
+  };
+
+  useEffect(() => {
+    updatePageState();
   }, [domain]);
 
   const openOptions = () => {
@@ -72,7 +76,7 @@ function SettingsPopup() {
   };
 
   const containerStyles: SxProps<Theme> = {
-    width: '20rem',
+    width: '22.5rem',
     color: 'text.primary',
     borderRadius: 0,
     bgcolor: 'background.default',
@@ -81,8 +85,9 @@ function SettingsPopup() {
 
   const toolbarStyles: SxProps<Theme> = {
     display: 'flex',
-    justifyContent: 'space-between',
+    gap: 1.25,
     width: '100%',
+    minHeight: '3.5rem',
     alignItems: 'center',
     boxSizing: 'border-box',
   };
@@ -94,14 +99,18 @@ function SettingsPopup() {
 
   return (
     <Box sx={containerStyles}>
-      <AppBar position='static'>
+      <AppBar position='sticky' sx={{ top: 0, zIndex: 'appBar' }}>
         <Toolbar sx={toolbarStyles}>
           <Logo />
-          <Typography variant='h6' component='div'>
+          <Typography
+            variant='subtitle1'
+            component='div'
+            sx={{ flex: 1, fontWeight: 600 }}
+          >
             Material Icons
           </Typography>
-          <Tooltip title='Configure Domains'>
-            <IconButton aria-label='Open options' onClick={openOptions}>
+          <Tooltip title='Manage sites'>
+            <IconButton aria-label='Manage sites' onClick={openOptions}>
               <SettingsIcon style={{ color: 'white' }} />
             </IconButton>
           </Tooltip>
@@ -110,7 +119,9 @@ function SettingsPopup() {
 
       {shouldShowDomainSettings && <DomainSettings domain={domain} />}
       {shouldShowNotSupported && <NotSupported />}
-      {showAskForAccess && <AskForAccess />}
+      {showAskForAccess && (
+        <AskForAccess onAccessGranted={() => updatePageState()} />
+      )}
       {showAddProvider && (
         <AddProvider domain={domain} suggestedProvider={suggestedProvider} />
       )}
@@ -123,8 +134,13 @@ function SettingsPopup() {
 
 export default function Main() {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <ThemeProvider
+      theme={theme}
+      defaultMode='system'
+      storageManager={null}
+      noSsr
+    >
+      <CssBaseline enableColorScheme />
       <SettingsPopup />
     </ThemeProvider>
   );

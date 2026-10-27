@@ -1,11 +1,18 @@
 import { IconAssociations, IconPackValue } from 'material-icon-theme';
 import Browser from 'webextension-polyfill';
+import { DEFAULT_FOLDER_COLOR } from './folder-color';
+import { FolderTheme } from './folder-theme';
 import { IconSize } from './icon-sizes';
 
 export type UserConfig = {
   iconPack: IconPackValue;
   iconSize: IconSize;
+  iconSaturation: number;
+  iconOpacity: number;
   extEnabled: boolean;
+  folderColor: string;
+  fileColor: string;
+  folderTheme: FolderTheme;
   fileIconBindings?: IconAssociations;
   folderIconBindings?: IconAssociations;
 };
@@ -13,7 +20,12 @@ export type UserConfig = {
 export const hardDefaults: UserConfig = {
   iconPack: 'react',
   iconSize: 'md',
+  iconSaturation: 100,
+  iconOpacity: 100,
   extEnabled: true,
+  folderColor: DEFAULT_FOLDER_COLOR,
+  fileColor: DEFAULT_FOLDER_COLOR,
+  folderTheme: 'specific',
   fileIconBindings: {},
   folderIconBindings: {},
 };

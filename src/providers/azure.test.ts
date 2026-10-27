@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import azure from './azure';
 
 describe('Azure provider', () => {
@@ -102,8 +102,7 @@ describe('Azure provider', () => {
 
   describe('getIsSymlink', () => {
     it('should return true when icon has "ms-Icon--PageArrowRight" class', () => {
-      document.body.innerHTML =
-        '<span class="ms-Icon--PageArrowRight"></span>';
+      document.body.innerHTML = '<span class="ms-Icon--PageArrowRight"></span>';
       const icon = document.querySelector('span') as HTMLElement;
       expect(provider.getIsSymlink({ row: document.body, icon })).toBe(true);
     });
@@ -180,8 +179,7 @@ describe('Azure provider', () => {
     });
 
     it('should append the new icon if container has no children', () => {
-      document.body.innerHTML =
-        '<div><span class="icon-margin"></span></div>';
+      document.body.innerHTML = '<div><span class="icon-margin"></span></div>';
       const svgEl = document.querySelector('.icon-margin') as HTMLElement;
       const newSVG = document.createElement('img');
 

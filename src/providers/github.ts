@@ -1,3 +1,4 @@
+import { syncIconMetadata } from '../lib/icon-metadata';
 import { Provider } from '../models';
 
 export default function github(): Provider {
@@ -15,12 +16,14 @@ export default function github(): Provider {
         a.tree-browser-result,
         .PRIVATE_TreeView-item-content,
         .react-directory-filename-column,
+        a[data-testid="up-tree"],
         .Box details .Box-row`,
       filename: `div[role="rowheader"] > span,
         .ActionList-item-label,
         a.tree-browser-result > marked-text,
         .PRIVATE_TreeView-item-content > .PRIVATE_TreeView-item-content-text,
         .react-directory-filename-column a,
+        a[data-testid="up-tree"] > div,
         a.Truncate`,
       icon: `.octicon-file,
         .octicon-file-directory-fill,
@@ -66,10 +69,6 @@ export default function github(): Provider {
       icon.classList.contains('octicon-file-directory-open-fill'),
     replaceIcon: (svgEl, newSVG) => {
       const iconUrl = newSVG.getAttribute('src') ?? '';
-      const iconName =
-        newSVG.getAttribute('data-material-icons-extension-iconname') ?? '';
-      const fileName =
-        newSVG.getAttribute('data-material-icons-extension-filename') ?? '';
 
       // Clear the SVG's internal paths/shapes so nothing renders on top
       // of our background icon. This keeps the original element in the DOM
@@ -87,10 +86,14 @@ export default function github(): Provider {
       svgEl.style.backgroundPosition = 'center';
       svgEl.style.display = '';
 
-      // Mark as replaced by this extension
-      svgEl.setAttribute('data-material-icons-extension', 'icon');
-      svgEl.setAttribute('data-material-icons-extension-iconname', iconName);
-      svgEl.setAttribute('data-material-icons-extension-filename', fileName);
+      syncIconMetadata(newSVG, svgEl);
+      const colorFilterProperty = '--material-icons-extension-color-filter';
+      const colorFilter = newSVG.style.getPropertyValue(colorFilterProperty);
+      if (colorFilter) {
+        svgEl.style.setProperty(colorFilterProperty, colorFilter);
+      } else {
+        svgEl.style.removeProperty(colorFilterProperty);
+      }
 
       // Get the fgColor-* class from the original svg element
       // and apply it to the link next to the icon.

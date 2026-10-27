@@ -17,14 +17,15 @@ export function Footer() {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    gap: '.5rem',
-    padding: '1rem 0',
+    gap: '.375rem',
+    padding: '.625rem 0 .75rem',
   };
 
   const linksStyles: SxProps<Theme> = {
     display: 'flex',
     justifyContent: 'center',
-    gap: '.5rem',
+    gap: '1rem',
+    fontSize: '.8125rem',
   };
 
   const versionStyles: SxProps<Theme> = {

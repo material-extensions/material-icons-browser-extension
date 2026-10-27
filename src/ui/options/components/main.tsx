@@ -83,28 +83,58 @@ function Options() {
           </Toolbar>
         </AppBar>
 
-        <Box p={4}>
-          <div style={{ width: 'fit-content' }}>
-            <InfoPopover
-              infoText='The settings of the default domain will be applied to all other domains unless they are overridden.'
-              renderContent={() => <h3>Default domain</h3>}
-            />
-          </div>
-          {defaultDomain && <DomainSettings domain={defaultDomain} />}
+        <main className='options-content'>
+          <section
+            className='options-section'
+            aria-labelledby='default-heading'
+          >
+            <Box className='options-section-heading'>
+              <InfoPopover
+                infoText='The default settings apply to every site unless that site has its own overrides.'
+                renderContent={() => (
+                  <h2 id='default-heading'>Default settings</h2>
+                )}
+              />
+              <p>Applied to sites that do not have custom settings.</p>
+            </Box>
+            <Box className='domain-list'>
+              {defaultDomain && <DomainSettings domain={defaultDomain} />}
+            </Box>
+          </section>
 
-          <h3>Other domains</h3>
-          {initialDomains.map((domain) => (
-            <DomainSettings domain={domain} />
-          ))}
+          <section className='options-section' aria-labelledby='sites-heading'>
+            <Box className='options-section-heading'>
+              <h2 id='sites-heading'>Supported sites</h2>
+              <p>Expand a site to override its default appearance.</p>
+            </Box>
+            <Box className='domain-list'>
+              {initialDomains.map((domain) => (
+                <DomainSettings key={domain.name} domain={domain} />
+              ))}
+            </Box>
+          </section>
 
-          {customDomains.length > 0 && <h3>Custom domains</h3>}
-          {customDomains.map((domain) => (
-            <DomainSettings
-              domain={domain}
-              deleteDomain={() => deleteDomain(domain)}
-            />
-          ))}
-        </Box>
+          {customDomains.length > 0 && (
+            <section
+              className='options-section'
+              aria-labelledby='custom-heading'
+            >
+              <Box className='options-section-heading'>
+                <h2 id='custom-heading'>Custom sites</h2>
+                <p>Sites added through the extension popup.</p>
+              </Box>
+              <Box className='domain-list'>
+                {customDomains.map((domain) => (
+                  <DomainSettings
+                    key={domain.name}
+                    domain={domain}
+                    deleteDomain={() => deleteDomain(domain)}
+                  />
+                ))}
+              </Box>
+            </section>
+          )}
+        </main>
 
         <Footer />
       </Box>
@@ -129,8 +159,13 @@ function Options() {
 
 export default function Main() {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <ThemeProvider
+      theme={theme}
+      defaultMode='system'
+      storageManager={null}
+      noSsr
+    >
+      <CssBaseline enableColorScheme />
       <Options />
     </ThemeProvider>
   );
